@@ -29,3 +29,4 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm knip
       - run: pnpm test:node
+      - run: pnpm build

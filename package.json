@@ -17,6 +17,7 @@
     "format": "biome check --write .",
     "typecheck": "tsc -p .",
     "knip": "knip",
+    "build": "vite build && node scripts/add-game.ts",
     "test:node": "vitest run"
   },
   "devDependencies": {
@@ -24,6 +25,7 @@
     "@types/node": "24.19.1",
     "knip": "6.39.0",
     "typescript": "7.0.2",
+    "vite": "8.3.3",
     "vitest": "5.0.3"
   }
 }
