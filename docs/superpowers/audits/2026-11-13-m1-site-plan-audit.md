@@ -23,11 +23,11 @@ It is **not ready to execute as written**. Three blocking findings need applying
   pinned words don't meet yet;
 - one is a claim on the page that nobody has measured and is likely false.
 
-Then there are six should-fix findings (S1 to S6), one question for the Owner (Q1) and six notes (N1 to N6).
+Then there are six should-fix findings (S1 to S6), one question for the Owner (Q1, now answered) and six notes (N1 to N6).
 
 **How the findings are applied** (the Owner, 2026-11-13, as for the framework): the workflow runs as written, with no
 extra fix pass. Stage 4 (Execution) reads this audit with the plan and applies B1 to B3 and S1 to S6 in the tasks they
-name. Where the two differ, this audit wins. Q1 waits for the Owner's answer, and nothing defaults it. Nothing here
+name. Where the two differ, this audit wins. Q1 is answered (below). Nothing here
 reopens a decision the Owner made.
 
 ## Method
@@ -78,7 +78,7 @@ things are missing.
 | next, line 3 | Make your own game: not yet. The toolkit is still being built, and this page will say when it is ready. |
 | footer links | "The game on GitHub" and "The toolkit on GitHub" (same targets), so the link names say where they go. |
 
-If the Owner answers Q1 with "yes", one more line goes under "What to do next" (see Q1).
+A fourth line goes under "What to do next", by the Owner's answer to Q1 (see "The Owner's answers").
 
 Add to `home.journey.ts`, at every size: "before any scroll, the heading, the lede and the Play button are all inside
 the window" (`toBeInViewport()` for each, at `scrollY === 0`), and "the What to do next section has its three lines".
@@ -174,8 +174,7 @@ which the Editors plan names.
 - **(b) No, wait for M4.** The editors join the site with the rest of M4 ("the free editors"). The page stays as B2
   has it.
 
-The coordinator relays this to the Owner. Execution builds B2's three lines either way, and adds the fourth only on
-"(a)".
+**Answered: (a)** (the Owner, 2026-11-13; see "The Owner's answers" below).
 
 ## Notes
 
@@ -226,6 +225,22 @@ Principles: 1 (what the site shows comes from the game's repo, nothing set by ha
 and 6 (the stack, with Svelte and Effect left out for a written reason) are served as the plan says. Touch targets
 (44 px, the Play button 56 px) are above the spec's 48 px for a primary action. The plan copies the framework's
 architecture test with two rules of its own, and those rules fit `CLAUDE.md`'s structure.
+
+## The Owner's answers (2026-11-13)
+
+- **Q1: yes.** The home page sends a newcomer on to the editor. The Owner also set how the editor treats a visitor:
+  the primary way to make a game is through agents working on the code, and what a person edits in the editor is the
+  authorable content, the JSON the agents produce. Anyone can use the editor freely without signing in, and can
+  export their work. Signing in with GitHub is needed only to save and to work together. So the link works for every
+  visitor, and the line says nothing about needing an account.
+
+  *Apply (Task 5's words, landing in Task 8):* the fourth line under "What to do next" is "Change this game: open it
+  in the editor. You can try changes without signing in. To save them, sign in with GitHub." The words "open it in the
+  editor" link to the editor's own Cloudflare Pages address, which the Editors plan names. The line and its link land
+  only once that address is live and the editor behaves as above, so no claim shows before it is true. Until then the
+  line is not on the page. A journey checks the line word for word. `live` checks that the link answers 200 and that
+  the page it opens loads with no sign-in. If the Editors plan has the editor ask for sign-in before anything can be
+  edited, stop and report it to the coordinator, because the line would then be false.
 
 ## Also in this pull request
 
