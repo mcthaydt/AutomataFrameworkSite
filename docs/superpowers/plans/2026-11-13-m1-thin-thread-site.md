@@ -623,7 +623,7 @@ test('the live address serves this build', ...)
   // expect.poll(() => request.get('/version.json') parsed, { timeout: 120_000 }).toEqual({ site: EXPECT_SITE, game: EXPECT_GAME })
 ```
 
-- [ ] **Step 1: Write the failing tests,** `tests/workflows/site.test.ts`, over the workflow's text:
+- [x] **Step 1: Write the failing tests,** `tests/workflows/site.test.ts`, over the workflow's text:
 
 ```ts
 test('it starts on exactly these five events, and looks for a new game every 10 minutes', ...)
@@ -640,9 +640,9 @@ test('two deploys never run at once', ...)
 test('the address is written once and matches the project name in wrangler.toml', ...)
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `site.yml` does not exist.
-- [ ] **Step 3: Write `site.yml`.** Push.
-- [ ] **Step 4: Read the `site` run on the pull request.** One of two things is true:
+- [x] **Step 2: Push; `check` fails** because `site.yml` does not exist.
+- [x] **Step 3: Write `site.yml`.** Push.
+- [x] **Step 4: Read the `site` run on the pull request.** One of two things is true:
   - **The game has a commit that passed.** `pick` says so, `build` and the three `journeys` engines pass against the
     real game, and `deploy` and `live` are skipped. This is the join of the two repos, proven before anything is
     live. Read the pictures under `pr-<number>-real/` on `ci-screens`, as in Task 5 Step 4. If a journey fails
@@ -651,8 +651,8 @@ test('the address is written once and matches the project name in wrangler.toml'
   - **The game has no commit that passed yet.** `pick` prints rule 1's sentence and the other jobs are skipped. Report
     that the join is waiting on the Examples repo, and finish the task's other steps. The join then happens on the
     first `site` run after Examples is green; read it and report it.
-- [ ] **Step 5: Push; all jobs of `ci` and `site` pass** (or are skipped for the reason Step 4 names).
-- [ ] **Step 6: Commit** (`feat(site): pick the checked game, build, test and deploy around it`). Mark the pull request
+- [x] **Step 5: Push; all jobs of `ci` and `site` pass** (or are skipped for the reason Step 4 names).
+- [x] **Step 6: Commit** (`feat(site): pick the checked game, build, test and deploy around it`). Mark the pull request
   ready, set this stage to 91% in `progress.md`, and send the coordinator the summary: commits, test counts per job,
   what the pictures show, every deviation, and that going live waits on the Owner's two settings. Tell the
   coordinator the exact check names of the `ci` workflow, so the Owner can make them required on `main`.

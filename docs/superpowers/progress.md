@@ -8,19 +8,28 @@ Spec: [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/Automa
 in AutomataFramework (Stage 1 was done there). The project-wide tracker is AutomataFramework's
 [`progress.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/progress.md).
 
-Overall: **50%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **59%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | 2. Plan (M1, site) | Done, 100% (in review) | [`plans/2026-11-13-m1-thin-thread-site.md`](plans/2026-11-13-m1-thin-thread-site.md) |
 | 3. Plan audit | Done, 100% (in review) | [`audits/2026-11-13-m1-site-plan-audit.md`](audits/2026-11-13-m1-site-plan-audit.md) |
-| 4. Execution | In progress, 78% (Tasks 1 to 6 done; 7 is built and waits on one Owner question; 8 waits for the Owner) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
+| 4. Execution | In progress, 91% (Tasks 1 to 7 done; Task 8, going live, waits for the Owner's Cloudflare settings) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
 | 5. Implementation audit | Not started | `audits/2026-11-13-m1-site-implementation-audit.md` |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-13: Stage 4, Task 7 done: the `site` workflow. The Owner chose to keep the strict header (the eval was zod's
+  probe), the framework fixed it (AutomataFramework 9109fa3), Examples moved its pin (9fab3c0), and the re-run of
+  `site` on pull request 3 picked that game: `pick`, `build` and the journeys passed in Chromium, WebKit and Firefox
+  (40 journeys per engine, touch included), and `deploy` and `live` were skipped because a pull request is never
+  deployed. `ci` is green too (73 Node tests in 9 files, the same 40 journeys per engine against the stand-in game).
+  The `ci` checks the Owner can make required on `main`: `check`, `build`, `journeys / engines (chromium)`,
+  `journeys / engines (webkit)`, `journeys / engines (firefox)`. Task 8, going live, waits for `CLOUDFLARE_API_TOKEN`
+  and `CLOUDFLARE_ACCOUNT_ID` and for the editor's address (the home page's "Change this game" line).
 
 - 2026-11-13: Stage 4, Tasks 5 and 6 done: the home page, the Play button, the 404 page and the headers. `ci`
   is green (39 journeys per engine in Chromium, WebKit and Firefox, plus 5 Node test files for workflows and the
