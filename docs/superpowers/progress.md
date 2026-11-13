@@ -8,13 +8,13 @@ Spec: [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/Automa
 in AutomataFramework (Stage 1 was done there). The project-wide tracker is AutomataFramework's
 [`progress.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/progress.md).
 
-Overall: **10%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **15%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | 2. Plan (M1, site) | Done, 100% (in review) | [`plans/2026-11-13-m1-thin-thread-site.md`](plans/2026-11-13-m1-thin-thread-site.md) |
-| 3. Plan audit | Not started | `audits/2026-11-13-m1-site-plan-audit.md` |
+| 3. Plan audit | Done, 100% (in review) | [`audits/2026-11-13-m1-site-plan-audit.md`](audits/2026-11-13-m1-site-plan-audit.md) |
 | 4. Execution | Not started | the plan, ticked as it goes |
 | 5. Implementation audit | Not started | `audits/2026-11-13-m1-site-implementation-audit.md` |
 | 6. Fixes | Not started | |
@@ -22,6 +22,12 @@ review 10)
 
 ### Log
 
+- 2026-11-13: Stage 3. The plan audit: sound in shape, not ready as written. Three blocking findings: B1, the `site`
+  workflow can't set up pnpm in sub-folders; B2, onboarding (the Owner's rule), with new words for what this is and
+  what to do next, and the Play button proven on screen on arrival; B3, the unmeasured "about 15 minutes". Six
+  should-fix (S1 to S6, touch journeys included), one Owner question (Q1, a link to the editor) and six notes.
+  Execution applies them. The editors get their own Cloudflare Pages project (the Owner), so the line below about
+  where they are hosted is settled.
 - 2026-11-13: Stage 2. The Site's M1 plan written: 8 tasks, from the repo's skeleton to going live. The site does not
   depend on the framework: its `site` workflow picks the newest commit on the game's `main` whose checks all passed,
   builds the game with the game's own `pnpm build`, serves it at `/play/` in a frame behind a "Play the game" button,
