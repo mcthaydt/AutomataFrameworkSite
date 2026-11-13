@@ -20,3 +20,6 @@ export function job(workflow: string, name: string): string {
   const next = rest.slice(1).search(/\n {2}[\w-]+:/)
   return next < 0 ? rest : rest.slice(0, next + 1)
 }
+
+/** A GitHub expression, written out here so the linter does not mistake it for a template string. */
+export const expr = (inside: string): string => `\${{ ${inside} }}`

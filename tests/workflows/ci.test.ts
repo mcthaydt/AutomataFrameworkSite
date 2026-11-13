@@ -1,12 +1,10 @@
 import { expect, test } from 'vitest'
-import { head, job, readWorkflow } from './read.ts'
+import { expr, head, job, readWorkflow } from './read.ts'
 
 // These checks read the workflows' text because a workflow only runs on GitHub.
 const ci = readWorkflow('ci.yml')
 const journeys = readWorkflow('journeys.yml')
 const screens = job(journeys, 'screens')
-/** A GitHub expression, written out here so the linter does not mistake it for a template string. */
-const expr = (inside: string): string => `\${{ ${inside} }}`
 
 test('the workflow as a whole can only read the repository', () => {
   expect(head(ci)).toMatch(/^permissions:\n {2}contents: read$/m)
