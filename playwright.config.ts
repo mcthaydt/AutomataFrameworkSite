@@ -15,7 +15,8 @@ const config: PlaywrightTestConfig = defineConfig({
   retries: 0,
   forbidOnly: !!process.env.CI,
   reporter: [['list']],
-  use: { baseURL },
+  // A button that is not there should fail in seconds, not at the end of a 30 second test.
+  use: { baseURL, actionTimeout: 8_000, navigationTimeout: 15_000 },
   projects: ENGINES.map((engine) => ({ name: engine, use: { browserName: engine } })),
   ...(process.env.BASE_URL === undefined
     ? {
