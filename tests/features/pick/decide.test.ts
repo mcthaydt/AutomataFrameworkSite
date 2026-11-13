@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 import { type Decision, decide } from '#src/features/pick/pick.ts'
 
-const SITE = 's'.repeat(40)
-const OLD = 'o'.repeat(40)
+const SITE = 'c'.repeat(40)
+const OLD = 'd'.repeat(40)
 const A = 'a'.repeat(40)
 const B = 'b'.repeat(40)
 const base = { event: 'push', site: SITE, picked: A, live: undefined, hostReady: true } as const
@@ -45,14 +45,14 @@ test('rule 5: otherwise it builds, and deploys when the site can be hosted', () 
     game: A,
     build: true,
     deploy: true,
-    reason: 'Building the site at sssssss with the game at aaaaaaa.',
+    reason: 'Building the site at ccccccc with the game at aaaaaaa.',
   } satisfies Decision)
   expect(decide({ ...base, hostReady: false })).toEqual({
     game: A,
     build: true,
     deploy: false,
     reason:
-      'Building the site at sssssss with the game at aaaaaaa. It will not be deployed: the Owner has not added CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID.',
+      'Building the site at ccccccc with the game at aaaaaaa. It will not be deployed: the Owner has not added CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID.',
   } satisfies Decision)
 })
 
