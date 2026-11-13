@@ -74,7 +74,8 @@ for (const size of SIZES) {
       await expect(buttons).toHaveCount(1)
       await expect(buttons).toHaveText(WORDS.play)
       await expect(buttons).toBeVisible()
-      expect((await buttons.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(56)
+      // Rounded: Firefox reports a 56 px button as 55.99997.
+      expect(Math.round((await buttons.boundingBox())?.height ?? 0)).toBeGreaterThanOrEqual(56)
       expect(await fitsSideways(page)).toBe(true)
       expect(trouble()).toEqual([])
     })
