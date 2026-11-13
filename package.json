@@ -1,0 +1,29 @@
+{
+  "name": "@automataframework/site",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The AutomataFramework website: one page with the demo game playing.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=24.21.0"
+  },
+  "imports": {
+    "#src/*": "./src/*"
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "tsc -p .",
+    "knip": "knip",
+    "test:node": "vitest run"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/node": "24.19.1",
+    "knip": "6.39.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
+  }
+}
