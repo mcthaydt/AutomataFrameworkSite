@@ -185,7 +185,7 @@ export interface Violation { readonly file: string; readonly rule: string; reado
 export function checkArchitecture(files: SourceFiles): Violation[]
 ```
 
-- [ ] **Step 1: Write the config.** Copy from AutomataFramework at `ec4fddd96d0f1e39365ff807306faf9b42ac3190` and
+- [x] **Step 1: Write the config.** Copy from AutomataFramework at `ec4fddd96d0f1e39365ff807306faf9b42ac3190` and
   change only what is named: `biome.json` (drop `!schemas` and `!docs/api`), `.gitignore` (add `.wrangler/`,
   `test-results/`), `tsconfig.json` (drop `isolatedDeclarations` and `declaration`; nothing is published), `knip.json`
   (entries `scripts/*.ts`, `tests/**/*.test.ts`, `tests/journeys/*.journey.ts`, `playwright.config.ts`; ignore
@@ -195,7 +195,7 @@ export function checkArchitecture(files: SourceFiles): Violation[]
   `test:node` (`vitest run`). Add each dev dependency, at the Tech Stack's exact version, in the task that first uses
   it (knip fails on an unused one): this task adds `@biomejs/biome`, `typescript`, `knip`, `vitest`, `@types/node`.
   `vitest.config.ts`: one Node project, `tests/**/*.test.ts`.
-- [ ] **Step 2: Write `ci.yml`,** job `check` only, copied from the framework's `ci.yml` (`on`, `permissions`,
+- [x] **Step 2: Write `ci.yml`,** job `check` only, copied from the framework's `ci.yml` (`on`, `permissions`,
   `concurrency` and the `check` job as they are). `tests/workflows/ci.test.ts` reads the file's text:
 
 ```ts
@@ -203,7 +203,7 @@ test('the workflow as a whole can only read the repository', ...)   // /^permiss
 test('every action is pinned to a commit', ...)                     // each `uses:` of an action matches /@[0-9a-f]{40} # v/
 ```
 
-- [ ] **Step 3: Write the failing tests.** Lift `tests/architecture/rules.ts`, `rules.test.ts` and
+- [x] **Step 3: Write the failing tests.** Lift `tests/architecture/rules.ts`, `rules.test.ts` and
   `tests/architecture.test.ts` from the framework at the commit above (first line
   `// Lifted from AutomataFramework@ec4fddd9: <path>`), then change the rules to this repo's:
   - `LAYERS` as above. Drop `sim-is-pure` and `headless-is-headless` with their tests; replace `CONFINED` and the
@@ -226,13 +226,13 @@ test('the Node entry reaches nothing that needs a page', () =>
 
   Keep the lifted tests for `imports-go-down`, `through-the-entry`, `lib-is-below-features`, `no-cycles`,
   `no-tests-in-src`, `at-most-600-lines`, `feature-has-entry` and `unknown-feature`, with this repo's feature names.
-- [ ] **Step 4: Push; `check` fails** on the three new rule tests (the lifted rules do not know them). This run also
+- [x] **Step 4: Push; `check` fails** on the three new rule tests (the lifted rules do not know them). This run also
   answers "Before starting" item 2. Open the stage's pull request as a draft, with a few lines saying what M1's site is.
-- [ ] **Step 5: Implement the two rules.** `src/index.ts` and `src/build.ts` are one comment each for now.
+- [x] **Step 5: Implement the two rules.** `src/index.ts` and `src/build.ts` are one comment each for now.
   `README.md`: what the site is, that the game comes from AutomataFrameworkExamples, and that tests run only in
   GitHub Actions.
-- [ ] **Step 6: Push; `check` passes.**
-- [ ] **Step 7: Commit** (`chore: repo skeleton, the check job and the architecture test`).
+- [x] **Step 6: Push; `check` passes.**
+- [x] **Step 7: Commit** (`chore: repo skeleton, the check job and the architecture test`).
 
 ### Task 2: The version stamp
 
@@ -255,7 +255,7 @@ export function shortCommit(text: string): string                  // the first 
 export function gameCommitUrl(version: Version): string | undefined // https://github.com/<GAME_REPO>/commit/<game>, only for a commit
 ```
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 const A = 'a'.repeat(40), B = 'b'.repeat(40)
@@ -268,10 +268,10 @@ test('gameCommitUrl links a commit and nothing else', ...)
   // { site: A, game: B } -> 'https://github.com/mcthaydt/AutomataFrameworkExamples/commit/' + B; game 'fixture' -> undefined
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `version.ts` does not exist.
-- [ ] **Step 3: Implement.** No package: `JSON.parse` in a `try`, then field checks.
-- [ ] **Step 4: Push; `check` passes.**
-- [ ] **Step 5: Commit** (`feat(version): the stamp that says which site and game a build holds`).
+- [x] **Step 2: Push; `check` fails** because `version.ts` does not exist.
+- [x] **Step 3: Implement.** No package: `JSON.parse` in a `try`, then field checks.
+- [x] **Step 4: Push; `check` passes.**
+- [x] **Step 5: Commit** (`feat(version): the stamp that says which site and game a build holds`).
 
 ### Task 3: Picking the game's commit, and deciding whether to deploy
 
@@ -322,7 +322,7 @@ export function listCandidates(options: {
   5. Otherwise build, and deploy when `hostReady`. Reason: `Building the site at <site 7> with the game at <game 7>.`,
      plus ` It will not be deployed: the Owner has not added CLOUDFLARE_API_TOKEN.` when not `hostReady`.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 const run = (name: string, conclusion: string | null = 'success', status = 'completed') => ({ name, status, conclusion })
@@ -346,14 +346,14 @@ test('listCandidates turns a refusal into a sentence', ...)
   // a fetch that rejects -> GitHubError 'GitHub could not be reached. The site keeps the game it has.'
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `pick.ts` does not exist.
-- [ ] **Step 3: Implement.** `scripts/pick-game.ts` is the thin wrapper: it reads `GITHUB_EVENT_NAME`, `GITHUB_SHA`
+- [x] **Step 2: Push; `check` fails** because `pick.ts` does not exist.
+- [x] **Step 3: Implement.** `scripts/pick-game.ts` is the thin wrapper: it reads `GITHUB_EVENT_NAME`, `GITHUB_SHA`
   (for a pull request, `PR_HEAD_SHA`), `GH_TOKEN`, `SITE_URL` and `HOST_READY`; calls `listCandidates` for
   `GAME_REPO`, `main`, 10 commits (a `GitHubError` is printed and means `picked` is undefined); fetches
   `${SITE_URL}/version.json` (any failure means `live` is undefined); prints the reason; and appends `game=`,
   `build=` and `deploy=` to the file `GITHUB_OUTPUT` names. It exits 0 whatever GitHub or the live site answered.
-- [ ] **Step 4: Push; `check` passes.**
-- [ ] **Step 5: Commit** (`feat(pick): choose the newest checked game and decide whether to deploy`).
+- [x] **Step 4: Push; `check` passes.**
+- [x] **Step 5: Commit** (`feat(pick): choose the newest checked game and decide whether to deploy`).
 
 ### Task 4: The stand-in game, and putting a game into the site
 
@@ -383,7 +383,7 @@ export function addGame(options: { readonly siteDir: string; readonly gameDir: s
   `SITE_COMMIT` (default `GITHUB_SHA`, else `dev`), and calls `addGame` with `siteDir` `dist`. An `AssembleError`
   is printed as its sentence, without a stack, and exits 1.
 
-- [ ] **Step 1: Write the failing tests** (each in its own folder under `os.tmpdir()`, removed afterwards):
+- [x] **Step 1: Write the failing tests** (each in its own folder under `os.tmpdir()`, removed afterwards):
 
 ```ts
 test('the game is copied to play/ with everything beside it', ...)
@@ -401,12 +401,12 @@ test('a game that uses addresses starting with / is refused, because it would be
 test('nothing is written when the game is refused', ...)           // siteDir has no play/ and no version.json afterwards
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `assemble.ts` does not exist.
-- [ ] **Step 3: Implement,** with `node:fs`'s `cpSync`, `rmSync` and `writeFileSync`. Add `vite` and the `build` script.
+- [x] **Step 2: Push; `check` fails** because `assemble.ts` does not exist.
+- [x] **Step 3: Implement,** with `node:fs`'s `cpSync`, `rmSync` and `writeFileSync`. Add `vite` and the `build` script.
   `vite.config.ts`: inputs `index.html` and (from Task 6) `404.html`, output `dist/`.
-- [ ] **Step 4: Run `pnpm build` locally** and confirm `dist/play/index.html`, `dist/play/game.js` and
+- [x] **Step 4: Run `pnpm build` locally** and confirm `dist/play/index.html`, `dist/play/game.js` and
   `dist/version.json` (`"game": "fixture"`) exist. Push; `check` passes, its last step being `pnpm build`.
-- [ ] **Step 5: Commit** (`feat(assemble): put a built game into the site at /play/`).
+- [x] **Step 5: Commit** (`feat(assemble): put a built game into the site at /play/`).
 
 ### Task 5: The page, the Play button and the journeys
 
