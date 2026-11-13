@@ -16,6 +16,13 @@ export interface Violation {
 }
 
 const MAX_LINES = 600
+/** Where a `node:` import may live: the Node side of the site, which runs in scripts and workflows, never in a page. */
+const NODE_PLACES: readonly string[] = ['src/features/pick/', 'src/features/assemble/', 'src/build.ts']
+/** Features that only Node uses: the page may not reach them. */
+const NODE_FEATURES: ReadonlySet<string> = new Set(['pick', 'assemble'])
+/** Features that only a page uses: the Node entry may not reach them. */
+const PAGE_FEATURES: ReadonlySet<string> = new Set(['play', 'page'])
+
 interface Source {
   readonly file: string
   readonly text: string
@@ -171,6 +178,12 @@ export function checkArchitecture(files: SourceFiles): Violation[] {
         )
       }
     }
+
+    for (const spec of source.packages) {
+      if (spec.startsWith('node:') && !NODE_PLACES.some((place) => file.startsWith(place))) {
+        add(file, 'node-stays-in-node', `${spec} is Node's, so it belongs only in ${NODE_PLACES.join(', ')}.`)
+      }
+    }
   }
 
   for (const group of cycles(sources))
@@ -184,6 +197,32 @@ export function checkArchitecture(files: SourceFiles): Violation[] {
     seen.add(feature)
     if (!sources.has(`src/features/${feature}/${feature}.ts`)) {
       add(file, 'feature-has-entry', `src/features/${feature}/ needs ${feature}.ts, the feature's entry.`)
+    }
+  }
+
+  // Walk the imports from each entry: the page must not reach Node's features, and Node's entry no page feature.
+  const reach = (entry: string): string[] => {
+    const reached = new Set<string>()
+    const walk = (file: string): void => {
+      for (const target of sources.get(file)?.local ?? []) {
+        if (reached.has(target)) continue
+        reached.add(target)
+        walk(target)
+      }
+    }
+    if (sources.has(entry)) walk(entry)
+    return [...reached].sort()
+  }
+  for (const target of reach('src/index.ts')) {
+    const feature = featureOf(target)
+    if (feature !== undefined && NODE_FEATURES.has(feature)) {
+      add('src/index.ts', 'page-and-node-stay-apart', `${target} needs Node, so the page cannot reach it.`)
+    }
+  }
+  for (const target of reach('src/build.ts')) {
+    const feature = featureOf(target)
+    if (feature !== undefined && PAGE_FEATURES.has(feature)) {
+      add('src/build.ts', 'page-and-node-stay-apart', `${target} needs a page, so Node cannot reach it.`)
     }
   }
 
