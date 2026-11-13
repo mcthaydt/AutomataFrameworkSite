@@ -45,10 +45,12 @@ a {
   text-decoration: underline;
 }
 
+/* Shrinks with the window so the name never runs past the edge of a narrow phone, in any font. */
 h1 {
   margin: 16px 0 8px;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 7vw, 2rem);
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 h2 {

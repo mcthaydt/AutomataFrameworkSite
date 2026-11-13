@@ -176,7 +176,9 @@ for (const size of [SIZES[4], SIZES[0]]) {
 
       test('the page says what to do and shows no button', async ({ page }) => {
         await page.goto('/')
-        await expect(page.getByText(WORDS.noScript)).toBeVisible()
+        // Not getByText: Playwright's text search skips what is inside a <noscript>.
+        await expect(page.locator('p.no-script')).toHaveText(WORDS.noScript)
+        await expect(page.locator('p.no-script')).toBeVisible()
         await expect(page.getByRole('button')).toBeHidden()
       })
     })

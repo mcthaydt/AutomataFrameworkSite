@@ -6,7 +6,7 @@ const config: UserConfig = defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    rollupOptions: { input: { index: 'index.html' } },
+    rollupOptions: { input: { index: 'index.html', 'not-found': '404.html' } },
   },
 })
 
