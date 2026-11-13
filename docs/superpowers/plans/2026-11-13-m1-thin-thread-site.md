@@ -32,8 +32,9 @@ and its two audits, this repo's `CLAUDE.md` and [`progress.md`](../progress.md).
 Not in this plan, because M1's Site line does not use it:
 
 - The home page's five claims, guides, the examples gallery and the API reference (M4).
-- The browser editors and their sign-in function. Where M1's editor is hosted is the Editors plan's question, with the
-  Owner. If the answer is "on the site", that is a new task here, not a change to these.
+- The browser editors and their sign-in function. The Owner has decided that the editors get their own Cloudflare Pages
+  project, so the Site does not host them in M1 (plan audit S4). The home page links to the editor once its address
+  exists (the Owner's answer to Q1); that line lands in Task 8.
 - A price page. Its brief is in the Owner's private notes and it starts after M1.
 - A domain (spec, open item 2), other languages, Svelte (one static page has no use for it; it arrives with M4's
   site), Effect (three short scripts).
@@ -499,7 +500,7 @@ export const SIZES = [
   framework. Add to `tests/workflows/ci.test.ts`: only the call to `journeys.yml` may write; inside `journeys.yml`
   only `screens` asks for `contents: write`, and its one `git push` goes to `ci-screens`.
 
-- [ ] **Step 1: Write the failing journeys,** `home.journey.ts`. Each `describe` below runs once per size in `SIZES`
+- [x] **Step 1: Write the failing journeys,** `home.journey.ts`. Each `describe` below runs once per size in `SIZES`
   (`test.use({ viewport })`), except where it names one:
 
 ```ts
@@ -533,13 +534,13 @@ test('turning the phone keeps the same game going', ...)
   // and the page has no sideways scroll
 ```
 
-- [ ] **Step 2: Push; the three `engines` jobs fail** because the page has no button (`check` and `build` pass).
-- [ ] **Step 3: Implement** the page, the styles, `play.ts`, `page.ts` and `src/index.ts` (which calls
+- [x] **Step 2: Push; the three `engines` jobs fail** because the page has no button (`check` and `build` pass).
+- [x] **Step 3: Implement** the page, the styles, `play.ts`, `page.ts` and `src/index.ts` (which calls
   `startPage(document)`).
-- [ ] **Step 4: Push; all jobs pass.** Read the fifteen pictures on `ci-screens` under `pr-<number>/` and check each
+- [x] **Step 4: Push; all jobs pass.** Read the fifteen pictures on `ci-screens` under `pr-<number>/` and check each
   against the drunk-grandma test: can she tell what this is and what to press, at every size? Report what you saw in
   the task's line; a picture that fails is fixed here, not noted.
-- [ ] **Step 5: Commit** (`feat(page): the home page, the Play button and its journeys`).
+- [x] **Step 5: Commit** (`feat(page): the home page, the Play button and its journeys`).
 
 ### Task 6: The missing page and the headers
 
@@ -563,7 +564,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval
   promises games do not need. If the real game trips this policy in Task 7, the journey's `trouble()` names the
   directive: widen that one directive only, and report it as a deviation with the browser's message.
 
-- [ ] **Step 1: Write the failing journeys** (desktop size, each engine):
+- [x] **Step 1: Write the failing journeys** (desktop size, each engine):
 
 ```ts
 test('a missing address answers 404, says so, and offers the way home', ...)
@@ -577,11 +578,11 @@ test('every page is sent with its safety headers', ...)
 test('the game still plays under those headers', ...)   // Play -> '#game[data-state="playing"]' in the frame; trouble() is []
 ```
 
-- [ ] **Step 2: Push; the `engines` jobs fail** on the 404 status (Pages answers a missing address with the home page
+- [x] **Step 2: Push; the `engines` jobs fail** on the 404 status (Pages answers a missing address with the home page
   while there is no `404.html`).
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Push; all jobs pass.**
-- [ ] **Step 5: Commit** (`feat(hosting): a real 404 page and the safety headers`).
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Push; all jobs pass.**
+- [x] **Step 5: Commit** (`feat(hosting): a real 404 page and the safety headers`).
 
 ### Task 7: The `site` workflow, and the real game in the site
 
@@ -676,8 +677,8 @@ the coordinator says so. This task changes no file but the tracker; it is done b
 ## For later plans (noted, not built)
 
 - The game runs in a frame on the site's own origin. That is right while both repos are the Owner's. Before any page
-  on this origin holds a sign-in (the editors) or shows other people's examples (M4's gallery), frames must move to
-  their own origin or be sandboxed.
+  on this origin shows other people's examples (M4's gallery), frames must move to their own origin or be sandboxed.
+  The editors' sign-in will not be on this origin (they have their own project).
 - A push from the game's repo (`repository_dispatch`, already accepted) would replace the 10-minute wait. It needs an
   Owner token stored in the Examples repo.
 - GitHub stops a repo's scheduled workflows after 60 days with no commits; a quiet stretch needs one run started by

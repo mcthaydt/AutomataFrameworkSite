@@ -8,19 +8,37 @@ Spec: [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/Automa
 in AutomataFramework (Stage 1 was done there). The project-wide tracker is AutomataFramework's
 [`progress.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/progress.md).
 
-Overall: **38%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **50%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | 2. Plan (M1, site) | Done, 100% (in review) | [`plans/2026-11-13-m1-thin-thread-site.md`](plans/2026-11-13-m1-thin-thread-site.md) |
 | 3. Plan audit | Done, 100% (in review) | [`audits/2026-11-13-m1-site-plan-audit.md`](audits/2026-11-13-m1-site-plan-audit.md) |
-| 4. Execution | In progress, 52% (Tasks 1 to 4 done; 5 to 7 in CI; 8 waits for the Owner) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
+| 4. Execution | In progress, 78% (Tasks 1 to 6 done; 7 is built and waits on one Owner question; 8 waits for the Owner) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
 | 5. Implementation audit | Not started | `audits/2026-11-13-m1-site-implementation-audit.md` |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-13: Stage 4, Tasks 5 and 6 done: the home page, the Play button, the 404 page and the headers. `ci`
+  is green (39 journeys per engine in Chromium, WebKit and Firefox, plus 5 Node test files for workflows and the
+  rest). Task 7's `site` workflow is written and runs: its `pick` found a real game commit, `build` built it, and the
+  journeys pass against the real game in Chromium and WebKit, touch included. **One stop:** in Firefox only, the real
+  game logs a Content-Security-Policy error (a blocked eval in `/play/assets/headless-*.js`) under the site's header,
+  so 6 Firefox journeys are red in `site`. The game still plays. This is reported to the coordinator as an Owner
+  question (keep the strict header and fix zod's eval probe in the framework or Examples, or add `'unsafe-eval'`);
+  the header stays strict meanwhile. Audit findings applied so far: B1 (the build job's pnpm and cache paths, with a
+  check that both repos use the same pnpm), B2 (the new words, the "What to do next" section, the arrival pictures
+  and the before-any-scroll journey), B3 (no minutes on the page), S1 (a touch journey on a phone and a tablet),
+  S2 (the `screens` guard and the `-real` folder), S3 (both Cloudflare settings), S4 (the plan and tracker say the
+  editors have their own project), S5 (the game's own words), S6 (`live` runs the wait first and alone), N3 and N4.
+  Pictures read: the arrival and playing pictures of the stand-in and the real game (`pr-3`, `pr-3-real` on
+  `ci-screens`); every size shows the heading, the lede and the Play button without scrolling, and the real game
+  plays at every size. Rulings: the journeys' `actionTimeout` is 8 seconds so a missing button fails in seconds; the
+  Play button's height is rounded in its journey, because Firefox reports 56 px as 55.99997; the journeys import the
+  version helpers by relative path, not `#src/`.
 
 - 2026-11-13: Stage 4, Tasks 1 to 4 done and green in CI (pull request 3): the skeleton and the architecture test,
   the version stamp, picking the game's commit and deciding whether to deploy, and assembling the site around a game
