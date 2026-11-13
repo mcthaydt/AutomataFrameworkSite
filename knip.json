@@ -1,13 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@6.39.0/schema.json",
   "ignoreExportsUsedInFile": true,
-  "entry": [
-    "src/index.ts",
-    "src/build.ts",
-    "scripts/*.ts",
-    "tests/**/*.test.ts",
-    "tests/journeys/*.journey.ts"
-  ],
+  "entry": ["src/build.ts", "scripts/*.ts", "tests/**/*.test.ts", "tests/journeys/*.journey.ts"],
   "project": ["src/**/*.ts", "tests/**/*.ts"],
   "ignoreDependencies": ["wrangler"]
 }

@@ -1,1 +1,4 @@
-// The page's entry. It starts the page in a later task.
+// The page's entry: starts the home page once the document is there.
+import { startPage } from './features/page/page.ts'
+
+void startPage(document)
