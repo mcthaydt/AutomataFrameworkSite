@@ -32,7 +32,7 @@ saved data included, so there is no gate and no `mayWatch`; Q4 (a) it loops, wit
   play (`tellGameToPlay`); the frame is never loaded twice. Each side checks who sent a message and from where
   (`talk.ts`). The built game now downloads for every visitor, which it did not before Play. Its size on the wire,
   from Vite's own listing in the game's CI build log for commit `6b4b65a`: **1,540 kB gzipped** over the files it
-  lists (the physics engine alone is 1,315 kB of that), plus a 16 kB font and the recording. It is asked for only after
+  lists (the physics engine alone is 1,315 kB of that), plus a 16 kB font and the recording. Stage 6 (F4): the game's framework pin moved to `a3f52a5`, which sends the physics engine's binary as a file of its own (933 kB gzipped, not 1,315 kB of base64 text); a local build of the Examples repo's lockfile lists **about 1,212 kB gzipped** over the same kind of files. This repo's words (`CLAUDE.md`, `watch.ts`) say about 1.2 MB. Read from a build log, not a test result. It is asked for only after
   the page has loaded, so the page and its picture are not slower; a slow connection meets the cost in the game, not
   in the page. Checks: every journey passes in Chromium, WebKit and Firefox against the stand-in and against the real
   game (`pr-22` and `pr-22-real` on `ci-screens`). The arrival pictures show the game moving with its own words,
