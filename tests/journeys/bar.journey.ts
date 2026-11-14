@@ -76,15 +76,19 @@ for (const size of [SIZES[4], SIZES[2], SIZES[0]]) {
         kept ? 'sticky' : 'relative',
       )
       await play(page)
-      const edge = async (): Promise<number> => {
+      // How far the frame's top is from what is above it, in pixels as the engine lays them out. Where the bar is kept,
+      // that is the bar's bottom edge; otherwise the window's top. Not rounded first: two numbers that each round up
+      // by half a pixel in one engine differ by a whole pixel after rounding, and the game's own place in WebKit
+      // is a fraction. A strip a person could see is a pixel or more.
+      const gap = async (): Promise<number> => {
         const bar = await header.boundingBox()
         const frame = await page.locator(FRAME).boundingBox()
-        // Where the bar is kept, the frame's top is measured against the bar's bottom; otherwise against the window's.
-        const floor = kept ? Math.round((bar?.y ?? 0) + (bar?.height ?? 0)) : 0
-        // `+ 0` turns a -0 into 0, which `toBe` tells apart.
-        return Math.round(frame?.y ?? 1e6) - floor + 0
+        const floor = kept ? (bar?.y ?? 0) + (bar?.height ?? 0) : 0
+        return Math.abs((frame?.y ?? 1e6) - floor)
       }
-      await expect.poll(edge, { message: 'the game flush with what is above it' }).toBe(0)
+      await expect
+        .poll(gap, { message: 'the game flush with what is above it, to under a pixel' })
+        .toBeLessThan(1)
       // The pixel just under that edge is the game's own frame, not a strip of the page.
       const under = await page.evaluate(() => {
         const frame = document.querySelector('iframe')
