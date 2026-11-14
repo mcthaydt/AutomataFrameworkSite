@@ -37,8 +37,8 @@ Two things are still open and are **not code findings**:
   the editor's address for the "Change this game" line. The `site` run on `main` says so in its own words: "Building
   the site at 97b0940 with the game at 9fab3c0. It will not be deployed: the Owner has not added CLOUDFLARE_API_TOKEN
   and CLOUDFLARE_ACCOUNT_ID."
-- **`main` is not protected yet.** `GET /branches/main/protection` answers 404 "Branch not protected", so pull
-  request 3 merged with no required checks. `CLAUDE.md` says every repo's `main` is protected. The coordinator has
+- **`main` was not protected when pull request 3 merged.** `GET /branches/main/protection` answered 404 "Branch not
+  protected", so it merged with no required checks. The Owner has since turned protection on. `CLAUDE.md` says every repo's `main` is protected. The coordinator has
   given the Owner the commands; F2 explains why they still work once F2 is fixed.
 
 ## Method
@@ -226,6 +226,9 @@ force-pushing, which `main`'s rules forbid and which changes the commit id of th
   merge session checks authors before it merges.
 - **(b) Rewrite `main` once.** The Owner lifts the protection, the commit's author is rewritten, `main` is
   force-pushed, and the protection goes back on. Every open branch must then be rebased.
+
+**Answered: (a)** (the Owner, 2026-11-14). `0f1b4be` stays as it is. From now on the merge session checks the authors
+of a pull request's commits before every merge. `main`'s protection is now on.
 
 ## Also in this pull request
 
