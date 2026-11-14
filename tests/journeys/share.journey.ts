@@ -38,7 +38,7 @@ test('the share card draws nothing to press, and about a third of it is the game
   expect(touchWords, 'words in the touch colour inside the card').toEqual([])
   // No keys line, no loading note and no lede (the preview prints the description under the picture).
   for (const selector of ['.lede', '.sheet-head .how', '.sheet-head .status', '.actions'])
-    await expect(page.locator(selector), selector).toBeHidden()
+    await expect(page.locator(`${selector}:visible`), selector).toHaveCount(0)
   // The claim and the game's own picture are there; the game starts well inside the card and fills about a third.
   await expect(page.getByRole('heading', { level: 1 })).toBeInViewport({ ratio: 1 })
   const game = await page.locator('#game').boundingBox()
