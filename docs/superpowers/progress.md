@@ -12,10 +12,13 @@ Overall: **5%** (the design audit is 5 points; the rest is shared out when the p
 | Stage | State | Output |
 |---|---|---|
 | Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
-| The Owner's answers (Q1 to Q5) | Four of five given; the palette's pick is open | the audit's "The Owner's answers" |
+| The Owner's answers (Q1 to Q5) | Done, 100% | the audit's "The Owner's answers" |
 | 2. Plan | Not started | |
 
 ### Log
+
+- 2026-11-14: the Owner picked the palette: A, No. 325 (Deep Slate Green, Naples Yellow, Yellow Ocher, Eugenia Red).
+  Every question is answered and the plan can start.
 
 - 2026-11-14: the Owner's answers. The name is "Automata Framework" and the logo is the word "automata". The
   colours are a palette from *A Dictionary of Color Combinations*, on the site only for now; five were drawn and the

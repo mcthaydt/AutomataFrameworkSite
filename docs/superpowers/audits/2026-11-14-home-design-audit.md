@@ -42,8 +42,9 @@ asked.
 - **Q1, the colours: neither.** "I don't like the colors": the site takes a palette from *A Dictionary of Color
   Combinations* (Sanzo Wada). This is for the site only for now; whether the editors and the demo's screens follow is
   decided after the site. The fonts, icons, square corners and the rule that the bright colour means "you can touch
-  this" stay. Five combinations were drawn, each with a dark ground, light words and one bright colour; **the pick
-  is still open**:
+  this" stay. Five combinations were drawn, each with a dark ground, light words and one bright colour, and **the
+  Owner picked A, No. 325**: Deep Slate Green for the ground, Naples Yellow for words, Yellow Ocher for what can be
+  touched, Eugenia Red as the fourth colour (the stamps and small tags).
 
   ![The draft in five combinations from the book, and in Blueprint](2026-11-14-home-design/palettes.png)
 
