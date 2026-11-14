@@ -70,5 +70,10 @@ export function reveal(target: HTMLElement): void {
     target.scrollIntoView({ block: 'start' })
     return
   }
-  running.lenis.scrollTo(target, { immediate: running.reduced.matches })
+  const { lenis } = running
+  // The page may have been moved by something other than the smoothing (a key, a scrollbar, a browser that scrolled a
+  // link into view just before the press) and its scroll event may not have arrived yet. Lenis would then work from the
+  // old place, and could take a press for a trip it was already on. So it is told where the page really is first.
+  if (lenis.isScrolling !== 'smooth') lenis.animatedScroll = lenis.targetScroll = lenis.actualScroll
+  lenis.scrollTo(target, { immediate: running.reduced.matches })
 }
