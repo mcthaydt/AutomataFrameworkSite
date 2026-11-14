@@ -2,6 +2,36 @@
 
 The tracker every stage reads first and updates last. One section per cycle; newest first.
 
+## Cycle 2: the site wears Blueprint
+
+Spec: the "Visual direction" section of
+[`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
+in AutomataFramework (Stage 1 was done there, 2026-11-14).
+
+Overall: **10%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+review 10)
+
+| Stage | State | Output |
+|---|---|---|
+| 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
+| 3. Plan audit | Not started | |
+| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`, and for the Owner's answer to Q1) | |
+| 5. Implementation audit | Not started | |
+| 6. Fixes | Not started | |
+| 7. Owner review | Not started | |
+
+### Log
+
+- 2026-11-14: Stage 2. The plan: four tasks. The two fonts come from packages and are served as the site's own
+  files; Phosphor's regular icons are written into the pages when the site is built; one stylesheet holds the five
+  Blueprint colours, dark only; the pictures are read against a written list. Not one word of copy changes, the
+  strict header stays byte for byte, no workflow changes, and nothing is drawn on or over the game. Journeys in
+  Chromium, WebKit and Firefox at phone and tablet size, upright and sideways, and at desktop size, with contrast
+  measured on the real page. It replaces the light theme and F4's fix (the Play button no longer sits on the game's
+  sky). One Owner question, Q1: which font packages the Owner's yes covers (the plan is written for
+  `@fontsource/ibm-plex-sans-condensed` and `@fontsource/jetbrains-mono`, 5.3.0). The fonts, the icons, the build
+  and the colours' contrast were tried in a throwaway copy while planning; no test was run.
+
 ## Cycle 1: the 2D first layer, the Site's share of M1
 
 Spec: [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
