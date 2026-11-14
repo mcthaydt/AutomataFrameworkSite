@@ -8,19 +8,28 @@ Spec: the "Visual direction" section of
 [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
 in AutomataFramework (Stage 1 was done there, 2026-11-14).
 
-Overall: **10%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **15%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
-| 3. Plan audit | Not started | |
-| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`, and for the Owner's answer to Q1) | |
+| 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
+| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`; Q1 is answered) | |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 3. The plan audit: sound, true to the spec's "Visual direction", and ready to execute once pull
+  request 6 is on `main`. Nothing blocking. Six should-fix findings, all written into the plan by the audit's own
+  pull request: S1, the "How to play" icons were pencil and the spec gives icons to chalk; S2, a mistyped icon name
+  would not reach the plan's own error, because resolving a missing icon does not throw; S3, the 404 page's heading
+  is a sentence set in capitals, now said and tested; S4, two journeys could run before the version line and its
+  font arrive (a `settle` helper); S5, two rules that contradicted what the plan builds (the chalk line round the
+  playing game, the `theme-color` meta); S6, Q1 is answered (a), the `@fontsource` packages at 5.3.0. Seven notes for
+  execution, no new Owner question. Checked against the published packages and the draft pictures; no test was run.
 
 - 2026-11-14: Stage 2. The plan: four tasks. The two fonts come from packages and are served as the site's own
   files; Phosphor's regular icons are written into the pages when the site is built; one stylesheet holds the five
