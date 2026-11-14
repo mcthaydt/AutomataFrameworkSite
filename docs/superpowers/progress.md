@@ -15,7 +15,7 @@ saved data included, so there is no gate and no `mayWatch`; Q4 (a) it loops, wit
 |---|---|---|
 | Framework `watchReplay` (Part A) | Done, merged | AutomataFramework pull requests 29 and 31 |
 | Pin move and the game's watch mode (Parts B, C) | Done, merged | AutomataFrameworkExamples pull requests 25 and 26 |
-| Part D: the stand-in watches, the page shows the game playing itself, the journeys | In review | this repo's pull request |
+| Part D: the stand-in watches, the page shows the game playing itself, the journeys | Done, green in CI (waits for the merge session) | [pull request 22](https://github.com/mcthaydt/AutomataFrameworkSite/pull/22) |
 
 ### Log
 
@@ -23,8 +23,15 @@ saved data included, so there is no gate and no `mayWatch`; Q4 (a) it loops, wit
   place is within a window's height (`whenNear`); the frame sits in the picture's own box with pointer events off, so
   a wheel or a dragging finger scrolls the page and a tap starts the game. Play, or that tap, tells the same frame to
   play (`tellGameToPlay`); the frame is never loaded twice. Each side checks who sent a message and from where
-  (`talk.ts`). The built game now downloads for every visitor, which it did not before Play: its size on the wire is
-  recorded below once the build's own log has it.
+  (`talk.ts`). The built game now downloads for every visitor, which it did not before Play. Its size on the wire,
+  from Vite's own listing in the game's CI build log for commit `6b4b65a`: **1,540 kB gzipped** over the files it
+  lists (the physics engine alone is 1,315 kB of that), plus a 16 kB font and the recording. It is asked for only after
+  the page has loaded, so the page and its picture are not slower; a slow connection meets the cost in the game, not
+  in the page. Checks: every journey passes in Chromium, WebKit and Firefox against the stand-in and against the real
+  game (`pr-22` and `pr-22-real` on `ci-screens`). The arrival pictures show the game moving with its own words,
+  "The game is playing by itself. Tap it to play.", readable on a phone, which closes the site audit's F5. Findings
+  of the first CI runs: the architecture rule (the page reaches the feature through `play.ts`), the watching frame was a
+  Tab stop (now `tabindex="-1"` until it plays), and the journeys now read the game's own tick, not a picture.
 
 ## Cycle 3: the home page looks finished
 
