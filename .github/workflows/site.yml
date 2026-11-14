@@ -183,7 +183,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - name: Wait for the live address to serve this build
-        run: pnpm test:journeys --project chromium tests/journeys/live.journey.ts
+        # The file comes before `--project`, which would otherwise read it as a second project name.
+        run: pnpm test:journeys tests/journeys/live.journey.ts --project chromium
         env:
           BASE_URL: ${{ env.SITE_URL }}
       - name: Run the other journeys against the live address
