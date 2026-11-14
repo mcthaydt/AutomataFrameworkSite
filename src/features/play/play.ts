@@ -7,7 +7,7 @@ import { reveal } from '../motion/motion.ts'
 import { listenToGame, tellGameToPlay } from './talk.ts'
 
 // The page asks for the watching game through this entry, as it does for everything else of the feature.
-export { whenNear } from './watch.ts'
+export { mayWatch, whenNear } from './watch.ts'
 
 /** Where the built game lives on the site. */
 export const GAME_ADDRESS = '/play/'

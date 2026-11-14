@@ -22,8 +22,8 @@ import { arrive } from './look.ts'
 import { SIZES } from './sizes.ts'
 import { watchForTrouble } from './watch.ts'
 
-/** The game's own words while it plays itself (the Owner, 2026-11-14), which the real game puts on its screen. */
-const WATCHING_WORDS = 'The game is playing by itself. Tap it to play.'
+/** The game's own words while it plays itself (the Owner, 2026-11-14), which the real game puts on its screen: "Tap" for a finger, "Click" for a mouse. */
+const WATCHING_WORDS = /The game is playing by itself\. (Tap|Click) it to play\./
 
 /** The id of what is at each point on the picture, so a layer of the site's over the game would be named. */
 const idsAt = (page: Page, points: { x: number; y: number }[]): Promise<string[]> =>
@@ -273,22 +273,52 @@ test.describe('phone-390x844: a tap on the moving game', () => {
   })
 })
 
-// Q3 (b): it plays itself for everyone. A device that asks for less motion or for less data gets the same game, because the
-// game's own picture of its play is not decoration: it is what the page is showing.
+// Q3 (b): it plays itself for everyone, whatever their device says about motion.
 for (const reducedMotion of ['reduce', 'no-preference'] as const) {
   test.describe(`desktop-1440x900: asked for ${reducedMotion === 'reduce' ? 'less' : 'the usual'} motion`, () => {
     test.use({ viewport: { width: 1440, height: 900 }, reducedMotion })
 
     test('the game still plays itself', async ({ page }) => {
-      await page.addInitScript(() => {
-        Object.defineProperty(navigator, 'connection', { value: { saveData: true }, configurable: true })
-      })
       await arrive(page)
       await untilWatching(page)
       await expect(page.frameLocator(FRAME).locator('#game')).toHaveAttribute('data-state', 'watching')
     })
   })
 }
+
+// Q-C (b): a device that has asked to save data keeps the picture until Play is pressed, as before the game could watch:
+// the game's page is not asked for, and Play works as it always did.
+test.describe('phone-390x844: a device set to save data', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('keeps the picture and asks for nothing of the game until Play', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'connection', { value: { saveData: true }, configurable: true })
+    })
+    const asked: string[] = []
+    page.on('request', (request) => {
+      if (new URL(request.url()).pathname.startsWith('/play/')) asked.push(request.url())
+    })
+    await arrive(page)
+    // The page has had its chance to ask: it would have looked at where the game is (a frame or two) and then waited for
+    // idle time (or a quarter of a second, where there is none), and this waits for the same, after it.
+    await page.evaluate(async () => {
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      await new Promise((resolve) =>
+        'requestIdleCallback' in window
+          ? requestIdleCallback(resolve, { timeout: 3000 })
+          : setTimeout(resolve, 600),
+      )
+    })
+    await expect(page.locator('iframe')).toHaveCount(0)
+    await expect(pageGame(page)).toHaveAttribute('data-state', 'ready')
+    await expect(page.locator('img.poster')).toBeVisible()
+    expect(asked).toEqual([])
+    await play(page, WORDS.play.sheet, { early: true })
+    await expect(page.locator('iframe')).toHaveCount(1)
+    expect(asked.length).toBeGreaterThan(0)
+  })
+})
 
 // A game that cannot play itself, or that goes wrong when handed over, is a game the page must not break on. These serve
 // their own pages for the game's watching form, so what the real game does cannot matter to what they check.

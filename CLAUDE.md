@@ -22,7 +22,9 @@ where this page is short, the spec has the detail. This repo's plans, audits and
   (`pictures`) to take its picture, the share picture and the touch icon; `deploy` still never runs the game.
 - **The game plays itself before anyone presses Play** (the Owner, 2026-11-14). Once the page has loaded and the game's
   place is near, the page asks for `/play/?watch`: the game's watch mode, which plays its recorded run in the picture's
-  own box, for every visitor, whatever their device says about motion or saved data. Play (or a tap on the moving game)
+  own box, for every visitor whatever their device says about motion, but not for one whose device asked to save data
+  (the game is about 1.5 MB; they keep the picture until Play), and only when the browser has a moment to spare. Play
+  (or a tap on the moving game)
   sends `{ automata: 'play' }` to the same frame, which starts for real; the game tells the page its state with
   `{ automata: 'state', state }`. Each side checks who sent a message and where from. A game that cannot watch leaves
   the picture, and Play loads it as it always did. The picture is still there first, and what is in `public/_headers`

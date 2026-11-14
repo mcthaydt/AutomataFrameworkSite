@@ -19,6 +19,13 @@ saved data included, so there is no gate and no `mayWatch`; Q4 (a) it loops, wit
 
 ### Log
 
+- 2026-11-14: Stage 6 (the Owner's answers, all b). **Q-C:** a device that has asked to save data (`navigator.connection.saveData`)
+  keeps the picture until Play, as before the game could watch (`mayWatch`); reduced-motion visitors still watch. **F4,
+  step 1:** the game is asked for when the browser has idle time (`requestIdleCallback`, 2 s at most, 250 ms where there is
+  none), after the page has loaded and the game's place is near, so reading and compiling it never lands on a first
+  scroll. The strip's words are the game's (Examples pull request 28): "Click" for a mouse, "Tap" for a finger; the
+  journeys accept either. The binary loader (F4, step 2) is a framework change and waits for the Owner's yes.
+
 - 2026-11-14: Part D, in this repo's pull request. The page asks for `/play/?watch` once it has loaded and the game's
   place is within a window's height (`whenNear`); the frame sits in the picture's own box with pointer events off, so
   a wheel or a dragging finger scrolls the page and a tap starts the game. Play, or that tap, tells the same frame to
