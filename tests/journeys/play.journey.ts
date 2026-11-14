@@ -3,7 +3,20 @@
 import { expect, test } from '@playwright/test'
 import { isCommit, parseVersion } from '../../src/features/version/version.ts'
 import { siteFacts } from './facts.ts'
-import { button, FRAME, frameHeight, play, playNames, pointsOnPicture, WORDS, whatIsAt } from './home.ts'
+import {
+  button,
+  FRAME,
+  frameHeight,
+  holdWatching,
+  isGameRequest,
+  isWatchRequest,
+  pageGame,
+  play,
+  playNames,
+  pointsOnPicture,
+  WORDS,
+  whatIsAt,
+} from './home.ts'
 import { arrive, fitsSideways, tabKey } from './look.ts'
 import { SIZES } from './sizes.ts'
 import { watchForTrouble } from './watch.ts'
@@ -57,7 +70,9 @@ for (const size of [SIZES[4], SIZES[0]]) {
       const gate = new Promise<void>((resolve) => {
         release = resolve
       })
-      await page.route('**/play/', async (route) => {
+      // The game that plays itself never arrives here, so the press loads the game itself, as it did before it could watch.
+      await page.route(isWatchRequest, (route) => route.abort())
+      await page.route(isGameRequest, async (route) => {
         await gate
         await route.continue()
       })
@@ -81,12 +96,18 @@ for (const size of [SIZES[4], SIZES[0]]) {
       await expect(page.locator('#game')).toHaveAttribute('data-state', 'playing')
     })
 
-    test("nothing of the site's is over the game's picture, before Play", async ({ page }) => {
+    // While the game that plays itself is on its way the frame is there and hidden; it is never over the picture.
+    test("nothing of the site's is over the game's picture, before the game that plays itself arrives", async ({
+      page,
+    }) => {
+      const release = await holdWatching(page)
       await arrive(page)
+      await expect(pageGame(page)).toHaveAttribute('data-state', 'ready')
       expect(
-        await page.locator('#game').evaluate((game) => [...game.children].map((child) => child.tagName)),
-      ).toEqual(['IMG'])
+        await pageGame(page).evaluate((game) => [...game.children].map((child) => child.tagName)),
+      ).toContain('IMG')
       expect(new Set(await whatIsAt(page, await pointsOnPicture(page)))).toEqual(new Set(['img.poster']))
+      release()
     })
 
     test('a double press starts one game', async ({ page }) => {

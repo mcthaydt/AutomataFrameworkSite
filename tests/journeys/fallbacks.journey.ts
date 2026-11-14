@@ -3,6 +3,7 @@
 // `look.journey.ts`.
 import { expect, type Page, test } from '@playwright/test'
 import { contrast } from '../fixtures/contrast.ts'
+import { isGameRequest, isWatchRequest } from './home.ts'
 import { arrive, colours, fitsSideways, groundBehind, loadedFonts, TOKENS, tabKey } from './look.ts'
 import { SIZES } from './sizes.ts'
 
@@ -117,7 +118,8 @@ test.describe('phone-390x844: a slow game', () => {
     const gate = new Promise<void>((resolve) => {
       release = resolve
     })
-    await page.route('**/play/', async (route) => {
+    await page.route(isWatchRequest, (route) => route.abort())
+    await page.route(isGameRequest, async (route) => {
       await gate
       await route.continue()
     })

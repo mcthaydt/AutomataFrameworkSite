@@ -1,5 +1,5 @@
 // What the journeys of the home page share: the words it says (asserted word for word), where the game's frame is, and
-// how to press a Play button and wait for the game inside the frame to say it is playing.
+// how to wait for the game to play itself, press a Play button and wait for the game inside the frame to say it is playing.
 import { type ConsoleMessage, expect, type FrameLocator, type Page } from '@playwright/test'
 
 export const WORDS = {
@@ -69,13 +69,52 @@ export const button = (page: Page, name: string) => page.getByRole('button', { n
  */
 export const PLAYING_MS = 15_000
 
+/** The page's own `#game`: its `data-state` is what the page believes the game is doing. */
+export const pageGame = (page: Page) => page.locator('#game')
+
+/** The request for the game's page in its watching form, and the request for the game to play. */
+export const isWatchRequest = (url: URL): boolean =>
+  url.pathname === '/play/' && url.searchParams.has('watch')
+export const isGameRequest = (url: URL): boolean =>
+  url.pathname === '/play/' && !url.searchParams.has('watch')
+
 /**
- * Presses a Play button (the sheet's by default) and waits until the game inside the frame says it is playing. When it
- * does not, the failure names the button that was pressed and says what the game was doing instead (audit F7): the
- * state it showed, the words on its screen, what its console said and how long it had been. When it does, how long it
- * took is printed, so a run that passes slowly can be told from one that passes fast.
+ * Holds back the game's page in its watching form until the returned function is called, so the page stays as it is
+ * while the game is still on its way. A request the page has given up on by then is let go without a word.
  */
-export async function play(page: Page, name: string = WORDS.play.sheet): Promise<FrameLocator> {
+export async function holdWatching(page: Page): Promise<() => void> {
+  let release: () => void = () => {}
+  const gate = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  await page.route(isWatchRequest, async (route) => {
+    await gate
+    await route.continue().catch(() => {})
+  })
+  return release
+}
+
+/** Waits until the page says the game is playing itself. The first look at a cold game takes as long as a first press. */
+export async function untilWatching(page: Page): Promise<void> {
+  await expect(pageGame(page), 'the game plays itself').toHaveAttribute('data-state', 'watching', {
+    timeout: PLAYING_MS,
+  })
+}
+
+/**
+ * Presses a Play button (the sheet's by default) and waits until the game inside the frame says it is playing. The game
+ * is let play itself first, as a person would see it, unless the press is `early`: a press before the game is ready is
+ * its own journey, and a game still on its way would otherwise be given up on with a request that is cancelled. When
+ * the game does not say it is playing, the failure names the button that was pressed and says what the game was doing
+ * instead (audit F7): the state it showed, the words on its screen, what its console said and how long it had been.
+ * When it does, how long it took is printed, so a run that passes slowly can be told from one that passes fast.
+ */
+export async function play(
+  page: Page,
+  name: string = WORDS.play.sheet,
+  options: { early?: boolean } = {},
+): Promise<FrameLocator> {
+  if (options.early !== true) await untilWatching(page)
   const said: string[] = []
   const listen = (message: ConsoleMessage): void => {
     if (message.type() === 'error' || message.type() === 'warning')
