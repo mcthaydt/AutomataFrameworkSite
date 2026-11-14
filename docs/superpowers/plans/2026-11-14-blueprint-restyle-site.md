@@ -3,11 +3,18 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 > Steps use checkbox (`- [ ]`) syntax for tracking. No subagents (project rule).
 
+> **Audited 2026-11-14** ([`audits/2026-11-14-blueprint-restyle-plan-audit.md`](../audits/2026-11-14-blueprint-restyle-plan-audit.md)).
+> Its findings S1 to S9 are written into this plan already; its notes N1 to N7 are for execution to read. One
+> question for the Owner is open (Q2, below); Task 3 waits for it.
+
 **Goal:** The home page and the 404 page wear Blueprint, the look the spec's "Visual direction" section gives the
-editors and the site, with not one word of copy changed and the game in the frame left exactly as it is.
+editors and the site, with not one word of copy changed and the game in the frame left exactly as it is. Onboarding
+(a first-time player learns what to do, how to do it and that they did it) is kept by the unchanged words and checked
+in Task 4 by questions 1, 2 and 11.
 
 **Architecture:** One stylesheet (`src/styles.css`) holds the five Blueprint colours as custom properties and is the
-only place a colour or a font is named. The two fonts come from packages and are served as the site's own files, so
+only place a colour or a font is named, but for one line in each page: the `theme-color` meta, which a browser reads
+before any stylesheet and which a test holds to the paper colour. The two fonts come from packages and are served as the site's own files, so
 the strict header does not change. Icons are Phosphor's regular SVGs, written into the HTML when the site is built by
 a small Node feature (`icons`), so they need no script on the page, take the colour of the words beside them and are
 there with JavaScript off.
@@ -25,7 +32,24 @@ the private notes and nothing from it is copied here.
 file) and 2 (iPad-first: touch sizes and every picture at phone and tablet size, upright and sideways). It breaks
 none: no framework dependency, no 3D, no monorepo.
 
-## Open for the Owner (answer before Task 1 starts)
+## Open for the Owner (answer before Task 3 starts)
+
+**Q2. Once the game is playing, does the thin chalk line stay round it?** Two audits of this plan read the spec's
+"the game's art is never restyled" two ways, so it is the Owner's to say:
+
+- (a) **The line stays.** It is drawn outside the game's box, beside the game and never over it, and the game keeps
+  the same frame before and after Play. **The plan is written for (a).**
+- (b) **The line goes when the game plays.** Nothing of the site's is drawn round a playing game. Task 3, Step 5
+  gains `#game[data-state="playing"] { outline: none; }`, and "the game's own picture is left alone" also expects
+  `#game`'s `outline-style` to be `none` once it plays. Nothing else changes.
+
+Tasks 1 and 2 do not depend on it. Execution does not start Task 3 until the coordinator passes on the Owner's
+answer; it never picks one by default.
+
+## Asked of the Owner, and answered
+
+**Q1 is answered: (a).** The coordinator passed on the Owner's yes to `@fontsource/ibm-plex-sans-condensed` 5.3.0 and
+`@fontsource/jetbrains-mono` 5.3.0 on 2026-11-14 (the plan audit's S6). Nothing is open. The question as it was asked:
 
 **Q1. Are these the font packages the Owner's yes covers?** The spec says how the font files are shipped is the
 plan's choice and that a font package needs the Owner's yes; the Owner has said yes to the fonts "as packages". This
@@ -37,8 +61,7 @@ plan names the packages, which nobody has named yet:
 - (c) no package: the font files are copied into `public/fonts/` with their licence files. Task 1 changes; nothing
   else does.
 
-`@phosphor-icons/core` 2.1.1 (MIT) is already approved by name in the spec. Execution does not start Task 1 until the
-coordinator passes on the Owner's answer; it never picks one by default.
+`@phosphor-icons/core` 2.1.1 (MIT) is already approved by name in the spec.
 
 ## Depends on
 
@@ -52,11 +75,17 @@ with that pull request merged: it changes the same stylesheet and the same journ
   `#8FB0D3`, marker `#FFD447`. Marker means "you can touch this" and is used for nothing else.
 - **Type:** IBM Plex Sans Condensed for words, in capitals for labels (headings, buttons, the footer's links, the
   loading line); JetBrains Mono for numbers and measures (the game's version line), tabular. Sentences stay in
-  sentence case: capitals are for short labels only, and are made by CSS (`text-transform`), never typed.
+  sentence case: capitals are for labels only, and are made by CSS (`text-transform`), never typed. Every heading is
+  a label, the 404 page's "This page does not exist." included: it is the page's title, set like a sign. Its link
+  ("Go to the home page") and its sentence are not labels.
+- **Icons are chalk, or the colour of the words they sit beside** (the spec's table gives icons to chalk). No icon is
+  pencil.
 - **Dark is the only theme.** The page ignores the device's light or dark setting. No light theme in this plan.
 - **Square corners of 2 px, 1 px chalk lines, no shadows** (nothing on the site floats).
 - **The game's art is never restyled.** No filter, tint, opacity, blend, rounded corner or border is put on the frame
-  or on anything around it once the game plays. The site names no colour of the game.
+  or on the game's place once the game plays. Whether the 1 px chalk line round the game's place stays once the game
+  plays is Q2; it is an outline, drawn outside the box, so in either answer it is never over the game. The site
+  names no colour of the game.
 - **Every icon is Phosphor regular and has its words beside it.** No icon stands alone.
 - **The strict header stays byte for byte.** `public/_headers` is not edited. No font, icon, style or script comes
   from another address or from a `data:` address.
@@ -95,7 +124,8 @@ out:
   the built CSS points at `/assets/…`. Nothing is inlined when `build.assetsInlineLimit` is `0`.
 - `pnpm knip` reports all three packages as unused, because it does not read CSS imports or `import.meta.resolve`.
   They go in `knip.json`'s `ignoreDependencies`.
-- `import.meta.resolve('@phosphor-icons/core/assets/regular/play.svg')` works; the package exports that path. The six
+- `import.meta.resolve('@phosphor-icons/core/assets/regular/play.svg')` works; the package exports that path. (It
+  also "works" for a name that is no icon: see Task 2, Step 2.) The six
   icons this plan uses exist under those names. Each file is one line:
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="…"/></svg>`.
 - `vite.config.ts` can import `./src/build.ts`, and `pnpm typecheck` passes with the plugin below.
@@ -183,14 +213,18 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 - Produces, in `tests/journeys/look.ts`:
   - `arrive(page: Page, address?: string): Promise<void>`: `page.goto(address ?? '/')`, then waits for
     `document.fonts.ready`. Every journey that measures or takes a picture uses it in place of `page.goto`.
+  - `settle(page: Page): Promise<void>`: waits until `#game-version` is visible, then for `document.fonts.ready`
+    again. The version line arrives after the page's script has fetched `version.json`, and only then does the
+    browser ask for the number font, so `arrive` alone can return before either. A journey that takes a picture of
+    the whole page, counts what Tab can reach or measures the version line calls it after `arrive`. (Both test games
+    have a version file; the journey with the file missing does not call it.)
   - `loadedFonts(page: Page): Promise<string[]>`: for every face in `document.fonts` whose `status` is `'loaded'`,
     `"<family> <weight>"` with any quotes round the family removed, sorted.
   - `LABEL = 'IBM Plex Sans Condensed'`, `MEASURE = 'JetBrains Mono'`.
 - Produces, in CSS: `--label` and `--measure` on `:root`.
 
 - [ ] **Step 1: Check what this stands on.** Run `test -f tests/workflows/names.test.ts && git log --oneline -1 -- tests/workflows/names.test.ts`.
-  If the file is missing, pull request 6 is not on `main`: stop and report to the coordinator. Confirm the
-  coordinator has passed on the Owner's answer to Q1; if not, stop and report. Then set the git author (Global
+  If the file is missing, pull request 6 is not on `main`: stop and report to the coordinator. Then set the git author (Global
   Constraints) and add the Cycle 2 execution row to `progress.md` as "In progress, 0%".
 
 - [ ] **Step 2: Write the journeys.** In `tests/journeys/look.journey.ts`, with a header comment saying what the file
@@ -362,7 +396,13 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   ```
 
   `readIcon` answers `undefined` for any name that is not lower-case letters, digits and hyphens, before it looks
-  for a file.
+  for a file. For a name of the right shape it must read the file and answer `undefined` when the read fails:
+  `import.meta.resolve` gives back an address for an icon that does not exist and does not throw (measured by the
+  plan audit, Node 22), so the missing file is only found on reading it. Without that, a mistyped name ends the
+  build with Node's own "no such file" and not `IconError`'s sentence. `import.meta.resolve` was tried in Node and in
+  the Vite config while planning, never under Vitest; if `read.test.ts` is red in CI because it is missing there,
+  use `createRequire(import.meta.url).resolve(…)` from `node:module` (the package exports the same path to both) and
+  report the change as a deviation.
 
 - [ ] **Step 3: Write the feature.** `inline.ts`, `read.ts` and `icons.ts` (which only re-exports the two), each with
   a header comment saying its one job and why icons are written in at build time (no script on the page, the words'
@@ -441,6 +481,8 @@ ten minutes of all three engines. A journey that passes only on a second run is 
       await expect(icon).toHaveAttribute('aria-hidden', 'true')
       // The words are the icon's neighbours: its parent says something without it.
       expect((await icon.evaluate((svg) => svg.parentElement?.textContent ?? '')).trim().length).toBeGreaterThan(3)
+      // …and it is the colour of those words (the SVG's fill is currentColor, and no rule gives an icon its own).
+      expect(await icon.evaluate((svg) => getComputedStyle(svg).color === getComputedStyle(svg.parentElement as Element).color)).toBe(true)
       const box = await icon.boundingBox()
       expect(Math.round(box?.width ?? 0)).toBeGreaterThanOrEqual(20)
       expect(Math.round(box?.height ?? 0)).toBeGreaterThanOrEqual(20)
@@ -504,6 +546,13 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     expect(css).not.toContain('prefers-color-scheme')
     expect(css).not.toContain('--sky')
   })
+  // The one colour named outside the stylesheet: a browser reads it before any stylesheet, so it is held to paper here.
+  test.each(['index.html', '404.html'])('%s tells the browser the paper colour, and names no other', (file) => {
+    const html = readFileSync(new URL(`../../${file}`, import.meta.url), 'utf8')
+    expect(html).toContain(`<meta name="theme-color" content="${SPEC.paper}" />`)
+    expect(html).toContain('<meta name="color-scheme" content="dark" />')
+    expect(html.match(/#[0-9a-fA-F]{6}\b/g)).toEqual([SPEC.paper])
+  })
   test('nothing has a shadow, and corners are 2 px', () => {
     expect(css).not.toContain('box-shadow')
     expect(css.match(/border-radius:\s*([^;]+);/g)?.every((line) => line.includes('var(--corner)'))).toBe(true)
@@ -542,7 +591,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 
   test('every word can be read: 4.5 to 1 or more against what is behind it', async ({ page }) => {
     await arrive(page)
-    await expect(page.locator('#game-version')).toBeVisible()
+    await settle(page)
     const found = await colours(page, READABLE)
     expect(found.length).toBeGreaterThanOrEqual(16)
     for (const { what, words, ground } of found) expect(contrast(words, ground), what).toBeGreaterThanOrEqual(4.5)
@@ -608,10 +657,19 @@ ten minutes of all three engines. A journey that passes only on a second run is 
       expect(style).toEqual({ filter: 'none', opacity: '1', blend: 'normal', corner: '0px', border: '0px' })
     }
     // The frame fills its place edge to edge: the chalk line is drawn outside it, never over the game.
-    const [place, game] = [await page.locator('#game').boundingBox(), await frame.boundingBox()]
-    expect(game).toEqual(place)
+    // Rounded: an engine may report the same edge a hair apart for two boxes (Firefox gave 55.99997 for 56 in Cycle 1).
+    const edges = async (selector: string): Promise<number[]> => {
+      const box = await page.locator(selector).boundingBox()
+      return [box?.x, box?.y, box?.width, box?.height].map((edge) => Math.round(edge ?? -1))
+    }
+    expect(await edges('iframe[title="The demo game"]')).toEqual(await edges('#game'))
   })
   ```
+
+  Also in the per-size block, **"everything that can be pressed is big enough for a thumb"**: after `arrive` and
+  `settle`, every visible `a[href]` and every visible `button` has a bounding box at least 44 px high (rounded, as
+  `home.journey.ts` rounds for Firefox), and the Play button at least 56. The icons now sit inside the footer's
+  links, and until this journey nothing measured them, the link in "What to do next" or the version line's link.
 
   Outside the per-size block, each with its own `test.describe` and `test.use`:
 
@@ -621,7 +679,8 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   - **`phone-390x844: with JavaScript off`** (`javaScriptEnabled: false`, `page.goto('/')`; Review Focus 3): `body`'s
     ground is `TOKENS.paper`; `svg.icon` count is 6; `p.no-script` is visible and its `colours` contrast is at least
     4.5; the Play button is hidden.
-  - **`tablet-820x1180: the ring shows on everything Tab reaches`** (Review Focus 4): after `arrive`, press `Tab`
+  - **`tablet-820x1180: the ring shows on everything Tab reaches`** (Review Focus 4): after `arrive` and `settle`
+    (the real game's version line is a link, and it must be there before the links are counted), press `Tab`
     once per focusable (`a[href], button:not([hidden])`, counted on the page), and at each stop the focused element
     matches `:focus-visible`, its `outline-color` is `TOKENS.chalk`, its `outline-width` is `3px`, and
     `contrast(TOKENS.chalk, <what is behind it, from groundBehind()>)` is at least 3. The count of stops equals the count of
@@ -635,13 +694,18 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   `arrive(page, '/no-such-page')`: the title, the `h1` and the sentence word for word (the same words
   `hosting.journey.ts` checks); `body`'s ground is `TOKENS.paper`; every `colours(page, READABLE)` entry is at
   least 4.5 to 1; the home link is marker yellow, at least 44 px high, has one `svg.icon`, and its name is exactly
-  "Go to the home page"; nothing is wider than the window; every line `watchForTrouble` found mentions `404` (the
+  "Go to the home page"; the `h1`'s `text-transform` is `uppercase` and the sentence's and the link's are `none`
+  (a heading is a label; see Global Constraints); the `color-scheme` meta is `dark` and the `theme-color` meta is
+  `#0A1F3C`, as on the home page; nothing is wider than the window; every line `watchForTrouble` found mentions `404` (the
   address itself, which is the point) and none mentions anything else; picture `<size>-not-found.png`.
 
 - [ ] **Step 4: Update `tests/journeys/home.journey.ts`.** Remove the whole `phone-390x844: dark mode` describe
-  (see "What this replaces"). In the per-size "before any scroll" test, after the existing picture, also take
+  (see "What this replaces"). In the per-size "before any scroll" test, after the existing picture, call
+  `await settle(page)` and then take
   `await page.screenshot({ path: \`tests/journeys/__screenshots__/${size.name}-whole.png\`, fullPage: true })`, so
-  people can see the parts below the first screen. Add, at `phone-390x844` with `colorScheme: 'light'`, a test that
+  people can see the parts below the first screen, with the version line there and in its own font. Every picture this
+  plan adds is written under `tests/journeys/__screenshots__/`, the only folder `journeys.yml` uploads. Add, at
+  `phone-390x844` with `colorScheme: 'light'`, a test that
   takes `phone-390x844-arrival-light-setting.png` after `arrive`; and at `phone-390x844` a test that focuses the Play
   button with the keyboard (`page.keyboard.press('Tab')` until it is focused, `Alt+Tab` in WebKit) and takes
   `phone-390x844-focus.png`.
@@ -757,11 +821,8 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     margin-bottom: 16px;
   }
 
-  /* …Task 2's icon rules go here, unchanged but for its `.home` block, which the last rule of this sheet now covers,
-     plus: */
-  .help .icon {
-    color: var(--pencil);
-  }
+  /* …Task 2's icon rules go here, unchanged but for its `.home` block, which the last rule of this sheet now covers.
+     No rule gives an icon a colour of its own: each takes the colour of the words beside it. */
 
   /* The game's place: a sheet of hatch with a chalk line round it until the game plays. The line is an outline, drawn
      outside the box, so the frame fills the box edge to edge and the line is never over the game. No rounded corner
@@ -896,14 +957,21 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   2. Could a drunk grandma say what this page is and what to press, from the arrival picture alone?
   3. Is yellow only on things that can be pressed?
   4. Are the words set in the condensed font (not the device's own), and the version line in the number font?
-  5. Is every icon beside its words, sharp, and the colour of those words?
+  5. Is every icon beside its words, sharp, and the colour of those words (chalk beside chalk, yellow in a link,
+     paper on the Play button), with none in pencil?
   6. Do the heading, the lede and the Play button all fit in the arrival picture, upright and sideways, on the phone
      and the tablet?
-  7. Does the playing game look exactly as it does in the pictures from before this work (`main/` on `ci-screens`):
-     the same colours, no tint, no rounded corner, no line over it?
+  7. Does the playing game look exactly as it does in the pictures from before this work: the same colours, no
+     tint, no rounded corner, no line over it? Compare like with like: the stand-in game's `pr-<number>/` with
+     `main/`, and the real game's `pr-<number>-real/` with `live/` (`main/` holds the stand-in game, never the real
+     one).
   8. Does "Loading the game…" read as a note on the sheet, and does the focus ring show clearly?
   9. Does the page on a device set to light look the same as the others?
-  10. Is anything cut off, overlapping, or wider than the window?
+  10. Is anything cut off, overlapping, or wider than the window? On the phone, does any link drop to a line of its
+      own and leave a gap in its sentence (the plan audit's N3)? Report that one; do not fix it here.
+
+  11. After Play is pressed, do the loading note and then the game make it plain that the press worked
+      (`phone-390x844-loading.png`, then `<size>.png`)?
 
   A "no" is a defect: fix it in this task if it is a value in the stylesheet, with a journey that would have caught
   it; report it and stop if it is anything else.
