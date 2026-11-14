@@ -7,7 +7,7 @@ The tracker every stage reads first and updates last. One section per cycle; new
 A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
 site). It stands in for the spec, with the "Visual direction" section of the spec in AutomataFramework.
 
-Overall: **75%** (the design audit is 5 points, the plan 10, its audit 5, execution 40, the implementation audit 15,
+Overall: **90%** (the design audit is 5 points, the plan 10, its audit 5, execution 40, the implementation audit 15,
 fixes 15, the Owner's review 10)
 
 | Stage | State | Output |
@@ -19,10 +19,53 @@ fixes 15, the Owner's review 10)
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-home-redesign-plan-audit.md`](audits/2026-11-14-home-redesign-plan-audit.md) |
 | 4. Execution | Done, 100% (waits only for CI on its last push) | [pull request 17](https://github.com/mcthaydt/AutomataFrameworkSite/pull/17); pictures: `ci-screens/pr-17` and `pr-17-real` |
 | 5. Implementation audit | Done, 100% | [`audits/2026-11-14-site-redesign-implementation-audit.md`](audits/2026-11-14-site-redesign-implementation-audit.md) |
-| 6. Fixes | Not started | |
+| 6. Fixes | Done, 100% (waits only for CI on its last push) | [pull request 19](https://github.com/mcthaydt/AutomataFrameworkSite/pull/19) |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 6, the fixes, in [pull request 19](https://github.com/mcthaydt/AutomataFrameworkSite/pull/19).
+  The Owner's answers: Q1 (a) the stamp lands once when in view; Q2 (b) the share card drops the lede so about a
+  third is the game; Q3 (a) the tiny phone words wait for the "watch" state; Q4 (b) the card reads "The part after
+  the demo comes built in" until it works. Lenis stays on for everyone, subtle. In the order done:
+  - **F7, first.** Playwright keeps a trace on failure and `journeys.yml` uploads `test-results/` for a failed
+    engine (`test-results-<engine>`, 14 days). The Play journey names the button it pressed and, when the game does
+    not say it is playing, says the state the game showed, its words, its console and how long it had been; it also
+    prints how long each press took. The picture journey reads `/game.png`'s own pixels in Node (`png.ts`, with a
+    test of the reader against pictures made with each row filter), not through a canvas. *The causes.* The
+    picture's: WebKit's canvas handed back nothing for a 2560 by 1440 picture once (one colour, where Chromium and
+    Firefox read the same bytes and passed); a canvas is the engine's own memory, the file is not, so that way of
+    looking is gone; it was never the page. The Play journey's: time. The printed times of the first CI run after
+    the change are 1.0 to 1.3 s for the first (cold) press of a test and 0.5 to 0.7 s for the next, and one press took
+    3.8 s while the runner's other worker was busy: a 5 s limit has about a second to spare at the worst of those and
+    fails when a busier moment comes. That is the best-supported cause, not a proven one for the run that failed (the
+    run kept nothing, which is why the trace and the message were added first); the message now tells a hang from a
+    slow start. The limit is 15 s (the build's own limit for the same wait), and each press's time is printed.
+  - **F1 and Q2.** The share card hides the sheet's button, the keys line, the loading note and the lede; the game's
+    two lines of words are whole and the level starts under them. `share.journey.ts` sets the attribute the build
+    sets and checks nothing is a button, nothing is words in the touch colour, and the game fills a quarter to two
+    fifths of the card.
+  - **F2 and Q1.** The stamp waits (`data-landing="waiting"`, set by `land.ts`) and lands once over 220 ms when 90% of
+    it is in the window; with no script, with reduced motion, or with no `IntersectionObserver` it is simply there.
+  - **F3.** A press on a link to a place on the page gives that place the keyboard (`tabindex="-1"`, no ring);
+    `links.journey.ts` presses each way at three sizes, then Tab, and expects the focus on and then past the list.
+  - **F4.** The bar is kept only from 700 px wide and 500 px high; on a phone it scrolls away. `#game` clears 64 px
+    where the bar is kept and none where it is not, so the playing game's top edge is the bar's bottom edge (or the
+    window's top) to the pixel (`bar.journey.ts`).
+  - **Q4.** `claims.json` gives the card a `whileBuilding` title; the spec's title returns with the stamp.
+  - **F5.** The three untrue lines above are corrected in place.
+  - **F6.** The stylesheet is six parts in `src/styles/` that `src/styles.css` imports in order; the built CSS is byte
+    for byte what it was, the six colours are named in `base.css` only, and the architecture test counts lines in
+    every `.ts` and `.css` under `src`, `scripts` and `tests` (a test of the rule). `look.journey.ts` is split into
+    look, touch and fallbacks, `home.journey.ts` into home, play and bar; every file is under 600 lines.
+  - **Minor.** M1 the motion comment and the plan's Task 8 say where the build left them, and the reduced-motion
+    journey is renamed. M2 `CLAUDE.md` says six colours. M3 a refused build ends on its sentence. M4 the version link
+    keeps its line. M5 the four numbers stand one under another below 480 px. M6 the README names `GAME_COMMIT`. M7 and
+    M8 are left as the audit left them. The `commit-authors` pattern now also catches "Generated by Claude Code" (B1's
+    cause), with cases in its test.
+  - Run here, not as tests: `biome check`, `tsc`, `knip` and the builds; the pictures and measurements were read from
+    a build of the real game in Chromium. No test was run locally; CI is the check, and its result is in the pull
+    request.
 
 - 2026-11-14: Stage 5, the implementation and design audit of pull request 17 at `4ceba86`, run on Fable as the
   Owner asked for design audits. The build is what the plan asked for and looks finished on a computer and a tablet;
@@ -45,7 +88,7 @@ fixes 15, the Owner's review 10)
 
 - 2026-11-14: Stage 4, execution of all nine tasks, plus smooth scrolling the Owner asked for during it.
   Journeys: 181 per engine against the stand-in game (180 run, 1 skipped: the live check), in Chromium, WebKit and
-  Firefox; Node tests: 226 before the Lenis commit, plus 3 for `motion`. Tasks 6 and 7 are one commit (their pages
+  Firefox; Node tests: CI ran 231 (this line said 226 plus 3; corrected in Stage 6, audit F5). Tasks 6 and 7 are one commit (their pages
   share one stylesheet and one journey file). Deviations, each with its reason:
   1. **Lenis added (the Owner, 2026-11-14: "super subtle smoothed page scrolling").** `lenis` 1.3.27, MIT, bundled by
      Vite so it is self-hosted and the strict header is unchanged; its notice is in `public/licences.txt`. A new
@@ -76,12 +119,14 @@ fixes 15, the Owner's review 10)
   7. Yes: the wordmark, claim, lede and button fit before any scroll at 844 by 390.
   8. Yes: the numbers, file rows, table and title block are `facts.json`'s; the stamps read one "Works today", four "Being built".
   9. Yes: after Play the note says "Loading the game..." in the sheet, then the game; a second press goes back to it.
-  10. Yes: `share.png` reads at link-preview size (claim, line, the game's picture edge) with no button or link drawn.
+  10. Not as first written: `share.png` had the sheet's "Play it" button and the keys line drawn in it (audit F1). It no
+      longer does: no button, no keys line and no lede, and about a third of the card is the game; `share.journey.ts` holds it.
   11. Yes: the 404 page is the same site with one way home.
   12. Yes, to the eye of its author: one biggest thing per screen, air between sections, visible dividing lines. The
       Owner's judgement.
-  13. On a phone the game's own words are about 14 px when its picture fills the width and smaller in the first
-      screen's cropped corner; they read. That is the Owner's to judge.
+  13. Not as first written (audit F5): the game's own words in the picture are 14.6 px on a computer, 11 px on an upright
+      tablet and 5 px on a phone, where they do not read. The Owner's answer to Q3 (a): leave it until the game's "watch"
+      state replaces the picture with the real game at the phone's own size.
 
   For the Owner to look at first in Stage 7: the live first screen on a phone, the stamps landing as the cards come
   in, the share picture, and how the smooth wheel feels (it is meant to be barely noticed).
