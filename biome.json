@@ -21,7 +21,12 @@
     },
     {
       "includes": ["src/styles.css"],
-      "linter": { "rules": { "style": { "noDescendingSpecificity": "off" } } }
+      "linter": {
+        "rules": {
+          "style": { "noDescendingSpecificity": "off" },
+          "complexity": { "noImportantStyles": "off" }
+        }
+      }
     }
   ]
 }
