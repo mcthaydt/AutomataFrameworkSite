@@ -81,7 +81,8 @@ for (const size of [SIZES[4], SIZES[2], SIZES[0]]) {
         const frame = await page.locator(FRAME).boundingBox()
         // Where the bar is kept, the frame's top is measured against the bar's bottom; otherwise against the window's.
         const floor = kept ? Math.round((bar?.y ?? 0) + (bar?.height ?? 0)) : 0
-        return Math.round(frame?.y ?? 1e6) - floor
+        // `+ 0` turns a -0 into 0, which `toBe` tells apart.
+        return Math.round(frame?.y ?? 1e6) - floor + 0
       }
       await expect.poll(edge, { message: 'the game flush with what is above it' }).toBe(0)
       // The pixel just under that edge is the game's own frame, not a strip of the page.
