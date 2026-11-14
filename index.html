@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>AutomataFramework</title>
+  </head>
+  <body>
+    <div class="page">
+      <div class="stage">
+        <h1>AutomataFramework</h1>
+        <p class="lede">AutomataFramework is a toolkit for making 2D games that play in a web browser. It is still being built. Below is the first game made with it.</p>
+        <section id="game" aria-label="The game">
+          <noscript><p class="no-script">This game needs JavaScript. Turn it on in your browser's settings, then load this page again.</p></noscript>
+          <button type="button" class="play" hidden>Play the game</button>
+          <p class="status" role="status" hidden>Loading the game…</p>
+        </section>
+      </div>
+
+      <section>
+        <h2>How to play</h2>
+        <ul class="help">
+          <li>On a computer: hold the left or right arrow key to move. Press Space to jump.</li>
+          <li>On a phone or tablet: hold the Left or Right button to move. Tap Jump to jump.</li>
+          <li>Keys not working? Click the game once, then try again.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>What you are playing</h2>
+        <p class="playing">You are playing the game exactly as it is saved on GitHub. When someone changes it there and the change passes its checks, this page shows the new game a little while later.</p>
+        <p id="game-version" hidden></p>
+      </section>
+
+      <section>
+        <h2>What to do next</h2>
+        <ul class="next">
+          <li>Play the game above. It takes a minute.</li>
+          <li>See how it is made: <a href="https://github.com/mcthaydt/AutomataFrameworkExamples">the game's files are on GitHub</a>.</li>
+          <li>Make your own game: not yet. The toolkit is still being built, and this page will say when it is ready.</li>
+        </ul>
+      </section>
+
+      <footer>
+        <a href="https://github.com/mcthaydt/AutomataFrameworkExamples">The game on GitHub</a>
+        <a href="https://github.com/mcthaydt/AutomataFramework">The toolkit on GitHub</a>
+      </footer>
+    </div>
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>

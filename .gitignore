@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.superpowers/
+.wrangler/
+test-results/
+*.tsbuildinfo
+__screenshots__/

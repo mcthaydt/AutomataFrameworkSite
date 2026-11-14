@@ -1,0 +1,6 @@
+# The one package of this repo. pnpm reads its install settings from here.
+saveExact: true
+# wrangler's two programs, which pnpm 10 builds only when told to: `wrangler pages dev` needs both to serve the site.
+onlyBuiltDependencies:
+  - esbuild
+  - workerd

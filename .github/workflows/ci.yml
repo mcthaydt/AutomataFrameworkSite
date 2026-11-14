@@ -1,0 +1,61 @@
+# `check` runs the static checks and the Node tests. `build` makes the site around a stand-in game, and `journeys` drives
+# it in real Chromium, WebKit and Firefox. Every action is pinned to a commit.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.21.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm knip
+      - run: pnpm test:node
+
+  # The site as it would be served, with the stand-in game, for the journeys to drive.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.21.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: site
+          path: dist
+          if-no-files-found: error
+
+  # A called workflow gets no more than its caller grants: `actions: read` lets it download the site, and
+  # the right to write lets its `screens` job push the pictures to the ci-screens branch, and nothing else may write.
+  journeys:
+    needs: build
+    permissions:
+      actions: read
+      contents: write
+    uses: ./.github/workflows/journeys.yml
+    with:
+      site-artifact: site
+      latest: ${{ github.event_name == 'push' && 'main' || format('pr-{0}', github.event.pull_request.number) }}

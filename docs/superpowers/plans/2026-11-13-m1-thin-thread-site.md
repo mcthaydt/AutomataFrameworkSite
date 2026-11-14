@@ -32,8 +32,9 @@ and its two audits, this repo's `CLAUDE.md` and [`progress.md`](../progress.md).
 Not in this plan, because M1's Site line does not use it:
 
 - The home page's five claims, guides, the examples gallery and the API reference (M4).
-- The browser editors and their sign-in function. Where M1's editor is hosted is the Editors plan's question, with the
-  Owner. If the answer is "on the site", that is a new task here, not a change to these.
+- The browser editors and their sign-in function. The Owner has decided that the editors get their own Cloudflare Pages
+  project, so the Site does not host them in M1 (plan audit S4). The home page links to the editor once its address
+  exists (the Owner's answer to Q1); that line lands in Task 8.
 - A price page. Its brief is in the Owner's private notes and it starts after M1.
 - A domain (spec, open item 2), other languages, Svelte (one static page has no use for it; it arrives with M4's
   site), Effect (three short scripts).
@@ -185,7 +186,7 @@ export interface Violation { readonly file: string; readonly rule: string; reado
 export function checkArchitecture(files: SourceFiles): Violation[]
 ```
 
-- [ ] **Step 1: Write the config.** Copy from AutomataFramework at `ec4fddd96d0f1e39365ff807306faf9b42ac3190` and
+- [x] **Step 1: Write the config.** Copy from AutomataFramework at `ec4fddd96d0f1e39365ff807306faf9b42ac3190` and
   change only what is named: `biome.json` (drop `!schemas` and `!docs/api`), `.gitignore` (add `.wrangler/`,
   `test-results/`), `tsconfig.json` (drop `isolatedDeclarations` and `declaration`; nothing is published), `knip.json`
   (entries `scripts/*.ts`, `tests/**/*.test.ts`, `tests/journeys/*.journey.ts`, `playwright.config.ts`; ignore
@@ -195,7 +196,7 @@ export function checkArchitecture(files: SourceFiles): Violation[]
   `test:node` (`vitest run`). Add each dev dependency, at the Tech Stack's exact version, in the task that first uses
   it (knip fails on an unused one): this task adds `@biomejs/biome`, `typescript`, `knip`, `vitest`, `@types/node`.
   `vitest.config.ts`: one Node project, `tests/**/*.test.ts`.
-- [ ] **Step 2: Write `ci.yml`,** job `check` only, copied from the framework's `ci.yml` (`on`, `permissions`,
+- [x] **Step 2: Write `ci.yml`,** job `check` only, copied from the framework's `ci.yml` (`on`, `permissions`,
   `concurrency` and the `check` job as they are). `tests/workflows/ci.test.ts` reads the file's text:
 
 ```ts
@@ -203,7 +204,7 @@ test('the workflow as a whole can only read the repository', ...)   // /^permiss
 test('every action is pinned to a commit', ...)                     // each `uses:` of an action matches /@[0-9a-f]{40} # v/
 ```
 
-- [ ] **Step 3: Write the failing tests.** Lift `tests/architecture/rules.ts`, `rules.test.ts` and
+- [x] **Step 3: Write the failing tests.** Lift `tests/architecture/rules.ts`, `rules.test.ts` and
   `tests/architecture.test.ts` from the framework at the commit above (first line
   `// Lifted from AutomataFramework@ec4fddd9: <path>`), then change the rules to this repo's:
   - `LAYERS` as above. Drop `sim-is-pure` and `headless-is-headless` with their tests; replace `CONFINED` and the
@@ -226,13 +227,13 @@ test('the Node entry reaches nothing that needs a page', () =>
 
   Keep the lifted tests for `imports-go-down`, `through-the-entry`, `lib-is-below-features`, `no-cycles`,
   `no-tests-in-src`, `at-most-600-lines`, `feature-has-entry` and `unknown-feature`, with this repo's feature names.
-- [ ] **Step 4: Push; `check` fails** on the three new rule tests (the lifted rules do not know them). This run also
+- [x] **Step 4: Push; `check` fails** on the three new rule tests (the lifted rules do not know them). This run also
   answers "Before starting" item 2. Open the stage's pull request as a draft, with a few lines saying what M1's site is.
-- [ ] **Step 5: Implement the two rules.** `src/index.ts` and `src/build.ts` are one comment each for now.
+- [x] **Step 5: Implement the two rules.** `src/index.ts` and `src/build.ts` are one comment each for now.
   `README.md`: what the site is, that the game comes from AutomataFrameworkExamples, and that tests run only in
   GitHub Actions.
-- [ ] **Step 6: Push; `check` passes.**
-- [ ] **Step 7: Commit** (`chore: repo skeleton, the check job and the architecture test`).
+- [x] **Step 6: Push; `check` passes.**
+- [x] **Step 7: Commit** (`chore: repo skeleton, the check job and the architecture test`).
 
 ### Task 2: The version stamp
 
@@ -255,7 +256,7 @@ export function shortCommit(text: string): string                  // the first 
 export function gameCommitUrl(version: Version): string | undefined // https://github.com/<GAME_REPO>/commit/<game>, only for a commit
 ```
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 const A = 'a'.repeat(40), B = 'b'.repeat(40)
@@ -268,10 +269,10 @@ test('gameCommitUrl links a commit and nothing else', ...)
   // { site: A, game: B } -> 'https://github.com/mcthaydt/AutomataFrameworkExamples/commit/' + B; game 'fixture' -> undefined
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `version.ts` does not exist.
-- [ ] **Step 3: Implement.** No package: `JSON.parse` in a `try`, then field checks.
-- [ ] **Step 4: Push; `check` passes.**
-- [ ] **Step 5: Commit** (`feat(version): the stamp that says which site and game a build holds`).
+- [x] **Step 2: Push; `check` fails** because `version.ts` does not exist.
+- [x] **Step 3: Implement.** No package: `JSON.parse` in a `try`, then field checks.
+- [x] **Step 4: Push; `check` passes.**
+- [x] **Step 5: Commit** (`feat(version): the stamp that says which site and game a build holds`).
 
 ### Task 3: Picking the game's commit, and deciding whether to deploy
 
@@ -322,7 +323,7 @@ export function listCandidates(options: {
   5. Otherwise build, and deploy when `hostReady`. Reason: `Building the site at <site 7> with the game at <game 7>.`,
      plus ` It will not be deployed: the Owner has not added CLOUDFLARE_API_TOKEN.` when not `hostReady`.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 const run = (name: string, conclusion: string | null = 'success', status = 'completed') => ({ name, status, conclusion })
@@ -346,14 +347,14 @@ test('listCandidates turns a refusal into a sentence', ...)
   // a fetch that rejects -> GitHubError 'GitHub could not be reached. The site keeps the game it has.'
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `pick.ts` does not exist.
-- [ ] **Step 3: Implement.** `scripts/pick-game.ts` is the thin wrapper: it reads `GITHUB_EVENT_NAME`, `GITHUB_SHA`
+- [x] **Step 2: Push; `check` fails** because `pick.ts` does not exist.
+- [x] **Step 3: Implement.** `scripts/pick-game.ts` is the thin wrapper: it reads `GITHUB_EVENT_NAME`, `GITHUB_SHA`
   (for a pull request, `PR_HEAD_SHA`), `GH_TOKEN`, `SITE_URL` and `HOST_READY`; calls `listCandidates` for
   `GAME_REPO`, `main`, 10 commits (a `GitHubError` is printed and means `picked` is undefined); fetches
   `${SITE_URL}/version.json` (any failure means `live` is undefined); prints the reason; and appends `game=`,
   `build=` and `deploy=` to the file `GITHUB_OUTPUT` names. It exits 0 whatever GitHub or the live site answered.
-- [ ] **Step 4: Push; `check` passes.**
-- [ ] **Step 5: Commit** (`feat(pick): choose the newest checked game and decide whether to deploy`).
+- [x] **Step 4: Push; `check` passes.**
+- [x] **Step 5: Commit** (`feat(pick): choose the newest checked game and decide whether to deploy`).
 
 ### Task 4: The stand-in game, and putting a game into the site
 
@@ -383,7 +384,7 @@ export function addGame(options: { readonly siteDir: string; readonly gameDir: s
   `SITE_COMMIT` (default `GITHUB_SHA`, else `dev`), and calls `addGame` with `siteDir` `dist`. An `AssembleError`
   is printed as its sentence, without a stack, and exits 1.
 
-- [ ] **Step 1: Write the failing tests** (each in its own folder under `os.tmpdir()`, removed afterwards):
+- [x] **Step 1: Write the failing tests** (each in its own folder under `os.tmpdir()`, removed afterwards):
 
 ```ts
 test('the game is copied to play/ with everything beside it', ...)
@@ -401,12 +402,12 @@ test('a game that uses addresses starting with / is refused, because it would be
 test('nothing is written when the game is refused', ...)           // siteDir has no play/ and no version.json afterwards
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `assemble.ts` does not exist.
-- [ ] **Step 3: Implement,** with `node:fs`'s `cpSync`, `rmSync` and `writeFileSync`. Add `vite` and the `build` script.
+- [x] **Step 2: Push; `check` fails** because `assemble.ts` does not exist.
+- [x] **Step 3: Implement,** with `node:fs`'s `cpSync`, `rmSync` and `writeFileSync`. Add `vite` and the `build` script.
   `vite.config.ts`: inputs `index.html` and (from Task 6) `404.html`, output `dist/`.
-- [ ] **Step 4: Run `pnpm build` locally** and confirm `dist/play/index.html`, `dist/play/game.js` and
+- [x] **Step 4: Run `pnpm build` locally** and confirm `dist/play/index.html`, `dist/play/game.js` and
   `dist/version.json` (`"game": "fixture"`) exist. Push; `check` passes, its last step being `pnpm build`.
-- [ ] **Step 5: Commit** (`feat(assemble): put a built game into the site at /play/`).
+- [x] **Step 5: Commit** (`feat(assemble): put a built game into the site at /play/`).
 
 ### Task 5: The page, the Play button and the journeys
 
@@ -499,7 +500,7 @@ export const SIZES = [
   framework. Add to `tests/workflows/ci.test.ts`: only the call to `journeys.yml` may write; inside `journeys.yml`
   only `screens` asks for `contents: write`, and its one `git push` goes to `ci-screens`.
 
-- [ ] **Step 1: Write the failing journeys,** `home.journey.ts`. Each `describe` below runs once per size in `SIZES`
+- [x] **Step 1: Write the failing journeys,** `home.journey.ts`. Each `describe` below runs once per size in `SIZES`
   (`test.use({ viewport })`), except where it names one:
 
 ```ts
@@ -533,13 +534,13 @@ test('turning the phone keeps the same game going', ...)
   // and the page has no sideways scroll
 ```
 
-- [ ] **Step 2: Push; the three `engines` jobs fail** because the page has no button (`check` and `build` pass).
-- [ ] **Step 3: Implement** the page, the styles, `play.ts`, `page.ts` and `src/index.ts` (which calls
+- [x] **Step 2: Push; the three `engines` jobs fail** because the page has no button (`check` and `build` pass).
+- [x] **Step 3: Implement** the page, the styles, `play.ts`, `page.ts` and `src/index.ts` (which calls
   `startPage(document)`).
-- [ ] **Step 4: Push; all jobs pass.** Read the fifteen pictures on `ci-screens` under `pr-<number>/` and check each
+- [x] **Step 4: Push; all jobs pass.** Read the fifteen pictures on `ci-screens` under `pr-<number>/` and check each
   against the drunk-grandma test: can she tell what this is and what to press, at every size? Report what you saw in
   the task's line; a picture that fails is fixed here, not noted.
-- [ ] **Step 5: Commit** (`feat(page): the home page, the Play button and its journeys`).
+- [x] **Step 5: Commit** (`feat(page): the home page, the Play button and its journeys`).
 
 ### Task 6: The missing page and the headers
 
@@ -563,7 +564,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval
   promises games do not need. If the real game trips this policy in Task 7, the journey's `trouble()` names the
   directive: widen that one directive only, and report it as a deviation with the browser's message.
 
-- [ ] **Step 1: Write the failing journeys** (desktop size, each engine):
+- [x] **Step 1: Write the failing journeys** (desktop size, each engine):
 
 ```ts
 test('a missing address answers 404, says so, and offers the way home', ...)
@@ -577,11 +578,11 @@ test('every page is sent with its safety headers', ...)
 test('the game still plays under those headers', ...)   // Play -> '#game[data-state="playing"]' in the frame; trouble() is []
 ```
 
-- [ ] **Step 2: Push; the `engines` jobs fail** on the 404 status (Pages answers a missing address with the home page
+- [x] **Step 2: Push; the `engines` jobs fail** on the 404 status (Pages answers a missing address with the home page
   while there is no `404.html`).
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Push; all jobs pass.**
-- [ ] **Step 5: Commit** (`feat(hosting): a real 404 page and the safety headers`).
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Push; all jobs pass.**
+- [x] **Step 5: Commit** (`feat(hosting): a real 404 page and the safety headers`).
 
 ### Task 7: The `site` workflow, and the real game in the site
 
@@ -622,7 +623,7 @@ test('the live address serves this build', ...)
   // expect.poll(() => request.get('/version.json') parsed, { timeout: 120_000 }).toEqual({ site: EXPECT_SITE, game: EXPECT_GAME })
 ```
 
-- [ ] **Step 1: Write the failing tests,** `tests/workflows/site.test.ts`, over the workflow's text:
+- [x] **Step 1: Write the failing tests,** `tests/workflows/site.test.ts`, over the workflow's text:
 
 ```ts
 test('it starts on exactly these five events, and looks for a new game every 10 minutes', ...)
@@ -639,9 +640,9 @@ test('two deploys never run at once', ...)
 test('the address is written once and matches the project name in wrangler.toml', ...)
 ```
 
-- [ ] **Step 2: Push; `check` fails** because `site.yml` does not exist.
-- [ ] **Step 3: Write `site.yml`.** Push.
-- [ ] **Step 4: Read the `site` run on the pull request.** One of two things is true:
+- [x] **Step 2: Push; `check` fails** because `site.yml` does not exist.
+- [x] **Step 3: Write `site.yml`.** Push.
+- [x] **Step 4: Read the `site` run on the pull request.** One of two things is true:
   - **The game has a commit that passed.** `pick` says so, `build` and the three `journeys` engines pass against the
     real game, and `deploy` and `live` are skipped. This is the join of the two repos, proven before anything is
     live. Read the pictures under `pr-<number>-real/` on `ci-screens`, as in Task 5 Step 4. If a journey fails
@@ -650,8 +651,8 @@ test('the address is written once and matches the project name in wrangler.toml'
   - **The game has no commit that passed yet.** `pick` prints rule 1's sentence and the other jobs are skipped. Report
     that the join is waiting on the Examples repo, and finish the task's other steps. The join then happens on the
     first `site` run after Examples is green; read it and report it.
-- [ ] **Step 5: Push; all jobs of `ci` and `site` pass** (or are skipped for the reason Step 4 names).
-- [ ] **Step 6: Commit** (`feat(site): pick the checked game, build, test and deploy around it`). Mark the pull request
+- [x] **Step 5: Push; all jobs of `ci` and `site` pass** (or are skipped for the reason Step 4 names).
+- [x] **Step 6: Commit** (`feat(site): pick the checked game, build, test and deploy around it`). Mark the pull request
   ready, set this stage to 91% in `progress.md`, and send the coordinator the summary: commits, test counts per job,
   what the pictures show, every deviation, and that going live waits on the Owner's two settings. Tell the
   coordinator the exact check names of the `ci` workflow, so the Owner can make them required on `main`.
@@ -676,8 +677,8 @@ the coordinator says so. This task changes no file but the tracker; it is done b
 ## For later plans (noted, not built)
 
 - The game runs in a frame on the site's own origin. That is right while both repos are the Owner's. Before any page
-  on this origin holds a sign-in (the editors) or shows other people's examples (M4's gallery), frames must move to
-  their own origin or be sandboxed.
+  on this origin shows other people's examples (M4's gallery), frames must move to their own origin or be sandboxed.
+  The editors' sign-in will not be on this origin (they have their own project).
 - A push from the game's repo (`repository_dispatch`, already accepted) would replace the 10-minute wait. It needs an
   Owner token stored in the Examples repo.
 - GitHub stops a repo's scheduled workflows after 60 days with no commits; a quiet stretch needs one run started by

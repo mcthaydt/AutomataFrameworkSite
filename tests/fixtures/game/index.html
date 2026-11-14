@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Stand-in game</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #9fd3f0; overflow: hidden; }
+      #game { position: fixed; inset: 0; }
+      canvas { display: block; width: 100%; height: 100%; }
+      /* Shown at once on a coarse pointer, or after the first touch: the framework's touch buttons do the same. */
+      #right { position: absolute; left: 16px; bottom: 16px; width: 64px; height: 64px; font: bold 18px sans-serif;
+        border: 0; border-radius: 12px; background: #1b1b24; color: #fff; touch-action: none; display: none; }
+      #right[data-shown] { display: block; }
+      @media (pointer: coarse) { #right { display: block; } }
+    </style>
+  </head>
+  <body>
+    <!-- The stand-in follows only what the site relies on: a #game root with a data-state, keys, touch buttons. -->
+    <main id="game" data-state="loading">
+      <button id="right" type="button">Right</button>
+    </main>
+    <script src="./game.js"></script>
+  </body>
+</html>

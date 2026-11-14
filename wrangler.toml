@@ -1,0 +1,4 @@
+# The Cloudflare Pages project the site is deployed to (automataframework.pages.dev) and the folder it is built in.
+name = "automataframework"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-30"  # the newest date the installed workerd supports
