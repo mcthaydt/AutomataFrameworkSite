@@ -82,7 +82,7 @@ asked.
   (Q3's a), so the redesign does not wait.
 - **Q4, the list: (a)** all five claims, each stamped "Works today" or "Being built".
 
-## The fonts (asked 2026-11-14, the pick is open)
+## The fonts (asked and picked 2026-11-14)
 
 The Owner, after the palettes: "we need a better font combination too now, the palette is too great for basic
 fonts", and then: two combinations, one for **the site and the editors**, one for **the Examples screens and both
@@ -92,6 +92,26 @@ comes as a Fontsource package, so the site serves its own files and the safety h
 Japanese and Chinese packages are cut into many small files and a page fetches only the ones its words need; a game
 that draws its words on a canvas has to ask for them itself, which is the game's plan to settle. **Each package is a
 new dependency and needs the Owner's yes.**
+
+**The Owner picked 1B and 2A** (2026-11-14), which is also his yes to their packages:
+
+- **The site and the editors: Fraunces, Onest and JetBrains Mono.** New: `@fontsource-variable/fraunces` and
+  `@fontsource-variable/onest`; `@fontsource/jetbrains-mono` is already approved. The editors add
+  `@fontsource/noto-sans-kr`, `@fontsource/noto-sans-jp` and `@fontsource/noto-sans-sc`.
+  `@fontsource/ibm-plex-sans-condensed` leaves the site when the plan lands.
+- **The Examples screens and the demo games: Fredoka, with M PLUS Rounded 1c, Jua and ZCOOL KuaiLe.** New, in
+  AutomataFrameworkExamples: `@fontsource/fredoka`, `@fontsource/m-plus-rounded-1c`, `@fontsource/jua`,
+  `@fontsource/zcool-kuaile`.
+
+**2A needs no second font** (the Owner asked why it would). The three things that looked wrong in the first sample
+are fixed by how the four are used, shown below: Fredoka is first in the list, so numbers and Latin letters are
+Fredoka's in every language; the browser is told not to fake a bold (`font-synthesis: none`), and Korean and Chinese
+show what matters with size and colour, since Jua and ZCOOL KuaiLe have one weight; and no word is smaller than
+18 px, which the drunk-grandma rule already asks for.
+
+![2A as picked: Fredoka's numbers everywhere, no faked bold, nothing under 18 px](2026-11-14-home-design/fonts-games-picked.png)
+
+The options as they were shown, with the recommendations as they were made, follow.
 
 ### Combination 1: the site and the editors
 

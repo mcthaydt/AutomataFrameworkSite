@@ -13,10 +13,14 @@ Overall: **5%** (the design audit is 5 points; the rest is shared out when the p
 |---|---|---|
 | Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
 | The Owner's answers (Q1 to Q5) | Done, 100% | the audit's "The Owner's answers" |
-| The Owner's pick of fonts | Waiting | the audit's "The fonts" |
+| The Owner's pick of fonts | Done, 100% | the audit's "The fonts" |
 | 2. Plan | Not started | |
 
 ### Log
+
+- 2026-11-14: the Owner picked the fonts: Fraunces, Onest and JetBrains Mono for the site and the editors; Fredoka
+  with M PLUS Rounded 1c, Jua and ZCOOL KuaiLe for the Examples screens and the demo games, with no second font.
+  Nothing is open; the audit is ready to merge and the plan can start.
 
 - 2026-11-14: the fonts. The Owner asked for better ones than the two the site has: one combination for the site and
   the editors (nine languages), one for the Examples screens and the demo games (six). Four of the first and three
