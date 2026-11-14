@@ -14,7 +14,7 @@ test('a missing address answers 404, says so, and offers the way home', async ({
   await expect(page.getByText('The address may be mistyped, or the page may have moved.')).toBeVisible()
   await page.getByRole('link', { name: 'Go to the home page' }).click()
   await expect(page).toHaveURL(/\/$/)
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('AutomataFramework')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Finish the game your agent started.')
 })
 
 test('a missing file of the game answers 404, not the home page', async ({ request }) => {
@@ -64,7 +64,7 @@ test('every page is sent with its safety headers', async ({ request }) => {
 test('the game still plays under those headers', async ({ page }) => {
   const trouble = watchForTrouble(page)
   await page.goto('/')
-  await page.getByRole('button', { name: 'Play the game' }).click()
+  await page.getByRole('button', { name: 'Play it' }).click()
   await expect(
     page.frameLocator('iframe[title="The demo game"]').locator('#game[data-state="playing"]'),
   ).toBeAttached()

@@ -29,17 +29,19 @@ for (const size of SIZES) {
       // The way home: the touch colour, big enough for a thumb, one icon, and its name is its words alone.
       const home = page.getByRole('link', { name: 'Go to the home page', exact: true })
       await expect(home).toHaveAttribute('href', '/')
-      const [link] = await colours(page, 'a.home')
-      expect(link?.words).toBe(TOKENS.touch)
-      expect(Math.round((await home.boundingBox())?.height ?? 0)).toBeGreaterThanOrEqual(44)
+      const [link] = await colours(page, 'a.btn')
+      expect(link?.ground).toBe(TOKENS.touch)
+      expect(link?.words).toBe(TOKENS.ground)
+      expect(Math.round((await home.boundingBox())?.height ?? 0)).toBeGreaterThanOrEqual(52)
       await expect(home.locator('svg.icon')).toHaveCount(1)
 
-      // A heading is a title now, so it is set in sentence case, in Fraunces; the sentence and the link are too.
+      // A heading is a title, so it is set in sentence case, in Fraunces, and so is the sentence; the button is a label,
+      // so it is in capitals.
       const transform = (locator: typeof heading): Promise<string> =>
         locator.evaluate((element) => getComputedStyle(element).textTransform)
       expect(await transform(heading)).toBe('none')
       expect(await transform(sentence)).toBe('none')
-      expect(await transform(home)).toBe('none')
+      expect(await transform(home)).toBe('uppercase')
 
       expect(await page.locator('meta[name="color-scheme"]').getAttribute('content')).toBe('dark')
       expect(await page.locator('meta[name="theme-color"]').getAttribute('content')).toBe('#112F2C')

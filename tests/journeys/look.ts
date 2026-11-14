@@ -15,15 +15,6 @@ export async function arrive(page: Page, address?: string): Promise<void> {
   await page.evaluate(() => document.fonts.ready)
 }
 
-/**
- * Waits until the version line is shown, then for the fonts again. The line arrives after the page's script has fetched
- * `version.json`, and only then does the browser ask for the number font, so `arrive` alone can return before either.
- */
-export async function settle(page: Page): Promise<void> {
-  await page.locator('#game-version').waitFor({ state: 'visible' })
-  await page.evaluate(() => document.fonts.ready)
-}
-
 /** Every font face the browser has loaded, as "<family> <weight>", sorted. Quotes round a family are dropped. */
 export function loadedFonts(page: Page): Promise<string[]> {
   return page.evaluate(() =>

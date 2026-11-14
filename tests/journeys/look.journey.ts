@@ -1,7 +1,9 @@
 // How the page looks, at every size, in every engine: the fonts it is set in, the icons, the colours and the touch sizes.
 // Each journey measures what the browser really drew, because a stylesheet that reads right can still draw wrong.
-import { expect, test } from '@playwright/test'
+import { readFileSync } from 'node:fs'
+import { expect, type Page, test } from '@playwright/test'
 import { contrast } from '../fixtures/contrast.ts'
+import { siteFacts } from './facts.ts'
 import {
   arrive,
   colours,
@@ -11,13 +13,25 @@ import {
   loadedFonts,
   MEASURE,
   READABLE,
-  settle,
   TITLE,
   TOKENS,
   tabKey,
 } from './look.ts'
 import { SIZES } from './sizes.ts'
 import { watchForTrouble } from './watch.ts'
+
+/** What the page calls a label: set in capitals by the stylesheet, in Onest, at least 13 px. A label is known by its class. */
+const LABELS = '.btn, .kicker, .stamp, .tag b, .note, thead th, .title-block dt, footer h3'
+/** What the page shows as a measure or a file's words: set in the number font, at least 15 px. */
+const MEASURES = '.code, .panel-head, .number, .panel-foot [data-fact]'
+
+/** The two things the claim, the lede and the first button must all do on a phone that has no fonts: be on the first screen. */
+async function firstScreenHolds(page: Page): Promise<void> {
+  await expect(page.locator('header.top .wordmark')).toBeInViewport({ ratio: 1 })
+  await expect(page.getByRole('heading', { level: 1 })).toBeInViewport({ ratio: 1 })
+  await expect(page.locator('p.lede')).toBeInViewport({ ratio: 1 })
+  await expect(page.getByRole('button', { name: 'Play the first game' })).toBeInViewport({ ratio: 1 })
+}
 
 for (const size of SIZES) {
   test.describe(size.name, () => {
@@ -31,15 +45,20 @@ for (const size of SIZES) {
       const asked: string[] = []
       page.on('request', (request) => asked.push(request.url()))
       await arrive(page)
-      await expect(page.locator('#game-version')).toBeVisible()
       await expect
         .poll(() => loadedFonts(page))
         .toEqual([`${TITLE} 100 900`, `${MEASURE} 400`, `${LABEL} 100 900`])
       const family = (selector: string): Promise<string> =>
-        page.locator(selector).evaluate((element) => getComputedStyle(element).fontFamily)
+        page
+          .locator(selector)
+          .first()
+          .evaluate((element) => getComputedStyle(element).fontFamily)
       expect(await family('h1')).toContain(TITLE)
+      expect(await family('.wordmark')).toContain(TITLE)
       expect(await family('body')).toContain(LABEL)
-      expect(await family('#game-version')).toContain(MEASURE)
+      expect(await family('.btn')).toContain(LABEL)
+      expect(await family('.code')).toContain(MEASURE)
+      expect(await family('.number')).toContain(MEASURE)
       // Nothing is fetched from anywhere but this site, and no font is an inlined data: address.
       const origin = new URL(baseURL ?? '').origin
       expect(asked.filter((url) => !url.startsWith(`${origin}/`) && url !== 'data:,')).toEqual([])
@@ -60,26 +79,28 @@ for (const size of SIZES) {
       expect(await style('#game', 'background-color')).toBe(TOKENS.raised)
       expect(await style('#game', 'outline-color')).toBe(TOKENS.words)
       expect(await style('#game', 'outline-style')).toBe('solid')
-      expect(await style('#game-version', 'color')).toBe(TOKENS.quiet)
+      expect(await style('.numbers', 'background-color')).toBe(TOKENS.raised)
+      expect(await style('.closing', 'background-color')).toBe(TOKENS.raised)
+      expect(await style('.lede', 'color')).toBe(TOKENS.quiet)
       expect(await page.locator('meta[name="color-scheme"]').getAttribute('content')).toBe('dark')
       expect(await page.locator('meta[name="theme-color"]').getAttribute('content')).toBe('#112F2C')
     })
 
     test('every word can be read: 4.5 to 1 or more against what is behind it', async ({ page }) => {
       await arrive(page)
-      await settle(page)
       const found = await colours(page, READABLE)
-      expect(found.length).toBeGreaterThanOrEqual(16)
+      expect(found.length).toBeGreaterThanOrEqual(40)
       for (const { what, words, ground } of found)
         expect(contrast(words, ground), what).toBeGreaterThanOrEqual(4.5)
     })
 
     test('the touch colour means you can touch it, and only that', async ({ page }) => {
       await arrive(page)
-      // Every link and the button is the touch colour, in its words or in its ground...
-      for (const { what, words, ground } of await colours(page, 'a, button'))
-        expect([words, ground], what).toContain(TOKENS.touch)
-      // ...and nothing else on the page is.
+      // Every link and button but the wordmark is the touch colour, in its words or in its ground...
+      const touchable = await colours(page, 'a:not(.wordmark), button')
+      expect(touchable.length).toBeGreaterThanOrEqual(10)
+      for (const { what, words, ground } of touchable) expect([words, ground], what).toContain(TOKENS.touch)
+      // ...and nothing else on the page is, the wordmark and the game's frame apart.
       const others = await page.evaluate((touch) => {
         const found: string[] = []
         for (const element of document.querySelectorAll('body *')) {
@@ -93,28 +114,179 @@ for (const size of SIZES) {
       expect(others).toEqual([])
     })
 
+    test('the mark colour is an edge or an icon and never the colour of any words', async ({ page }) => {
+      await arrive(page)
+      const words = await page.evaluate((mark) => {
+        const found: string[] = []
+        for (const element of document.querySelectorAll('body *')) {
+          const own = [...element.childNodes].some(
+            (node) => node.nodeType === 3 && (node.textContent ?? '').trim() !== '',
+          )
+          if (own && getComputedStyle(element).color === mark) found.push(element.tagName)
+        }
+        return found
+      }, TOKENS.mark)
+      expect(words).toEqual([])
+    })
+
+    test('a line that divides is never the colour of the ground it lies on', async ({ page }) => {
+      await arrive(page)
+      const lost = await page.evaluate(() => {
+        const clear = (colour: string): boolean => colour === 'transparent' || /,\s*0\)$/.test(colour)
+        const found: string[] = []
+        for (const element of document.querySelectorAll('body *')) {
+          if (element.getClientRects().length === 0) continue
+          const style = getComputedStyle(element)
+          let ground = 'rgb(255, 255, 255)'
+          for (let node: Element | null = element; node !== null; node = node.parentElement) {
+            const colour = getComputedStyle(node).backgroundColor
+            if (!clear(colour)) {
+              ground = colour
+              break
+            }
+          }
+          for (const side of ['Top', 'Right', 'Bottom', 'Left'] as const) {
+            const width = parseFloat(style[`border${side}Width`])
+            const colour = style[`border${side}Color`]
+            if (width > 0 && style[`border${side}Style`] !== 'none' && colour === ground)
+              found.push(`${element.tagName}.${element.className} ${side}`)
+          }
+        }
+        return found
+      })
+      expect(lost).toEqual([])
+      // The two rows of cards that sit on the raised ground are divided by the ground colour.
+      const between = (selector: string, side: 'Left' | 'Top'): Promise<string[]> =>
+        page
+          .locator(selector)
+          .evaluateAll(
+            (all, which) =>
+              all.map((element) =>
+                getComputedStyle(element).getPropertyValue(`border-${which.toLowerCase()}-color`),
+              ),
+            side,
+          )
+      const numbers = await between('.numbers > div:nth-child(2)', 'Left')
+      const claims = await between('.claim:nth-child(2)', size.width >= 1024 ? 'Left' : 'Top')
+      expect([...numbers, ...claims].every((colour) => colour === TOKENS.ground)).toBe(true)
+    })
+
     test('labels are in capitals and sentences are not', async ({ page }) => {
       await arrive(page)
       const transform = (selector: string): Promise<string[]> =>
         page
           .locator(selector)
           .evaluateAll((all) => all.map((element) => getComputedStyle(element).textTransform))
-      for (const label of ['button.play', 'footer a'])
+      for (const label of LABELS.split(', '))
         expect(new Set(await transform(label)), label).toEqual(new Set(['uppercase']))
-      for (const sentence of ['h1', 'h2', 'p.lede', 'ul.help li', 'p.playing', 'ul.next li', 'ul.next a'])
+      for (const sentence of [
+        'h1',
+        'h2',
+        '.claim h3',
+        '.lede',
+        '.sub',
+        '.points li',
+        '.claims p',
+        '.wordmark',
+        'nav a',
+        '.how',
+        '.panel-head',
+        '.status',
+      ])
         expect(new Set(await transform(sentence)), sentence).toEqual(new Set(['none']))
-      // Words are at least 18 px, everywhere.
-      const sizes = await page
-        .locator(READABLE)
-        .evaluateAll((all) => all.map((element) => parseFloat(getComputedStyle(element).fontSize)))
-      expect(Math.min(...sizes)).toBeGreaterThanOrEqual(18)
     })
 
-    test('the Play button is the touch-coloured thing, with a ring in the words colour when the keyboard reaches it', async ({
+    test('labels are at least 13 px, files and numbers 15, everything else 18, and the claim at most 84', async ({
       page,
     }) => {
       await arrive(page)
-      const button = page.getByRole('button', { name: 'Play the game' })
+      const sizes = await page.evaluate(
+        ([labels, measures, readable]) => {
+          const found = { labels: [] as number[], measures: [] as number[], words: [] as number[] }
+          for (const element of document.querySelectorAll(readable as string)) {
+            const style = getComputedStyle(element)
+            if (style.visibility === 'hidden' || element.getClientRects().length === 0) continue
+            const own = [...element.childNodes].some(
+              (node) => node.nodeType === 3 && (node.textContent ?? '').trim() !== '',
+            )
+            if (!own) continue
+            const px = parseFloat(style.fontSize)
+            // A label's own words are measured as a label even when the label is in a file panel's row.
+            if (element.closest(labels as string)) found.labels.push(px)
+            else if (element.closest(measures as string)) found.measures.push(px)
+            else found.words.push(px)
+          }
+          const claim = parseFloat(getComputedStyle(document.querySelector('h1') as Element).fontSize)
+          return { ...found, claim }
+        },
+        [LABELS, MEASURES, READABLE],
+      )
+      expect(Math.min(...sizes.labels)).toBeGreaterThanOrEqual(13)
+      expect(Math.min(...sizes.measures)).toBeGreaterThanOrEqual(15)
+      expect(Math.min(...sizes.words)).toBeGreaterThanOrEqual(18)
+      expect(sizes.claim).toBeLessThanOrEqual(84)
+      expect(sizes.claim).toBeGreaterThanOrEqual(32)
+      // A label is Onest's, never the number font or the title font.
+      const families = await page
+        .locator(LABELS)
+        .evaluateAll((all) => all.map((element) => getComputedStyle(element).fontFamily))
+      for (const family of families) expect(family).toContain(LABEL)
+    })
+
+    test('sections are 128 px apart at 1024 px and wider, and 80 px apart below', async ({ page }) => {
+      await arrive(page)
+      const padding = await page
+        .locator('.part, .closing')
+        .evaluateAll((all) =>
+          all.map((element) => [
+            getComputedStyle(element).paddingTop,
+            getComputedStyle(element).paddingBottom,
+          ]),
+        )
+      expect(padding).toHaveLength(4)
+      const wanted = size.width >= 1024 ? '128px' : '80px'
+      for (const [top, bottom] of padding) expect([top, bottom]).toEqual([wanted, wanted])
+    })
+
+    test('a stamp that is done is a crooked mark-coloured one, and one that is not is a dashed one', async ({
+      page,
+    }) => {
+      await arrive(page)
+      const look = (selector: string): Promise<Record<string, string>> =>
+        page
+          .locator(selector)
+          .first()
+          .evaluate((element) => {
+            const s = getComputedStyle(element)
+            return {
+              width: s.borderTopWidth,
+              style: s.borderTopStyle,
+              edge: s.borderTopColor,
+              words: s.color,
+              turned: s.rotate,
+            }
+          })
+      expect(await look('.stamp.works')).toEqual({
+        width: '2px',
+        style: 'solid',
+        edge: TOKENS.mark,
+        words: TOKENS.words,
+        turned: '-3deg',
+      })
+      expect(await look('.stamp.building')).toEqual({
+        width: '1px',
+        style: 'dashed',
+        edge: TOKENS.quiet,
+        words: TOKENS.quiet,
+        turned: 'none',
+      })
+    })
+
+    test('the main Play button is touch-coloured, with a ring in the words colour when the keyboard reaches it', async ({
+      page,
+    }) => {
+      await arrive(page)
+      const button = page.getByRole('button', { name: 'Play the first game' })
       await button.focus()
       expect(await button.evaluate((element) => element.matches(':focus-visible'))).toBe(true)
       const style = await button.evaluate((element) => {
@@ -134,14 +306,37 @@ for (const size of SIZES) {
         width: 3,
         corner: '2px',
       })
-      // The ring is drawn outside the button, so it is seen against the sheet behind it, not against the touch colour.
-      expect(await groundBehind(page, 'button.play')).toBe(TOKENS.raised)
-      expect(contrast(style.ring, TOKENS.raised)).toBeGreaterThanOrEqual(3)
+      // The ring is drawn outside the button, so it is seen against the ground behind it, not against the touch colour.
+      expect(contrast(style.ring, await groundBehind(page, '.actions .btn.main'))).toBeGreaterThanOrEqual(3)
     })
 
     test("the game's own picture is left alone", async ({ page }) => {
       await arrive(page)
-      await page.getByRole('button', { name: 'Play the game' }).click()
+      const poster = await page.locator('img.poster').evaluate((node) => {
+        const s = getComputedStyle(node)
+        return {
+          filter: s.filter,
+          opacity: s.opacity,
+          blend: s.mixBlendMode,
+          corner: s.borderTopLeftRadius,
+          border: s.borderTopWidth,
+          fit: s.objectFit,
+        }
+      })
+      expect(poster).toMatchObject({
+        filter: 'none',
+        opacity: '1',
+        blend: 'normal',
+        corner: '0px',
+        border: '0px',
+      })
+      // Nothing is cropped: the picture is shown whole.
+      expect(['fill', 'contain']).toContain(poster.fit)
+      expect(await page.locator('#game').evaluate((node) => getComputedStyle(node).outlineStyle)).toBe(
+        'solid',
+      )
+
+      await page.getByRole('button', { name: 'Play it' }).click()
       const frame = page.locator('iframe[title="The demo game"]')
       await expect(page.locator('#game')).toHaveAttribute('data-state', 'playing')
       // The Owner's answer: once the game plays, nothing of the site's is drawn round it, so the line is gone.
@@ -170,82 +365,87 @@ for (const size of SIZES) {
 
     test('everything that can be pressed is big enough for a thumb', async ({ page }) => {
       await arrive(page)
-      await settle(page)
       const pressable = page.locator('a[href], button').filter({ visible: true })
-      expect(await pressable.count()).toBeGreaterThanOrEqual(4)
+      expect(await pressable.count()).toBeGreaterThanOrEqual(10)
       for (const element of await pressable.all()) {
         const box = await element.boundingBox()
         const name = (await element.textContent())?.trim() ?? ''
-        // Rounded: Firefox reports a 56 px button as 55.99997.
-        expect(Math.round(box?.height ?? 0), name).toBeGreaterThanOrEqual(name === 'Play the game' ? 56 : 44)
+        const classes = (await element.getAttribute('class')) ?? ''
+        // The main buttons are 52 px, the two small ones 48 and everything else 44. Rounded: Firefox reports a 56 px
+        // button as 55.99997.
+        const wanted = classes.includes('btn') ? (classes.includes('small') ? 48 : 52) : 44
+        expect(Math.round(box?.height ?? 0), name).toBeGreaterThanOrEqual(wanted)
       }
     })
 
     // A link inside a sentence must stay in its line (it once dropped to a line of its own on a phone and left a gap) and
-    // still be 44 px tall for a thumb. The same goes for the number beside "Game version:".
+    // still be 44 px tall for a thumb.
     test('a link in a sentence stays in its line and is still big enough', async ({ page }) => {
       await arrive(page)
-      await settle(page)
       const lines = await page.evaluate(() => {
-        // The vertical middle of the first line of `link` and of the words just before it in the same element.
-        const middles = (link: Element, before: ChildNode): { link: number; words: number; tall: number } => {
-          const rect = link.getClientRects()[0] as DOMRect
-          const range = document.createRange()
-          range.selectNodeContents(before)
-          const words = range.getClientRects()[range.getClientRects().length - 1] as DOMRect
-          return {
-            link: (rect.top + rect.bottom) / 2,
-            words: (words.top + words.bottom) / 2,
-            tall: rect.height,
-          }
-        }
-        const sentence = document.querySelector('.next a') as Element
-        // The stand-in game's version is plain text, not a link; only the real game's is.
-        const version = document.querySelector('#game-version a')
+        const link = document.querySelector('.panel-foot a') as Element
+        const rect = link.getClientRects()[0] as DOMRect
+        const range = document.createRange()
+        range.selectNodeContents(link.previousSibling as ChildNode)
+        const words = range.getClientRects()[range.getClientRects().length - 1] as DOMRect
         return {
-          sentence: middles(sentence, sentence.previousSibling as ChildNode),
-          version: version === null ? undefined : middles(version, version.previousSibling as ChildNode),
+          apart: Math.abs((rect.top + rect.bottom) / 2 - (words.top + words.bottom) / 2),
+          tall: rect.height,
         }
       })
       // Same line: the middles are within a pixel or two, far less than a line apart (27 px).
-      expect(Math.abs(lines.sentence.link - lines.sentence.words), 'See how it is made').toBeLessThanOrEqual(
-        2,
-      )
-      if (lines.version !== undefined) {
-        expect(Math.abs(lines.version.link - lines.version.words), 'Game version').toBeLessThanOrEqual(2)
-      }
-      expect(Math.round(lines.sentence.tall), 'See how it is made').toBeGreaterThanOrEqual(44)
+      expect(lines.apart, 'Read the whole file').toBeLessThanOrEqual(2)
+      expect(Math.round(lines.tall), 'Read the whole file').toBeGreaterThanOrEqual(44)
     })
 
-    test('every icon has its words beside it and is hidden from screen readers', async ({ page }) => {
+    test('every icon has its words beside it, is hidden from screen readers and is seen against the ground', async ({
+      page,
+      request,
+    }) => {
       await arrive(page)
-      const icons = page.locator('svg.icon')
-      await expect(icons).toHaveCount(6)
+      // The icons the page asks for: those in index.html, one a place the game runs, one a claim that works today.
+      const asked =
+        (readFileSync(new URL('../../index.html', import.meta.url), 'utf8').match(/data-icon=/g) ?? [])
+          .length +
+        (await siteFacts(request)).engines.length +
+        (await page.locator('.stamp.works').count())
+      await expect(page.locator('svg.icon')).toHaveCount(asked)
       await expect(page.locator('[data-icon]')).toHaveCount(0)
-      for (const icon of await icons.all()) {
+      const shown = await page.locator('svg.icon').filter({ visible: true }).all()
+      expect(shown.length).toBeGreaterThanOrEqual(10)
+      for (const icon of shown) {
         await expect(icon).toHaveAttribute('aria-hidden', 'true')
         // The words are the icon's neighbours: its parent says something without it.
         expect(
           (await icon.evaluate((svg) => svg.parentElement?.textContent ?? '')).trim().length,
         ).toBeGreaterThan(3)
-        // ...and it is the colour of those words (the SVG's fill is currentColor, and no rule gives an icon its own).
-        expect(
-          await icon.evaluate(
-            (svg) => getComputedStyle(svg).color === getComputedStyle(svg.parentElement as Element).color,
-          ),
-        ).toBe(true)
         const box = await icon.boundingBox()
-        expect(Math.round(box?.width ?? 0)).toBeGreaterThanOrEqual(20)
-        expect(Math.round(box?.height ?? 0)).toBeGreaterThanOrEqual(20)
+        expect(Math.round(box?.width ?? 0)).toBeGreaterThanOrEqual(16)
+        expect(Math.round(box?.height ?? 0)).toBeGreaterThanOrEqual(16)
+        // An icon is an edge, so it needs 3 to 1 against what is behind it.
+        const seen = await icon.evaluate((svg) => {
+          const clear = (colour: string): boolean => colour === 'transparent' || /,\s*0\)$/.test(colour)
+          let ground = 'rgb(255, 255, 255)'
+          for (let node = svg.parentElement; node !== null; node = node.parentElement) {
+            const colour = getComputedStyle(node).backgroundColor
+            if (!clear(colour)) {
+              ground = colour
+              break
+            }
+          }
+          return { colour: getComputedStyle(svg).color, ground }
+        })
+        expect(contrast(seen.colour, seen.ground)).toBeGreaterThanOrEqual(3)
       }
-      // The button's name is still its words alone.
-      await expect(page.getByRole('button', { name: 'Play the game', exact: true })).toBeVisible()
+      // The buttons' names are still their words alone.
+      for (const name of ['Play the first game', 'Play it'])
+        await expect(page.getByRole('button', { name, exact: true })).toBeVisible()
     })
   })
 }
 
 // Review Focus 1: a slow line or a blocker means the fonts never come. The page must read in the device's own font, and
-// the heading, the lede and the Play button must still fit before any scroll. Phone, upright and sideways.
+// the wordmark, the claim, the lede and the main Play button must still fit before any scroll. Phone, upright and sideways.
 for (const size of [SIZES[0], SIZES[1]]) {
   test.describe(`${size.name}: no fonts`, () => {
     test.use({ viewport: { width: size.width, height: size.height } })
@@ -255,34 +455,34 @@ for (const size of [SIZES[0], SIZES[1]]) {
     }) => {
       await page.route(/\.woff2?(\?|$)/, (route) => route.abort())
       await page.goto('/')
-      await expect(page.getByRole('heading', { level: 1 })).toBeInViewport({ ratio: 1 })
-      await expect(page.locator('p.lede')).toBeInViewport({ ratio: 1 })
-      await expect(page.getByRole('button', { name: 'Play the game' })).toBeInViewport({ ratio: 1 })
+      await firstScreenHolds(page)
       expect(await loadedFonts(page)).toEqual([])
       expect(await fitsSideways(page)).toBe(true)
     })
   })
 }
 
-// Review Focus 2: a narrow phone, 320 px wide. The heading in capitals, set a little apart, must not run off the side.
+// Review Focus 2: a narrow phone, 320 px wide. The claim, set large, must not run off the side, and the four things of
+// the first screen must still be there. The file panel may scroll sideways inside itself; the page may not.
 test.describe('phone-320x568: a 320 px phone', () => {
   test.use({ viewport: { width: 320, height: 568 } })
 
-  test('nothing runs off the side, and the first screen still holds the heading, the lede and the button', async ({
-    page,
-  }) => {
+  test('nothing runs off the side, and the first screen still holds the four things', async ({ page }) => {
     await arrive(page)
     expect(await fitsSideways(page)).toBe(true)
     const heading = page.getByRole('heading', { level: 1 })
     const box = await heading.boundingBox()
     expect(Math.round((box?.x ?? 0) + (box?.width ?? 0))).toBeLessThanOrEqual(320)
-    await expect(heading).toBeInViewport({ ratio: 1 })
-    await expect(page.locator('p.lede')).toBeInViewport({ ratio: 1 })
-    await expect(page.getByRole('button', { name: 'Play the game' })).toBeInViewport({ ratio: 1 })
+    await firstScreenHolds(page)
+    // The table of places stays inside the window, and a long row of the file scrolls inside its own panel.
+    const table = await page.locator('table').boundingBox()
+    expect(Math.round((table?.x ?? 0) + (table?.width ?? 0))).toBeLessThanOrEqual(320)
+    expect(await fitsSideways(page)).toBe(true)
   })
 })
 
-// Review Focus 3: JavaScript off. The look and the icons are in the page itself, and the note about JavaScript must read.
+// Review Focus 3: JavaScript off. The look, the icons and the facts are in the page itself, and the note about
+// JavaScript must read.
 test.describe('phone-390x844: with JavaScript off', () => {
   test.use({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false })
 
@@ -291,40 +491,41 @@ test.describe('phone-390x844: with JavaScript off', () => {
     expect(await page.locator('body').evaluate((body) => getComputedStyle(body).backgroundColor)).toBe(
       TOKENS.ground,
     )
-    await expect(page.locator('svg.icon')).toHaveCount(6)
+    expect(await page.locator('svg.icon').count()).toBeGreaterThanOrEqual(16)
     const note = page.locator('p.no-script')
     await expect(note).toBeVisible()
     const [found] = await colours(page, 'p.no-script')
     expect(contrast(found?.words ?? '', found?.ground ?? '')).toBeGreaterThanOrEqual(4.5)
-    await expect(page.getByRole('button', { name: 'Play the game' })).toBeHidden()
+    await expect(page.locator('img.poster')).toBeVisible()
+    for (const button of await page.locator('[data-play]').all()) await expect(button).toBeHidden()
   })
 })
 
-// Review Focus 4: a person using the keyboard. Every link and the Play button must show the ring when Tab reaches
-// it, at 3 to 1 or more against what is behind it.
+// Review Focus 4: a person using the keyboard. Every link, every button and the file panel must show the ring when Tab
+// reaches it, at 3 to 1 or more against what is behind it.
 test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () => {
   test.use({ viewport: { width: 820, height: 1180 } })
 
   test('every stop has the ring', async ({ page, browserName }) => {
     await arrive(page)
-    // The real game's version line is a link, and it must be there before the links are counted.
-    await settle(page)
-    const stops = await page.locator('a[href], button:not([hidden])').count()
-    expect(stops).toBeGreaterThanOrEqual(4)
-    // Where Tab has been, by the link's address and words: each stop must be a different thing, so Tab cannot land on
-    // one link twice and skip another without this showing.
+    const stops = await page.locator('a[href], button, [tabindex="0"]').filter({ visible: true }).count()
+    expect(stops).toBeGreaterThanOrEqual(12)
+    // Where Tab has been, by the element's kind, address, words and place on the page: each stop must be a different
+    // thing, so Tab cannot land on one twice and skip another without this showing. (The bar and the footer both have
+    // "What works today", so the place is part of the name.)
     const reached = new Set<string>()
     for (let stop = 1; stop <= stops; stop++) {
       await page.keyboard.press(tabKey(browserName))
       const focused = await page.evaluate(() => {
         const element = document.activeElement as HTMLElement
         const style = getComputedStyle(element)
+        const box = element.getBoundingClientRect()
         return {
-          which: `${element.tagName} ${element.getAttribute('href') ?? ''} ${(element.textContent ?? '').trim()}`,
+          which: `${element.tagName} ${element.getAttribute('href') ?? ''} ${(element.textContent ?? '').trim()} @${Math.round(box.top + window.scrollY)},${Math.round(box.left)}`,
           visible: element.matches(':focus-visible'),
           ring: style.outlineColor,
           width: style.outlineWidth,
-          name: (element.textContent ?? '').trim().slice(0, 30),
+          name: (element.textContent ?? '').trim().slice(0, 30) || element.className,
         }
       })
       expect(focused.visible, `stop ${stop}: ${focused.name}`).toBe(true)
@@ -341,7 +542,7 @@ test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () =>
 test.describe('phone-390x844: a slow game', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
-  test('"Loading the game…" is a note on the ground, and then it is gone', async ({ page }) => {
+  test('"Loading the game…" is a note on the sheet, and then it is gone', async ({ page }) => {
     let release: () => void = () => {}
     const gate = new Promise<void>((resolve) => {
       release = resolve
@@ -351,25 +552,23 @@ test.describe('phone-390x844: a slow game', () => {
       await route.continue()
     })
     await arrive(page)
-    await page.getByRole('button', { name: 'Play the game' }).click()
+    await page.getByRole('button', { name: 'Play it' }).click()
     const note = page.getByRole('status')
     await expect(note).toHaveText('Loading the game…')
     const look = await note.evaluate((element) => {
       const s = getComputedStyle(element)
-      return { words: s.color, ground: s.backgroundColor, edge: s.borderTopColor, capitals: s.textTransform }
+      return { words: s.color, capitals: s.textTransform }
     })
-    expect(look).toEqual({
-      words: TOKENS.words,
-      ground: TOKENS.ground,
-      edge: TOKENS.words,
-      capitals: 'uppercase',
-    })
-    // The blank frame is not shown while the game loads (WebKit paints a blank frame white), so the note sits on the sheet.
+    expect(look).toEqual({ words: TOKENS.words, capitals: 'none' })
+    const [shown] = await colours(page, '[role="status"]')
+    expect(contrast(shown?.words ?? '', shown?.ground ?? '')).toBeGreaterThanOrEqual(4.5)
+    // The blank frame is not shown while the game loads (WebKit paints a blank frame white), so the picture stays.
     expect(
       await page
         .locator('iframe[title="The demo game"]')
         .evaluate((element) => getComputedStyle(element).visibility),
     ).toBe('hidden')
+    await expect(page.locator('img.poster')).toBeVisible()
     await page.screenshot({ path: 'tests/journeys/__screenshots__/phone-390x844-loading.png' })
     release()
     await expect(note).toBeHidden()

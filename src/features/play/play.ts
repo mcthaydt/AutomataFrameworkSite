@@ -1,12 +1,13 @@
-// The Play button and the game's frame. Nothing of the game loads until a person presses the button, so the page opens
-// fast on a slow phone connection and the game's sound and input never start by themselves.
+// The Play buttons and the game's frame. Nothing of the game loads until a person presses a button, so the page opens
+// fast on a slow phone connection and the game's sound and input never start by themselves. Under the buttons, the
+// game's own picture holds the place until the game plays.
 
 /** Where the built game lives on the site. */
 export const GAME_ADDRESS = '/play/'
 /** The frame's title, which a screen reader reads out. */
 export const FRAME_TITLE = 'The demo game'
 
-/** `ready`: the button shows. `loading`: the frame has been added and has not finished loading. `playing`: it has. */
+/** `ready`: the picture shows. `loading`: the frame has been added and has not finished loading. `playing`: it has. */
 export type PlayState = 'ready' | 'loading' | 'playing'
 
 export interface Player {
@@ -14,10 +15,16 @@ export interface Player {
   destroy(): void
 }
 
-/** `root` is the page's `#game` section. Shows the Play button; a press swaps it for the game's frame. */
-export function createPlayer(root: HTMLElement): Player {
-  const button = root.querySelector<HTMLButtonElement>('button')
-  const status = root.querySelector<HTMLElement>('[role="status"]')
+/**
+ * `root` is the page's `#game`, which holds the game's picture and, once a button is pressed, the frame. `buttons` are
+ * every Play button on the page; `status` is the sheet's loading note, which lives beside the picture and never over it.
+ */
+export function createPlayer(
+  root: HTMLElement,
+  buttons: readonly HTMLButtonElement[],
+  status: HTMLElement | null,
+): Player {
+  const sheet = root.closest<HTMLElement>('.sheet') ?? root
   let state: PlayState = 'ready'
   let frame: HTMLIFrameElement | undefined
 
@@ -37,20 +44,27 @@ export function createPlayer(root: HTMLElement): Player {
   }
 
   const onPress = (): void => {
-    // A double tap, or a press while the game is loading, must not start a second game.
-    if (state !== 'ready') return
+    // A press while the game loads or plays goes back to the game and starts no second one (a double tap is the same).
+    if (state !== 'ready') {
+      root.scrollIntoView({ block: 'start' })
+      frame?.focus()
+      return
+    }
     setState('loading')
-    if (button) button.hidden = true
+    // The buttons on the sheet have done their job; the ones elsewhere stay, and lead back to the game.
+    for (const button of buttons) if (sheet.contains(button)) button.hidden = true
     if (status) status.hidden = false
     frame = root.ownerDocument.createElement('iframe')
     frame.title = FRAME_TITLE
     frame.addEventListener('load', onLoad, { once: true })
     frame.src = GAME_ADDRESS
     root.append(frame)
+    // A press far from the game is seen to do something: the sheet, and its loading note, come into the window.
+    sheet.scrollIntoView({ block: 'start' })
   }
 
   setState('ready')
-  if (button) {
+  for (const button of buttons) {
     button.hidden = false
     button.addEventListener('click', onPress)
   }
@@ -60,7 +74,7 @@ export function createPlayer(root: HTMLElement): Player {
       return state
     },
     destroy() {
-      button?.removeEventListener('click', onPress)
+      for (const button of buttons) button.removeEventListener('click', onPress)
       frame?.remove()
     },
   }

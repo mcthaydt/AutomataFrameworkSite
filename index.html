@@ -21,46 +21,117 @@
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <div class="page">
-      <div class="stage">
-        <h1>AutomataFramework</h1>
-        <p class="lede">AutomataFramework is a toolkit for making 2D games that play in a web browser. It is still being built. Below is the first game made with it.</p>
-        <section id="game" aria-label="The game">
-          <noscript><p class="no-script">This game needs JavaScript. Turn it on in your browser's settings, then load this page again.</p></noscript>
-          <button type="button" class="play" hidden><i data-icon="play"></i>Play the game</button>
-          <p class="status" role="status" hidden>Loading the game…</p>
-        </section>
+    <header class="top">
+      <div class="wrap bar">
+        <a class="wordmark" href="/" aria-label="Automata Framework, home">automata</a>
+        <nav aria-label="Site">
+          <a href="#today">What works today</a>
+          <a href="https://github.com/mcthaydt/AutomataFramework"><i data-icon="github-logo"></i>GitHub</a>
+          <button type="button" class="btn main small" data-play hidden><i data-icon="play"></i>Play the game</button>
+        </nav>
       </div>
-
-      <section>
-        <h2>How to play</h2>
-        <ul class="help">
-          <li><i data-icon="keyboard"></i><span>On a computer: hold the left or right arrow key to move. Press Space to jump.</span></li>
-          <li><i data-icon="device-mobile"></i><span>On a phone or tablet: hold the Left or Right button to move. Tap Jump to jump.</span></li>
-          <li><i data-icon="cursor-click"></i><span>Keys not working? Click the game once, then try again.</span></li>
-        </ul>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="wrap">
+          <a class="tag" href="#today"><b>Being built</b><span>See what works today</span><i data-icon="arrow-right"></i></a>
+          <h1>Finish the game your agent started.</h1>
+          <p class="lede">Your coding agent can make a playable demo in a weekend. Saves, menus, settings, touch controls and publishing are what take the weeks after that. Automata Framework is a toolkit that will have them built in.</p>
+          <div class="actions">
+            <button type="button" class="btn main" data-play hidden><i data-icon="play"></i>Play the first game</button>
+            <a class="btn second" data-address="files"><i data-icon="github-logo"></i>See how it is made</a>
+          </div>
+          <section class="sheet" aria-label="The game">
+            <div class="sheet-head">
+              <b data-fact="name"></b>
+              <span class="quiet">A game made with Automata Framework</span>
+              <span class="how keys"><i data-icon="keyboard"></i>Arrow keys to move. Space to jump.</span>
+              <span class="how fingers"><i data-icon="hand-tap"></i>Use the buttons on the game.</span>
+              <button type="button" class="btn main small" data-play hidden><i data-icon="play"></i>Play it</button>
+              <p class="status" role="status" hidden>Loading the game…</p>
+            </div>
+            <noscript><p class="no-script">This game needs JavaScript. Turn it on in your browser's settings, then load this page again.</p></noscript>
+            <div id="game">
+              <img class="poster" src="/game.png" width="2560" height="1440" alt="" />
+            </div>
+            <dl class="title-block">
+              <div><dt>Game version</dt><dd><a data-address="version" data-fact="version"></a></dd></div>
+              <div><dt>Level</dt><dd data-fact="level-size"></dd></div>
+              <div><dt>Last check</dt><dd>Plays the same in <span data-fact="engines-list"></span></dd></div>
+            </dl>
+          </section>
+        </div>
       </section>
 
-      <section>
-        <h2>What you are playing</h2>
-        <p class="playing">You are playing the game exactly as it is saved on GitHub. When someone changes it there and the change passes its checks, this page shows the new game a little while later.</p>
-        <p id="game-version" hidden></p>
-      </section>
+      <dl class="numbers wrap">
+        <div><dt data-fact="engines-count"></dt><dd><span data-fact="engines-list"></span> play the game exactly the same way</dd></div>
+        <div><dt data-fact="steps"></dt><dd>of recorded play, run again every time the game changes</dd></div>
+        <div><dt data-fact="files-count"></dt><dd>hold all of the game's content</dd></div>
+        <div><dt data-fact="licence"></dt><dd>licensed and free to use</dd></div>
+      </dl>
 
-      <section>
-        <h2>What to do next</h2>
-        <ul class="next">
-          <li>Play the game above. It takes a minute.</li>
-          <li>See how it is made: <a href="https://github.com/mcthaydt/AutomataFrameworkExamples">the game's files are on GitHub</a>.</li>
-          <li>Make your own game: not yet. The toolkit is still being built, and this page will say when it is ready.</li>
-        </ul>
-      </section>
+      <section class="part" id="files"><div class="wrap split">
+        <div class="text">
+          <p class="kicker">Built for agents</p>
+          <h2>That whole level is one small file.</h2>
+          <p class="sub">A game is small files with plain names. Your agent finds the right one, changes it, and the game changes.</p>
+          <ul class="points">
+            <li><i data-icon="check"></i><span><strong>You can read it.</strong> Each # is a wall and each dot is air.</span></li>
+            <li><i data-icon="check"></i><span><strong>Nothing is hidden.</strong> What is in the file is what the game plays.</span></li>
+          </ul>
+          <p class="more"><a data-address="files">See all of the game's files</a></p>
+        </div>
+        <div class="panel">
+          <p class="panel-head" data-fact="level-path"></p>
+          <div class="code" data-block="level-file" tabindex="0" role="region" aria-label="The level's file"></div>
+          <p class="panel-foot">Part of the file is shown here. <a data-address="level">Read the whole file</a></p>
+        </div>
+      </div></section>
 
-      <footer>
-        <a href="https://github.com/mcthaydt/AutomataFrameworkExamples"><i data-icon="github-logo"></i>The game on GitHub</a>
-        <a href="https://github.com/mcthaydt/AutomataFramework"><i data-icon="github-logo"></i>The toolkit on GitHub</a>
-      </footer>
-    </div>
+      <section class="part" id="checks"><div class="wrap split flip">
+        <div class="text">
+          <p class="kicker">Checks</p>
+          <h2>Your agent can't quietly break your game.</h2>
+          <p class="sub">One play of the game is recorded. Every time the game changes, that play runs again in four places. All four have to end the same way, or the change does not pass.</p>
+          <p class="more"><a data-address="checks">See the latest check</a></p>
+        </div>
+        <div class="panel">
+          <p class="panel-head"><span data-fact="replay-path"></span> · <span data-fact="steps"></span></p>
+          <table>
+            <thead><tr><th scope="col">Where it runs</th><th scope="col">How it ends</th></tr></thead>
+            <tbody data-block="engines"></tbody>
+          </table>
+          <p class="panel-foot">The ending when it was recorded: <span data-fact="replay-ending"></span></p>
+        </div>
+      </div></section>
+
+      <section class="part" id="today"><div class="wrap">
+        <p class="kicker">Where it stands</p>
+        <h2>What works today, and what is still being built.</h2>
+        <ul class="claims" data-block="claims"></ul>
+      </div></section>
+
+      <section class="closing"><div class="wrap">
+        <h2>Want to make your own game with it?</h2>
+        <p>Not yet. Follow the toolkit on GitHub and you will see the day it is ready.</p>
+        <a class="btn main" href="https://github.com/mcthaydt/AutomataFramework"><i data-icon="github-logo"></i>Follow on GitHub</a>
+      </div></section>
+    </main>
+
+    <footer><div class="wrap">
+      <div>
+        <a class="wordmark" href="/" aria-label="Automata Framework, home">automata</a>
+        <p>Automata Framework is free and MIT licensed.</p>
+      </div>
+      <nav aria-label="More">
+        <div><h3>Look inside</h3>
+          <a href="https://github.com/mcthaydt/AutomataFrameworkExamples">The game's files</a>
+          <a href="https://github.com/mcthaydt/AutomataFramework">The toolkit's files</a></div>
+        <div><h3>About</h3>
+          <a href="#today">What works today</a>
+          <a href="/licences.txt">Licences</a></div>
+      </nav>
+    </div></footer>
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>
