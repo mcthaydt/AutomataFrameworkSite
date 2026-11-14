@@ -19,7 +19,10 @@ where this page is short, the spec has the detail. This repo's plans, audits and
 - **Site copy is where strategy leaks.** Words on a page come from the public spec and READMEs. Nothing is copied from
   the private notes; a plan may say "the brief is in the private notes" and no more.
 - **Dependencies the Owner approved for this repo** (2026-11-13): `wrangler` 4.140.0, `@playwright/test` 1.63.0,
-  `@types/node` 24.19.1.
+  `@types/node` 24.19.1, and (2026-11-14, for the Blueprint
+  look) `@fontsource/ibm-plex-sans-condensed` 5.3.0, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core`
+  2.1.1, all development-only. `knip.json` is told to ignore the three, because knip reads neither CSS `@import`s
+  (the fonts) nor the icon reader's `import.meta.resolve` (the icons).
 
 ## Principles
 

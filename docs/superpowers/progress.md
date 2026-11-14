@@ -8,19 +8,42 @@ Spec: the "Visual direction" section of
 [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
 in AutomataFramework (Stage 1 was done there, 2026-11-14).
 
-Overall: **15%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **60%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
-| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`; Q1 is answered; Task 3 waits for the Owner's answer to Q2) | |
+| 4. Execution | Done, 100% | [pull request 10](https://github.com/mcthaydt/AutomataFrameworkSite/pull/10); pictures: [`ci-screens/pr-10`](https://github.com/mcthaydt/AutomataFrameworkSite/tree/ci-screens/pr-10) |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 4, Tasks 1 to 4 done (pull request 10). One commit for Tasks 1 to 3, because the package install
+  was blocked until the Owner's own yes arrived. `ci` and `site` are green on the first run: 114 Node tests in 14
+  files, and 99 journeys in each of Chromium, WebKit and Firefox, against the stand-in game and the real one. 23
+  pictures an engine, in `pr-10/` and `pr-10-real/` on `ci-screens`. **The checklist, one line a question:**
+  1. Blue paper, chalk words, the yellow Play button first: yes, all engines. 2. A drunk grandma can say what the page
+  is and what to press from the arrival picture: yes. 3. Yellow only on what can be pressed (the button, the links):
+  yes, and a journey proves it. 4. Condensed font for words, mono for the version line: yes. 5. Every icon beside its
+  words, sharp, the colour of those words (chalk, yellow in a link, paper on the button), none pencil: yes. 6. The
+  heading, the lede and the button fit upright and sideways, phone and tablet: yes. 7. The playing game, real
+  (`pr-10-real/`) against `live/`: the same game, no tint, no rounded corner, and with Q2's answer no line round it.
+  8. **No in WebKit, fixed:** the loading note sat on a white frame in WebKit only (a blank frame is painted white
+  there, whatever is behind it); the frame is now not shown until the game plays (`visibility`, in the stylesheet), with
+  a journey line that checks it; Chromium and Firefox were already right. A first try, the sheet's colour as the
+  frame's background, did not work in WebKit (the picture of `cf1084c` shows it) and was replaced. The focus ring is clear. 9. A device set to light looks the same: yes. 10. Nothing cut off or
+  overlapping. **Reported, not fixed (the plan audit's N3):** on the phone, the link in "See how it is made:" drops
+  to a line of its own and leaves a gap in the sentence. 11. After Play, the loading note then the game make the
+  press plain: yes.
+  Deviations: Tasks 1 to 3 in one commit; Task 3's playing-game rules follow Q2 (b); the frame's `visibility` rule is
+  the one stylesheet rule added that the plan's sheet did not have.
+
+- 2026-11-14: Stage 4 starts. Pull request 6 is on `main` (`3893c72`). The Owner answered Q2: (b), the chalk line goes
+  once the game plays; the plan says so now (Global Constraints, Task 3's two journeys and its stylesheet).
 
 - 2026-11-14: Stage 3. The plan audit: sound, true to the spec's "Visual direction", and ready to execute once pull
   request 6 is on `main`. Nothing blocking. Nine should-fix findings, all written into the plan by the audit's own

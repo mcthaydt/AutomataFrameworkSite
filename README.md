@@ -5,9 +5,24 @@ The website for AutomataFramework: one page where you press "Play the game" and 
 - **The game comes from [AutomataFrameworkExamples](https://github.com/mcthaydt/AutomataFrameworkExamples).** This
   repo never imports it. Its `site` workflow picks the newest commit of the game whose checks all passed, builds the
   game with the game's own `pnpm build`, and shows it on the page, in a frame.
+- **The site wears Blueprint**, the look the spec's "Visual direction" gives the editors and the site. The colours and
+  fonts are in `src/styles.css`, and the pictures of every run are on the `ci-screens` branch.
 - **The site is static files**, hosted on Cloudflare Pages at `automataframework.pages.dev`.
 - **Tests run only in GitHub Actions**, never on your machine. `pnpm lint`, `pnpm typecheck`, `pnpm knip` and
   `pnpm build` are quick checks you can run before you push.
+
+## Icons
+
+An icon is one line, put before the words it goes with:
+
+```html
+<button type="button"><i data-icon="play"></i>Play the game</button>
+```
+
+- The name is a file name from Phosphor's regular set: look in `node_modules/@phosphor-icons/core/assets/regular/`.
+- `pnpm build` writes the picture in. If there is no icon of that name, the build stops and says which name, in which
+  page.
+- An icon never stands without words beside it, and it takes the colour of those words.
 
 ## Try it on your machine
 
