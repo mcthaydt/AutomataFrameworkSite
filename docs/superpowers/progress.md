@@ -8,7 +8,7 @@ Spec: the "Visual direction" section of
 [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
 in AutomataFramework (Stage 1 was done there, 2026-11-14).
 
-Overall: **60%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **75%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
@@ -16,11 +16,22 @@ review 10)
 | 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
 | 4. Execution | Done, 100% | [pull request 10](https://github.com/mcthaydt/AutomataFrameworkSite/pull/10); pictures: [`ci-screens/pr-10`](https://github.com/mcthaydt/AutomataFrameworkSite/tree/ci-screens/pr-10) |
-| 5. Implementation audit | Not started | |
+| 5. Implementation audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-implementation-audit.md`](audits/2026-11-14-blueprint-restyle-implementation-audit.md) |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 5. The implementation audit of `main` at `5388563` (pull request 10): the site wears Blueprint as
+  the spec's "Visual direction" describes it, and `main` is green in `ci` and `site`. The Owner's four decisions all
+  landed (the chalk line goes once the game plays, the `@fontsource` 5.3.0 fonts, Phosphor regular icons, the strict
+  header unchanged). Task 4 did land; only the pull request's body was stale. The pictures were read again: all 23 an
+  engine are there, and the playing game is the same picture as before, pixel for pixel, in every engine at every
+  size. Three should-fix findings for Stage 6: F1, on a phone the link in "See how it is made:" drops to a line of its
+  own; F2, the Blueprint bullet and `tests/styles/` the plan asked for are not in `CLAUDE.md`; F3, `CLAUDE.md` still
+  gives the old author name in its `git config` line. Six minor (M1 to M6). Two Owner questions, neither blocking:
+  Q3, whether the site carries the fonts' and icons' licence notices; Q4, whether anything is done about the old
+  author name on GitHub's merge commits and in old documents. No test was run.
 
 - 2026-11-14: Stage 4, Tasks 1 to 4 done (pull request 10). One commit for Tasks 1 to 3, because the package install
   was blocked until the Owner's own yes arrived. `ci` and `site` are green on the first run: 114 Node tests in 14
