@@ -2,6 +2,50 @@
 
 The tracker every stage reads first and updates last. One section per cycle; newest first.
 
+## Cycle 3: the home page looks finished
+
+A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
+site). The spec, plan and the stages after it wait on the Owner's answers to its five questions.
+
+Overall: **5%** (the design audit is 5 points; the rest is shared out when the plan is written)
+
+| Stage | State | Output |
+|---|---|---|
+| Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
+| The Owner's answers (Q1 to Q5) | Done, 100% | the audit's "The Owner's answers" |
+| The Owner's pick of fonts | Done, 100% | the audit's "The fonts" |
+| 2. Plan | Not started | |
+
+### Log
+
+- 2026-11-14: the Owner picked the fonts: Fraunces, Onest and JetBrains Mono for the site and the editors; Fredoka
+  with M PLUS Rounded 1c, Jua and ZCOOL KuaiLe for the Examples screens and the demo games, with no second font.
+  Nothing is open; the audit is ready to merge and the plan can start.
+
+- 2026-11-14: the fonts. The Owner asked for better ones than the two the site has: one combination for the site and
+  the editors (nine languages), one for the Examples screens and the demo games (six). Four of the first and three
+  of the second were drawn in their palettes and languages, with the packages each needs. Recommended: Fraunces,
+  Onest and JetBrains Mono; and Oxanium with Zen Kaku Gothic New, Gothic A1 and Noto Sans SC. The pick is open.
+
+- 2026-11-14: the Owner's final call on colours: A (No. 325) for the site, E (No. 310) for the editors, D (No. 340)
+  for the Examples demo game's screens, and B (No. 276) for the 2D and 3D example games themselves. The audit holds
+  all four sets of values.
+
+- 2026-11-14: the Owner picked the palette: A, No. 325 (Deep Slate Green, Naples Yellow, Yellow Ocher, Eugenia Red).
+  Every question is answered and the plan can start.
+
+- 2026-11-14: the Owner's answers. The name is "Automata Framework" and the logo is the word "automata". The
+  colours are a palette from *A Dictionary of Color Combinations*, on the site only for now; five were drawn and the
+  pick is open. The claim is "Finish the game your agent started." The game plays its recorded play by itself
+  before Play is pressed, which needs work in AutomataFrameworkExamples first. All five claims are listed with
+  stamps.
+
+- 2026-11-14: the design audit. Nine findings (no first screen, one type size, no rhythm, Blueprint only as paint,
+  words about the page, no proof shown, no motion, a dead end, no icon or share picture), a table of what the old
+  site got right, a direction in eleven parts (the old site's bones in Blueprint's skin, saying only what is true
+  today), draft pictures beside the old site and today's, and five questions for the Owner: the colours, the claim,
+  the game before Play, the list of what works, the mark. No test was run.
+
 ## Cycle 2: the site wears Blueprint
 
 Spec: the "Visual direction" section of
