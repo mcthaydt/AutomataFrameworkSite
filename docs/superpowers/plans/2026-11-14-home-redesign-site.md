@@ -206,10 +206,10 @@ The page as it is today, in No. 325 and the three fonts. No word and no layout c
   --corner`; in `tests/journeys/look.ts`: `TOKENS = { ground, raised, words, quiet, touch, mark }` (each
   `rgb(r, g, b)`), `TITLE = 'Fraunces Variable'`, `LABEL = 'Onest Variable'`, `MEASURE = 'JetBrains Mono'`.
 
-- [ ] **Step 1: Check the start.** `git log --oneline -1 origin/main` shows `81f6088` or later. If not, stop and
+- [x] **Step 1: Check the start.** `git log --oneline -1 origin/main` shows `81f6088` or later. If not, stop and
   report.
 
-- [ ] **Step 2: Rewrite `tests/styles/tokens.test.ts`** to hold the new colours. Its assertions:
+- [x] **Step 2: Rewrite `tests/styles/tokens.test.ts`** to hold the new colours. Its assertions:
 
 ```ts
 const BOOK = { ground: '#112F2C', words: '#FBE6A0', touch: '#E2B540', mark: '#DA525D' }
@@ -230,11 +230,11 @@ test.each([
 ] as const)('%s on %s is at least %d to 1', …)
 ```
 
-- [ ] **Step 3: Swap the packages.**
+- [x] **Step 3: Swap the packages.**
   `pnpm remove @fontsource/ibm-plex-sans-condensed && pnpm add -D -E @fontsource-variable/fraunces@5.3.0 @fontsource-variable/onest@5.3.1`.
   In `knip.json`'s `ignoreDependencies`, the two new names replace the one removed.
 
-- [ ] **Step 4: `src/styles.css`.** The imports become `@fontsource-variable/fraunces/opsz.css`,
+- [x] **Step 4: `src/styles.css`.** The imports become `@fontsource-variable/fraunces/opsz.css`,
   `@fontsource-variable/onest/wght.css` and `@fontsource/jetbrains-mono/latin-400.css`. `:root` holds the six colours
   under the names above and
   `--title: "Fraunces Variable", Georgia, "Times New Roman", serif;`
@@ -244,11 +244,11 @@ test.each([
   now); the other labels keep their capitals in `--label`. The comment at the top of the sheet is rewritten to say
   what is true now. Both pages' `theme-color` becomes `#112F2C`.
 
-- [ ] **Step 5: `public/licences.txt`.** Remove the IBM Plex Sans Condensed notice. Add the two packages' `LICENSE`
+- [x] **Step 5: `public/licences.txt`.** Remove the IBM Plex Sans Condensed notice. Add the two packages' `LICENSE`
   files, whole, each under a line naming the font and its package and version, copied from
   `node_modules/@fontsource-variable/{fraunces,onest}/LICENSE`.
 
-- [ ] **Step 6: The journeys.** In `look.ts`, `TOKENS`, `TITLE`, `LABEL`, `MEASURE` as above (the `rgb()` values of
+- [x] **Step 6: The journeys.** In `look.ts`, `TOKENS`, `TITLE`, `LABEL`, `MEASURE` as above (the `rgb()` values of
   the six). In `look.journey.ts`: loaded fonts are
   `['Fraunces Variable 100 900', 'JetBrains Mono 400', 'Onest Variable 100 900']`; `h1`'s family contains `TITLE`,
   `body`'s `LABEL`; the colour journey reads ground, words, raised, quiet; "yellow means you can touch it" becomes
@@ -258,12 +258,12 @@ test.each([
   `'Copyright 2021 The Onest Project Authors'`, and JetBrains Mono's and Phosphor's as now. Both `theme-color` checks
   expect `#112F2C`.
 
-- [ ] **Step 7: `CLAUDE.md`.** The dependencies bullet names the two new packages (the Owner, 2026-11-14) and drops
+- [x] **Step 7: `CLAUDE.md`.** The dependencies bullet names the two new packages (the Owner, 2026-11-14) and drops
   the one removed; the "wears Blueprint" bullet says the site has its own palette, No. 325, with the six names, that
   the touch colour is only for what can be touched and the mark colour never carries words; the fonts bullet names
   the three.
 
-- [ ] **Step 8: Verify and commit.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build` pass. `ls dist/assets`
+- [x] **Step 8: Verify and commit.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build` pass. `ls dist/assets`
   shows `fraunces-latin-opsz-normal-*.woff2` and `onest-latin-wght-normal-*.woff2`. Check the git author, then
   `git commit -m "feat(look): palette No. 325 and Fraunces, Onest and JetBrains Mono"`. Push; `ci` and `site` green.
 
@@ -303,13 +303,13 @@ export function writeFacts(facts: GameFacts): string   // two-space JSON and a n
 export function engineNames(checks: readonly string[]): string[]
 ```
 
-- [ ] **Step 1: The fixture.** A made-up game that can never be mistaken for the real one:
+- [x] **Step 1: The fixture.** A made-up game that can never be mistaken for the real one:
   `automata.toml` with `name = "Stand-in Game"`, `start = "room"   # a comment after the value`, a level
   `content/levels/room.json` and a character `content/characters/ball.json`; the level has `"id": "room"`, tiles
   `["#....#", "#....#", "######"]`, one thing `{ "id": "ball-1", "character": "ball", "x": 3.5, "y": 1.5 }`;
   `replays/room.json` has `"ticks": 12` and `"finalHash": "0123456789abcdef"`; `LICENSE` starts `MIT License`.
 
-- [ ] **Step 2: Write the tests.**
+- [x] **Step 2: Write the tests.**
 
 ```ts
 // project.test.ts
@@ -349,7 +349,7 @@ test('reads the fixture game from its folder', …)                 // readFacts
 test('a folder with no automata.toml stops with a sentence that names the folder', …)
 ```
 
-- [ ] **Step 3: Implement.** `readProject` is not a TOML parser and says so in its comment: it reads top-level
+- [x] **Step 3: Implement.** `readProject` is not a TOML parser and says so in its comment: it reads top-level
   `key = "value"` lines and `[[content]]` tables with `type` and `path`, drops a `#` comment that is outside quotes,
   and ignores every other line. `parseFacts`: the level is the content entry of type `level` whose JSON `id` equals
   `start`; `width` is the first row's length; `thing` is the first of `things`; the replay is `replays/<start>.json`,
@@ -357,7 +357,7 @@ test('a folder with no automata.toml stops with a sentence that names the folder
   `MIT License`, and anything else is a `FactsError` (the page says "MIT" in words). `engineNames`: `check` is
   `Node`, `engines (chromium)` is `Chrome`, `engines (webkit)` is `Safari`, `engines (firefox)` is `Firefox`.
 
-- [ ] **Step 4: `facts.json` is written with the game.** `addGame`'s options gain `readonly facts: GameFacts`, and it
+- [x] **Step 4: `facts.json` is written with the game.** `addGame`'s options gain `readonly facts: GameFacts`, and it
   writes `<siteDir>/facts.json` with `writeFacts` after `version.json`. `scripts/add-game.ts` reads them with
   `readFacts({ sourceDir: env.GAME_SOURCE ?? 'tests/fixtures/game-source', commit: env.GAME_COMMIT ?? 'fixture' })`
   and prints a `FactsError`'s sentence and exits 1, as it does for `AssembleError`. **A game with the wrong game's
@@ -367,13 +367,13 @@ test('a folder with no automata.toml stops with a sentence that names the folder
   gives the folder or throws that sentence (`sourceFolder(env)`), with its test in `read.test.ts`. Add to `assemble.test.ts`:
   "writes facts.json beside version.json" and "a refused game leaves no facts.json".
 
-- [ ] **Step 5: The workflow.** In `site.yml`'s "Build the site around the game" step, add `GAME_SOURCE: ../game`.
+- [x] **Step 5: The workflow.** In `site.yml`'s "Build the site around the game" step, add `GAME_SOURCE: ../game`.
   In `tests/workflows/site.test.ts`: that step's `env` has `GAME_SOURCE: '../game'` beside `GAME_DIR: '../game/dist'`.
 
-- [ ] **Step 6: The layers.** `LAYERS`, `NODE_PLACES` and `NODE_FEATURES` in `tests/architecture/rules.ts` as in
+- [x] **Step 6: The layers.** `LAYERS`, `NODE_PLACES` and `NODE_FEATURES` in `tests/architecture/rules.ts` as in
   "File structure" (all four new features now, so later tasks do not touch the file). `src/build.ts` exports `facts`.
 
-- [ ] **Step 7: Verify and commit.** Lint, typecheck, knip and build pass; `cat dist/facts.json` shows the stand-in
+- [x] **Step 7: Verify and commit.** Lint, typecheck, knip and build pass; `cat dist/facts.json` shows the stand-in
   game. Commit `feat(facts): read the game's own files into facts.json`. Push; `ci` and `site` green; in `site`'s
   `build-real` log, open the uploaded site's `facts.json` (or the `live` picture later) and note the real values in
   the tracker.
@@ -402,7 +402,7 @@ export function checkClaims(claims: readonly Claim[], facts: GameFacts): void   
 export const STAMP_WORDS: Record<ClaimState, string>   // { works: 'Works today', building: 'Being built' }
 ```
 
-- [ ] **Step 1: Write the tests.**
+- [x] **Step 1: Write the tests.**
 
 ```ts
 test('there are five claims, with the spec\'s five titles', () => expect(CLAIMS.map((c) => c.title)).toEqual([
@@ -419,12 +419,12 @@ test('no line promises what is being built as if it were here', …)
 //   for every 'building' claim, the journey in Task 7 shows 'Being built' beside it; here: STAMP_WORDS is exact
 ```
 
-- [ ] **Step 2: `proofs.ts`.** `same-in-every-engine` holds when `facts.engines` is exactly Node, Chrome, Safari and
+- [x] **Step 2: `proofs.ts`.** `same-in-every-engine` holds when `facts.engines` is exactly Node, Chrome, Safari and
   Firefox, `facts.replay.steps > 0` and `facts.replay.ending` is 16 hex digits. (It is true because `pick` only ever
   shows a commit that passed `REQUIRED_CHECKS`; the comment says so.) There is no second proof yet (Q1's answer: only one
   claim works today), and none is written ahead of the claim that needs it.
 
-- [ ] **Step 3: `library/claims.json`**, in this order:
+- [x] **Step 3: `library/claims.json`**, in this order:
 
 ```json
 [
@@ -445,7 +445,7 @@ test('no line promises what is being built as if it were here', …)
 
   The `agents` line says what is here and what is not (Q1's answer), so the card never promises the whole claim.
 
-- [ ] **Step 4: Verify and commit.** `feat(claims): the five claims, each stamp held to a proof`. Push; `ci` green.
+- [x] **Step 4: Verify and commit.** `feat(claims): the five claims, each stamp held to a proof`. Push; `ci` green.
 
 ### Task 4: Filling the pages
 
@@ -493,7 +493,7 @@ link).
 | `<tbody data-block="engines"></tbody>` | one row an engine |
 | `<ul data-block="claims"></ul>` | one card a claim |
 
-- [ ] **Step 1: Write the tests.** With the fixture facts and with the real game's values typed in the test:
+- [x] **Step 1: Write the tests.** With the fixture facts and with the real game's values typed in the test:
 
 ```ts
 // fill.test.ts
@@ -523,7 +523,7 @@ test('the claims: one card each, numbered 01 to 05, with its title, its line and
 //   a 'works' card has class "stamp works" and a check icon placeholder; a 'building' card "stamp building", no icon
 ```
 
-- [ ] **Step 2: Implement `fill` and `blocks`.** Both pure: strings in, a string out. Every value passes through one
+- [x] **Step 2: Implement `fill` and `blocks`.** Both pure: strings in, a string out. Every value passes through one
   `escape` (`&`, `<`, `>`, `"`). The blocks write icon placeholders (`<i data-icon="check"></i>`,
   `<i data-icon="check-circle"></i>`), so `fill` runs before `icons`. Markup the blocks write (the stylesheet and the
   journeys rely on these class names):
@@ -540,14 +540,14 @@ test('the claims: one card each, numbered 01 to 05, with its title, its line and
 
   The three notes are true of any level, whatever an editor saves: they describe the format, not this level.
 
-- [ ] **Step 3: Wire it into the build.** In `vite.config.ts`, read the facts once
+- [x] **Step 3: Wire it into the build.** In `vite.config.ts`, read the facts once
   (`readFacts({ sourceDir: process.env.GAME_SOURCE ?? 'tests/fixtures/game-source', commit: process.env.GAME_COMMIT ?? 'fixture' })`)
   and add a `fill` plugin before `icons` whose `transformIndexHtml` is `fillPage(html, facts, CLAIMS, page)`. A
   `FactsError`, `ClaimError` or `FillError` stops the build with its sentence: the facts are read in the plugin's
   `buildStart`, and each of the three is passed to `this.error(error.message)`, so the last thing the build prints
   is the sentence and not a stack (audit N3).
 
-- [ ] **Step 4: Verify and commit.** Lint, typecheck, knip, build. `feat(fill): write the game's facts and the claims
+- [x] **Step 4: Verify and commit.** Lint, typecheck, knip, build. `feat(fill): write the game's facts and the claims
   into the pages`. Push; `ci` and `site` green (no page uses a placeholder yet).
 
 ### Task 5: The pictures and the page's face
@@ -581,7 +581,7 @@ export function serveFolder(dir: string): Promise<{ url: string; close(): Promis
 out as a card for it (audit S10). There is no `SITE_ADDRESS` constant: the address is typed once in `index.html`'s
 head and held to the workflow's `SITE_URL` by the test below (audit N5).
 
-- [ ] **Step 1: Write the journey `facts.journey.ts`** (desktop size; `request` only where no page is needed):
+- [x] **Step 1: Write the journey `facts.journey.ts`** (desktop size; `request` only where no page is needed):
 
 ```ts
 test('the game\'s picture, the share picture and the icons are the site\'s own files', async ({ request, page }) => {
@@ -605,7 +605,7 @@ test('facts.json is served and says which game the page shows', …)
 
   In `tests/workflows/site.test.ts`: the `og:url` and `og:image` in `index.html` start with the workflow's `SITE_URL`.
 
-- [ ] **Step 2: Implement `pictures`.** `serveFolder` is Node's `http` serving files of one folder on port 0 with the
+- [x] **Step 2: Implement `pictures`.** `serveFolder` is Node's `http` serving files of one folder on port 0 with the
   right content type for `.html .js .css .json .png .svg .woff2 .wasm .toml` and `index.html` for a folder; nothing
   outside the folder. `takePictures` launches `chromium` from `@playwright/test`, takes `PICTURES` in order (the
   share picture shows the game's picture, so `game.png` is first) with reduced motion, and for each waits for `ready`,
@@ -627,24 +627,24 @@ test('facts.json is served and says which game the page shows', …)
   (`/../package.json`, `/%2e%2e/package.json`) answers 404 and serves nothing", "a missing file answers 404", and
   for `PICTURES`: "the game's picture is first, and the names are the three the pages point at".
 
-- [ ] **Step 3: The build.** `"build": "vite build && node scripts/add-game.ts && node scripts/take-pictures.ts"`.
+- [x] **Step 3: The build.** `"build": "vite build && node scripts/add-game.ts && node scripts/take-pictures.ts"`.
   In `ci.yml`'s `build` job and `site.yml`'s `build-real` job, add
   `pnpm exec playwright install --with-deps chromium` after the site's install and before the build (in `build-real`
   with `working-directory: site`). The workflow tests hold both. `deploy` is not touched: it still never runs the
   game. The comment at the top of `site.yml` says `build-real` now also opens the built game once in a browser, with
   no secret in the job.
 
-- [ ] **Step 4: The heads.** `public/icon.svg`:
+- [x] **Step 4: The heads.** `public/icon.svg`:
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="2" fill="#e2b540"/></svg>`.
   `index.html`'s head gets the title, description, the two icon links and the tags the journey lists; `404.html` gets
   the icon links and the title `Page not found: Automata Framework`. Update the title checks in
   `hosting.journey.ts`, `not-found.journey.ts` and `home.journey.ts`.
 
-- [ ] **Step 5: The README.** "Try it on your machine" gains `pnpm exec playwright install chromium` between install
+- [x] **Step 5: The README.** "Try it on your machine" gains `pnpm exec playwright install chromium` between install
   and build, and one sentence on why (the build takes the game's picture). `readme.test.ts` holds the order: install,
   playwright install, build, serve. It also says `GAME_SOURCE=` goes with `GAME_DIR=` for the real game.
 
-- [ ] **Step 6: Verify and commit.** Lint, typecheck, knip. For `pnpm build` in a cloud container set
+- [x] **Step 6: Verify and commit.** Lint, typecheck, knip. For `pnpm build` in a cloud container set
   `CHROMIUM_PATH=/opt/pw-browsers/chromium` if Playwright's own browser is missing; then look at `dist/game.png` and
   `dist/share.png`. Check that `dist/index.html` still says `href="/apple-touch-icon.png"` as written: Vite leaves an
   address alone when its file is not there at build time (tried in the plan audit with `/game.png`, N1), and the
@@ -661,10 +661,10 @@ test('facts.json is served and says which game the page shows', …)
 - Produces: `createPlayer(root: HTMLElement, buttons: readonly HTMLButtonElement[], status: HTMLElement | null): Player`
   (state and `destroy` as now); `startPage(doc: Document): void`; in `look.ts`, `arrive` as now and `settle` removed.
 
-- [ ] **Step 1: `playwright.config.ts`:** `use` gains `reducedMotion: 'reduce'`, with a comment: pictures and
+- [x] **Step 1: `playwright.config.ts`:** `use` gains `reducedMotion: 'reduce'`, with a comment: pictures and
   measures are taken of a page at rest; `motion.journey.ts` (Task 8) turns motion back on for itself.
 
-- [ ] **Step 2: Rewrite `index.html`'s body down to the end of the first screen.** The words are exact; the journeys
+- [x] **Step 2: Rewrite `index.html`'s body down to the end of the first screen.** The words are exact; the journeys
   assert them word for word. (The sections after it stay as they are until Task 7.)
 
 ```html
@@ -717,7 +717,7 @@ test('facts.json is served and says which game the page shows', …)
   Audit B1: the loading note and the note about JavaScript are in the sheet, outside `#game`, so nothing of the
   site's is ever over the game's picture. `<noscript>` is a child of the `section` here, which HTML allows.
 
-- [ ] **Step 3: Write the journeys** (`home.journey.ts`; at every size in `SIZES` unless said):
+- [x] **Step 3: Write the journeys** (`home.journey.ts`; at every size in `SIZES` unless said):
 
 ```ts
 const WORDS = { title: 'Automata Framework: finish the game your agent started', wordmark: 'automata',
@@ -784,7 +784,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
   each visible one still has words beside it. `hosting.journey.ts`'s "still plays under those headers" presses
   'Play it'.
 
-- [ ] **Step 4: `play.ts` and `page.ts`.** `createPlayer(root, buttons, status)`: every button is shown and listens;
+- [x] **Step 4: `play.ts` and `page.ts`.** `createPlayer(root, buttons, status)`: every button is shown and listens;
   `status` is the sheet's loading note, which is no longer inside `root` (audit B1), shown and hidden as now. A press
   when `ready` starts the game as now (loading, then playing) and at once scrolls the sheet (`root.closest('.sheet')`,
   or `root`) into view, so a press far from the game is seen to do something and the loading note in the sheet's bar
@@ -794,7 +794,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
   `startPage` finds `#game`, every `button[data-play]` and the sheet's `[role="status"]` and makes the player; the version line's fetch goes (the
   line is filled when the site is built).
 
-- [ ] **Step 5: The stylesheet.** The drawing is the audit's `fonts-site.png` (the Fraunces column),
+- [x] **Step 5: The stylesheet.** The drawing is the audit's `fonts-site.png` (the Fraunces column),
   `draft-desktop.png` and `draft-phone.png`, with three differences: no square beside the wordmark, the colours and
   fonts of Task 1, and stamp words in the words colour. Decisions the pictures do not settle:
   - `.wrap`: at most 1248 px wide, 24 px gutters, 16 px below 760 px (and never less than the safe-area insets).
@@ -841,7 +841,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
     screen is centred, so the card reads: the wordmark, "Being built", the claim, the lede, and the top of the game
     on its sheet. Nothing but `takePictures` ever sets that attribute.
 
-- [ ] **Step 6: Verify and commit.** Lint, typecheck, knip, build; open `dist/index.html`'s picture in
+- [x] **Step 6: Verify and commit.** Lint, typecheck, knip, build; open `dist/index.html`'s picture in
   `dist/share.png` to see the first screen. `feat(home): the top bar, the first screen and the game on its sheet`.
   Push; `ci` and `site` green in all three engines. Read the arrival pictures on `ci-screens` at every size before
   going on; a first screen that fails the drunk-grandma test is fixed here, not in Task 9.
@@ -851,7 +851,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
 **Files:**
 - Modify: `index.html`, `src/styles.css`, `tests/journeys/{home.journey,look.journey,facts.journey}.ts`
 
-- [ ] **Step 1: Replace the rest of `index.html`'s body** (the three old sections and the old footer go):
+- [x] **Step 1: Replace the rest of `index.html`'s body** (the three old sections and the old footer go):
 
 ```html
   <dl class="numbers wrap">
@@ -935,7 +935,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
   the file is shown here." (3) "The whole game, apart from its code" left out the project file and the recorded
   play; the files counted are the content files `automata.toml` lists, so the line says that.
 
-- [ ] **Step 2: Write the journeys.** In `home.journey.ts`, at every size:
+- [x] **Step 2: Write the journeys.** In `home.journey.ts`, at every size:
 
 ```ts
 test('the page says, below the game, why to care, in these words', …)
@@ -965,7 +965,7 @@ test('"What works today" in the bar, the tag and the footer all go to the list',
   At 320 px (Review Focus 4): `fitsSideways` is true; the file panel's `scrollWidth` may be more than its
   `clientWidth` and the page's is not; the table is inside the window.
 
-- [ ] **Step 3: The stylesheet.** From the same pictures. Decisions they do not settle:
+- [x] **Step 3: The stylesheet.** From the same pictures. Decisions they do not settle:
   - `.numbers`: raised ground, four across at 1024 px and wider, two by two below, the four divided by 1 px lines
     in the ground colour (audit S2: a raised line on a raised ground is no line); `dt` in Fraunces at 32 px, `dd`
     quiet at 18 px.
@@ -987,7 +987,7 @@ test('"What works today" in the bar, the tag and the footer all go to the list',
   - `footer`: a raised line on top; the wordmark and its line on the left, two columns of links on the right, each
     link 44 px tall; `h3` a 13 px label in Onest, quiet.
 
-- [ ] **Step 4: Verify and commit.** `feat(home): the numbers, the level's file, the checks, the five claims, the
+- [x] **Step 4: Verify and commit.** `feat(home): the numbers, the level's file, the checks, the five claims, the
   close and the footer`. Push; `ci` and `site` green. Read the whole-page pictures at every size on `ci-screens`.
 
 ### Task 8: Motion
@@ -996,7 +996,7 @@ test('"What works today" in the bar, the tag and the footer all go to the list',
 - Modify: `src/styles.css`
 - Create: `tests/journeys/motion.journey.ts`
 
-- [ ] **Step 1: Write the journeys** (phone upright and desktop):
+- [x] **Step 1: Write the journeys** (phone upright and desktop):
 
 ```ts
 test.describe('with motion', () => {
@@ -1019,7 +1019,7 @@ test.describe('with reduced motion', () => {
 })
 ```
 
-- [ ] **Step 2: The stylesheet.** All of it in CSS; no script. Buttons and links: `transition` of 140 ms on
+- [x] **Step 2: The stylesheet.** All of it in CSS; no script. Buttons and links: `transition` of 140 ms on
   `filter`, `transform` and `text-decoration-thickness`; hover brightens a `.btn` (`filter: brightness(1.08)`) and
   thickens a link's underline; pressed moves a `.btn` down 1 px. The first screen: `.tag, h1, .lede, .actions` run
   one `arrive` (opacity 0 and 8 px lower, to rest) over 200 ms, each 40 ms after the one before, `both`. The stamp:
@@ -1032,7 +1032,7 @@ test.describe('with reduced motion', () => {
   today" is seen to travel. Last in the sheet:
   `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }`.
 
-- [ ] **Step 3: Verify and commit.** `feat(home): small motion, off for people who ask for less`. Push; green.
+- [x] **Step 3: Verify and commit.** `feat(home): small motion, off for people who ask for less`. Push; green.
 
 ### Task 9: The 404 page, the docs and reading the pictures
 
@@ -1040,14 +1040,14 @@ test.describe('with reduced motion', () => {
 - Modify: `404.html`, `src/styles.css`, `tests/journeys/{not-found,hosting}.journey.ts`, `README.md`, `CLAUDE.md`,
   `docs/superpowers/progress.md`, this plan (its boxes ticked)
 
-- [ ] **Step 1: `404.html`** gets the same top bar with the wordmark only (it is the way home too), then, in `.wrap`:
+- [x] **Step 1: `404.html`** gets the same top bar with the wordmark only (it is the way home too), then, in `.wrap`:
   `<h1>This page does not exist.</h1>`, the sentence as now, and
   `<a class="btn main" href="/"><i data-icon="house"></i>Go to the home page</a>`. `not-found.journey.ts`: the
   wordmark link goes home; the heading is Fraunces in sentence case; the way home is a touch-colour button with
   ground words, 52 px high; the rest as now. `hosting.journey.ts`: after "Go to the home page" the home's `h1` is the
   claim.
 
-- [ ] **Step 2: `CLAUDE.md` and `README.md`.** `CLAUDE.md`: the opening says "Automata Framework"; "What is
+- [x] **Step 2: `CLAUDE.md` and `README.md`.** `CLAUDE.md`: the opening says "Automata Framework"; "What is
   particular" gains: every number and stamp on the page comes from the game's files through `facts`, `claims` and
   `fill` and is in `facts.json`; `build` and `build-real` open the built game once in a browser for its picture and
   `deploy` still never runs it; the structure list gains `tests/fixtures/game-source/` and the four features'
@@ -1055,7 +1055,7 @@ test.describe('with reduced motion', () => {
   first lines and `package.json`'s `description` say "Automata Framework", and its bullet about the look names the
   site's own palette and fonts in place of "wears Blueprint" (audit N10).
 
-- [ ] **Step 3: Read the pictures** on `ci-screens` (`pr-<n>/` for the stand-in game, `pr-<n>-real/` for the real
+- [x] **Step 3: Read the pictures** on `ci-screens` (`pr-<n>/` for the stand-in game, `pr-<n>-real/` for the real
   one), all three engines, every size, and write one line an answer in the tracker:
   1. From the arrival picture alone, can a drunk grandma say what this is and what to press?
   2. Is the claim the biggest thing on the first screen, and is the wordmark the word alone, with no mark?
@@ -1078,7 +1078,7 @@ test.describe('with reduced motion', () => {
       what is seen; it is the Owner's to judge in Stage 7.
   A "no" is fixed, with its journey, before the stage ends, or reported as a stop.
 
-- [ ] **Step 4: The tracker.** `progress.md`'s Cycle 3: execution done, the test counts per engine, every deviation
+- [x] **Step 4: The tracker.** `progress.md`'s Cycle 3: execution done, the test counts per engine, every deviation
   from this plan with its reason, the checklist's answers, and what the Owner should look at first in Stage 7 (the
   live first screen on a phone, the stamps, the share picture). Commit `docs: stage 4 of the home redesign`. Push;
   `ci` and `site` green; report to the coordinator. Do not merge.
