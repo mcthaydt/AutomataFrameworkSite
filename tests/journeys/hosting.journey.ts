@@ -2,6 +2,7 @@
 // missing file of the game, the safety headers on every page, and the game still playing under those headers.
 // `wrangler pages dev` serves dist/ the way Cloudflare Pages does, so these see what a visitor will.
 import { expect, test } from '@playwright/test'
+import { untilWatching } from './home.ts'
 import { watchForTrouble } from './watch.ts'
 
 test.use({ viewport: { width: 1440, height: 900 } })
@@ -66,6 +67,8 @@ test('every page is sent with its safety headers', async ({ request }) => {
 test('the game still plays under those headers', async ({ page }) => {
   const trouble = watchForTrouble(page)
   await page.goto('/')
+  // Let the game play itself first, as a person would see it: a press before it arrives cancels its request.
+  await untilWatching(page)
   await page.getByRole('button', { name: 'Play it' }).click()
   await expect(
     page.frameLocator('iframe[title="The demo game"]').locator('#game[data-state="playing"]'),

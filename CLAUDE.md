@@ -20,6 +20,13 @@ where this page is short, the spec has the detail. This repo's plans, audits and
   game's folder into `dist/facts.json`), `claims` (the five claims, each stamp held to a proof) and `fill` (writes
   them into the page). None is typed in `index.html`. `build` and `build-real` open the built game once in a browser
   (`pictures`) to take its picture, the share picture and the touch icon; `deploy` still never runs the game.
+- **The game plays itself before anyone presses Play** (the Owner, 2026-11-14). Once the page has loaded and the game's
+  place is near, the page asks for `/play/?watch`: the game's watch mode, which plays its recorded run in the picture's
+  own box, for every visitor, whatever their device says about motion or saved data. Play (or a tap on the moving game)
+  sends `{ automata: 'play' }` to the same frame, which starts for real; the game tells the page its state with
+  `{ automata: 'state', state }`. Each side checks who sent a message and where from. A game that cannot watch leaves
+  the picture, and Play loads it as it always did. The picture is still there first, and what is in `public/_headers`
+  does not change for it.
 - **The build tools the site's pages are made with** read the game's repo folder through `GAME_SOURCE`, never import
   the framework. The page's name is "Automata Framework", two words; the wordmark is the word `automata`, with no mark.
 - **Site copy is where strategy leaks.** Words on a page come from the public spec and READMEs. Nothing is copied from

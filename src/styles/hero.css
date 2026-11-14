@@ -178,13 +178,27 @@ h1 {
   outline: none;
 }
 
-#game[data-state="playing"] .poster {
+/* Once the game's page can be seen, in either form, it takes the picture's place, in the picture's own box. Until then
+   the frame is there and hidden: it is blank while its page arrives, and WebKit paints a blank frame white, whatever is
+   behind it. */
+#game[data-frame="shown"] .poster {
   display: none;
 }
 
-/* The frame is blank until the game's page arrives, and WebKit paints a blank frame white, whatever is behind it. */
-#game:not([data-state="playing"]) iframe {
+#game:not([data-frame="shown"]) iframe {
   visibility: hidden;
+}
+
+/* While the game plays itself the frame lets every touch and wheel through to the page, so a finger that drags scrolls
+   the page, and a tap on the game lands on the game's place, which starts it (the Owner, 2026-11-14). The line stays:
+   the game is not yet the visitor's to play. */
+#game[data-state="watching"] {
+  cursor: pointer;
+}
+
+#game[data-state="watching"] iframe,
+#game[data-state="loading"] iframe {
+  pointer-events: none;
 }
 
 /* A phone held upright: tall instead of wide while it plays, so the game has room for its touch buttons under the level. */

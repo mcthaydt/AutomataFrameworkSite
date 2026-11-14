@@ -4,7 +4,7 @@
 // read from the `facts.json` the build wrote, so a page that said one thing and a game that held another would fail.
 import { expect, test } from '@playwright/test'
 import { addresses, GAME_REPO, siteFacts, words } from './facts.ts'
-import { BAR_AT, button, WORDS } from './home.ts'
+import { BAR_AT, button, holdWatching, pageGame, WORDS } from './home.ts'
 import { arrive, fitsSideways } from './look.ts'
 import { SIZES } from './sizes.ts'
 import { watchForTrouble } from './watch.ts'
@@ -59,15 +59,20 @@ for (const size of SIZES) {
       await page.screenshot({ path: `tests/journeys/__screenshots__/${size.name}-whole.png`, fullPage: true })
     })
 
-    test("the game's real picture is on the sheet before Play is pressed", async ({ page }) => {
+    // The picture is what a visitor sees until the game that plays itself arrives, so the game's page is held back here:
+    // it is what a slow connection looks like, and the picture must be whole and in place meanwhile.
+    test("the game's real picture is on the sheet until the game that plays itself arrives", async ({
+      page,
+    }) => {
+      const release = await holdWatching(page)
       await arrive(page)
       const poster = page.locator('img.poster')
       await expect(poster).toBeVisible()
       expect(
         await poster.evaluate((image: HTMLImageElement) => [image.complete, image.naturalWidth]),
       ).toEqual([true, 2560])
-      await expect(page.locator('iframe')).toHaveCount(0)
-      await expect(page.locator('#game')).toHaveAttribute('data-state', 'ready')
+      await expect(pageGame(page)).toHaveAttribute('data-state', 'ready')
+      release()
     })
 
     test('the sheet says which game it is, how to play it, and which version', async ({ page, request }) => {
