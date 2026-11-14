@@ -2,8 +2,7 @@
 // itself once the page has loaded, and every Play button that starts it. Everything else the page
 // says (the game's version, its numbers, the claims) was written into it when the site was built.
 import { landStamps, startSmoothScroll } from '../motion/motion.ts'
-import { createPlayer } from '../play/play.ts'
-import { whenNear } from '../play/watch.ts'
+import { createPlayer, whenNear } from '../play/play.ts'
 
 /** Starts the player on `#game`, with every Play button on the page and the sheet's loading note. */
 export function startPage(doc: Document): void {
