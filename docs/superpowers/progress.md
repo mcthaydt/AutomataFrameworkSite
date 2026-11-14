@@ -2,6 +2,30 @@
 
 The tracker every stage reads first and updates last. One section per cycle; newest first.
 
+## Cycle 4: the game plays itself
+
+The game's watch mode (framework `watchReplay`, then the game's `?watch`) reaches the page. The plan is
+[`2026-11-14-watch-mode.md`](https://github.com/mcthaydt/AutomataFrameworkExamples/blob/main/docs/superpowers/plans/2026-11-14-watch-mode.md)
+in AutomataFrameworkExamples (Part D is this repo's); its spec addendum is in AutomataFramework. The Owner's answers
+are in: Q1 (a) the strip says "The game is playing by itself. Tap it to play."; Q2 (a) a tap or click on the moving
+game starts it, and a dragging finger still scrolls the page; Q3 (b) it plays itself for everyone, reduced motion and
+saved data included, so there is no gate and no `mayWatch`; Q4 (a) it loops, with a one-second rest.
+
+| Stage | State | Output |
+|---|---|---|
+| Framework `watchReplay` (Part A) | Done, merged | AutomataFramework pull requests 29 and 31 |
+| Pin move and the game's watch mode (Parts B, C) | Done, merged | AutomataFrameworkExamples pull requests 25 and 26 |
+| Part D: the stand-in watches, the page shows the game playing itself, the journeys | In review | this repo's pull request |
+
+### Log
+
+- 2026-11-14: Part D, in this repo's pull request. The page asks for `/play/?watch` once it has loaded and the game's
+  place is within a window's height (`whenNear`); the frame sits in the picture's own box with pointer events off, so
+  a wheel or a dragging finger scrolls the page and a tap starts the game. Play, or that tap, tells the same frame to
+  play (`tellGameToPlay`); the frame is never loaded twice. Each side checks who sent a message and from where
+  (`talk.ts`). The built game now downloads for every visitor, which it did not before Play: its size on the wire is
+  recorded below once the build's own log has it.
+
 ## Cycle 3: the home page looks finished
 
 A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
