@@ -2,6 +2,29 @@
 
 The tracker every stage reads first and updates last. One section per cycle; newest first.
 
+## Cycle 4: the sales site
+
+The Owner, 2026-11-14: make the site sales-optimized like the first attempt's; people should think it is a Y Combinator
+company and be shocked it isn't. Specced now, built once M2's showcase demo lands, just before Release 1.
+
+Overall: **5%** (the spec is 10 points, the plan 10, its audit 5, execution 40, the implementation audit 15, fixes 10,
+the Owner's review 10; the spec counts half until the Owner's four answers are in)
+
+| Stage | State | Output |
+|---|---|---|
+| 1. Spec | Written; four Owner questions open (Q1 to Q4) | [`specs/2026-11-14-sales-site-design.md`](specs/2026-11-14-sales-site-design.md) |
+| 2. Plan | Not started; waits for the answers and for M2's showcase | |
+| 3. Plan audit | Not started | |
+| 4. Execution | Not started | |
+| 5. Implementation audit | Not started | |
+| 6. Fixes | Not started | |
+| 7. Owner review | Not started | |
+
+### Log
+
+- 2026-11-14: the spec, from the first attempt's site, today's site and its design audit, and the M2 and watch-mode
+  specs. The reasoning behind its order and asks is in the private notes.
+
 ## Cycle 3: the home page looks finished
 
 A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
