@@ -1043,11 +1043,12 @@ h1 {
   }
 }
 
-/* A press on "What works today" is seen to travel. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+/* Lenis smooths the scrolling (src/features/motion) and travels to a place a press names, so the browser's own smooth
+   scroll is not asked for. Lenis's stylesheet is these lines of it; its rule that blocks pointer events on frames is
+   left out on purpose, because the game is a frame and must keep them. */
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
 /* The share picture (audit S10): a card for a link preview, so nothing in it asks to be pressed. Only `takePictures`

@@ -1,0 +1,74 @@
+// Smooth, very subtle page scrolling, from Lenis (the Owner asked for it, 2026-11-14): a wheel or trackpad scroll
+// eases to its place a little instead of stepping. Everything else about scrolling stays the browser's: touch is
+// native, the keyboard is native, and the game's own frame keeps its wheel to itself.
+import Lenis, { type LenisOptions } from 'lenis'
+
+/**
+ * How the scrolling is smoothed. `lerp` is how much of the way to its place the page goes each frame: 0.1 is Lenis's own
+ * (a slow glide); 0.2 is a quick ease that a person feels only as "not steppy". Touch is left to the browser
+ * (`syncTouch` off). `respectReducedMotion` is off because the Owner asked for this smoothing for everyone (2026-11-14:
+ * "it shouldn't be that obnoxious"); a long scroll that a press starts still jumps when the device asks for less motion
+ * (see `reveal`).
+ */
+export const SUBTLE: LenisOptions = {
+  lerp: 0.25,
+  smoothWheel: true,
+  wheelMultiplier: 1,
+  syncTouch: false,
+  respectReducedMotion: false,
+  autoRaf: true,
+}
+
+/** The id a link to a place on this page names (`#today` gives `today`), or nothing for any other address. */
+export function anchorId(href: string | null): string | undefined {
+  if (href === null || !href.startsWith('#') || href.length < 2) return undefined
+  try {
+    return decodeURIComponent(href.slice(1))
+  } catch {
+    return undefined
+  }
+}
+
+let running: { readonly lenis: Lenis; readonly reduced: MediaQueryList } | undefined
+
+/**
+ * Starts the smoothing on `win`'s page, and takes over the links to places on the page, so a press on one travels there
+ * instead of jumping. Returns what stops it again.
+ */
+export function startSmoothScroll(win: Window): () => void {
+  const doc = win.document
+  const lenis = new Lenis({ ...SUBTLE, wrapper: win, content: doc.documentElement })
+  running = { lenis, reduced: win.matchMedia('(prefers-reduced-motion: reduce)') }
+
+  const onClick = (event: MouseEvent): void => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey)
+      return
+    const link = (event.target as Element | null)?.closest('a')
+    const id = anchorId(link?.getAttribute('href') ?? null)
+    const target = id === undefined ? null : doc.getElementById(id)
+    if (target === null) return
+    event.preventDefault()
+    reveal(target)
+    win.history.pushState(null, '', `#${id}`)
+  }
+  doc.addEventListener('click', onClick)
+
+  return () => {
+    doc.removeEventListener('click', onClick)
+    lenis.destroy()
+    running = undefined
+  }
+}
+
+/**
+ * Brings `target` to the top of the window, stopping short of anything its `scroll-margin-top` keeps clear (the top
+ * bar). It travels there, unless the device asks for reduced motion: then it jumps, as a press always did. Without the
+ * smoothing running (a page that never started it) it is the browser's own jump.
+ */
+export function reveal(target: HTMLElement): void {
+  if (running === undefined) {
+    target.scrollIntoView({ block: 'start' })
+    return
+  }
+  running.lenis.scrollTo(target, { immediate: running.reduced.matches })
+}

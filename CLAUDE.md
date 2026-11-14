@@ -27,8 +27,10 @@ where this page is short, the spec has the detail. This repo's plans, audits and
 - **Dependencies the Owner approved for this repo** (2026-11-13): `wrangler` 4.140.0, `@playwright/test` 1.63.0,
   `@types/node` 24.19.1, and (2026-11-14, for the site's look) `@fontsource-variable/fraunces` 5.3.0,
   `@fontsource-variable/onest` 5.3.1, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core` 2.1.1, all
-  development-only. `knip.json` is told to ignore the four, because knip reads neither CSS `@import`s (the fonts) nor
-  the icon reader's `import.meta.resolve` (the icons).
+  development-only; and `lenis` 1.3.27 (the Owner, 2026-11-14, for very subtle smooth scrolling; Vite bundles it into
+  the page, so it is self-hosted under the strict header). `knip.json` is told to ignore the four fonts-and-icons
+  packages, because knip reads neither CSS `@import`s (the fonts) nor the icon reader's `import.meta.resolve` (the
+  icons).
 - **The site has its own palette and fonts** (the spec's "Visual direction"; the Owner picked them, 2026-11-14).
   Palette No. 325 from *A Dictionary of Color Combinations*: `ground` (Deep Slate Green), `words` (Naples Yellow),
   `touch` (Yellow Ocher) and `mark` (Eugenia Red), and two shades mixed from them, `raised` (6% words in the ground)
@@ -165,7 +167,7 @@ src/index.ts                  the page's entry
 src/build.ts                  the entry for Node: what the scripts use, nothing that needs a page
 src/lib/                      shared helpers, no feature logic
 src/features/<feature>/       <feature>.ts entry, <part>.ts one job per file
-                              (lowest first: version, pick, facts, claims, assemble, icons, fill, pictures, play, page)
+                              (lowest first: version, pick, facts, claims, assemble, icons, fill, pictures, motion, play, page)
 scripts/                      thin CLI wrappers
 tests/architecture.test.ts    imports go down, no cycles, no tests in src
 tests/features/<feature>/     mirrors src/features

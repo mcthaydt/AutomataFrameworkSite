@@ -38,6 +38,8 @@ test('the licence notices of the fonts and icons are served as plain text', asyn
     'SIL OPEN FONT LICENSE Version 1.1',
     'Phosphor Icons',
     'Copyright (c) 2023 Phosphor Icons',
+    'Lenis',
+    'Copyright (c) 2024 darkroom.engineering',
     'MIT License',
   ]) {
     expect(text, notice).toContain(notice)

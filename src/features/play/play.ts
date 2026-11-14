@@ -1,6 +1,7 @@
 // The Play buttons and the game's frame. Nothing of the game loads until a person presses a button, so the page opens
 // fast on a slow phone connection and the game's sound and input never start by themselves. Under the buttons, the
 // game's own picture holds the place until the game plays.
+import { reveal } from '../motion/motion.ts'
 
 /** Where the built game lives on the site. */
 export const GAME_ADDRESS = '/play/'
@@ -40,13 +41,13 @@ export function createPlayer(
     frame?.focus()
     frame?.contentWindow?.focus()
     // On a phone the game is below the heading; bring it up to fill the window.
-    root.scrollIntoView({ block: 'start' })
+    reveal(root)
   }
 
   const onPress = (): void => {
     // A press while the game loads or plays goes back to the game and starts no second one (a double tap is the same).
     if (state !== 'ready') {
-      root.scrollIntoView({ block: 'start' })
+      reveal(root)
       frame?.focus()
       return
     }
@@ -60,7 +61,7 @@ export function createPlayer(
     frame.src = GAME_ADDRESS
     root.append(frame)
     // A press far from the game is seen to do something: the sheet, and its loading note, come into the window.
-    sheet.scrollIntoView({ block: 'start' })
+    reveal(sheet)
   }
 
   setState('ready')

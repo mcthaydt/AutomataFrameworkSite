@@ -2,7 +2,7 @@
 // stamp landing as its card scrolls in, a button answering a pointer. The other journeys run with motion off (see
 // `playwright.config.ts`); this one turns it on for itself. Motion is only ever a nicety, so what these prove is that it
 // always ends fully shown and that it is gone when asked.
-import { expect, type Locator, test } from '@playwright/test'
+import { expect, type Locator, type Page, test } from '@playwright/test'
 import { arrive } from './look.ts'
 import { SIZES } from './sizes.ts'
 
@@ -18,6 +18,14 @@ async function scrollBottomTo(target: Locator, gap: number): Promise<void> {
     const bottom = element.getBoundingClientRect().bottom + window.scrollY
     window.scrollTo({ top: bottom - window.innerHeight + margin, behavior: 'instant' })
   }, gap)
+}
+
+/** Turns the wheel down 600 px over the page, and waits for the page to come to rest there. */
+async function wheelDown(page: Page): Promise<void> {
+  await page.mouse.move(200, 300)
+  await page.mouse.wheel(0, 600)
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBeGreaterThanOrEqual(595)
+  expect(await page.evaluate(() => Math.round(window.scrollY))).toBeLessThanOrEqual(605)
 }
 
 for (const size of SHOWN_AT) {
@@ -83,6 +91,23 @@ for (const size of SHOWN_AT) {
       await expect.poll(landed).toEqual({ opacity: '1', scale: expect.stringMatching(/^(none|1)$/) })
     })
 
+    // Super subtle smoothing (Lenis): a turn of the wheel ends where the browser would have put it.
+    test('the wheel is smoothed and still ends exactly where it was sent', async ({ page }) => {
+      await arrive(page)
+      await expect(page.locator('html')).toHaveClass(/\blenis\b/)
+      await wheelDown(page)
+    })
+
+    test('a press on "What works today" travels there and stops short of the bar', async ({ page }) => {
+      await arrive(page)
+      await page.locator('a[href="#today"]:visible').first().click()
+      await expect(page.locator('#today h2')).toBeInViewport()
+      await expect
+        .poll(async () => (await page.locator('#today').boundingBox())?.y ?? -1)
+        .toBeGreaterThanOrEqual(78)
+      await expect(page).toHaveURL(/#today$/)
+    })
+
     test('a button answers a pointer and a press', async ({ page }) => {
       await arrive(page)
       const button = page.getByRole('button', { name: 'Play it' })
@@ -115,6 +140,19 @@ test.describe('with reduced motion', () => {
     expect(durations.length).toBeGreaterThan(10)
     for (const duration of durations) expect(duration.split(', ').every((one) => one === '0s')).toBe(true)
     // A press on a link jumps; it does not travel.
-    expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto')
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+    await page.locator('a[href="#today"]:visible').first().click()
+    const rest = await page.evaluate(() => window.scrollY)
+    expect(rest).toBeGreaterThan(1000)
+    await page.evaluate(() => new Promise((done) => setTimeout(done, 400)))
+    expect(await page.evaluate(() => window.scrollY)).toBe(rest)
+    await expect(page.locator('#today h2')).toBeInViewport()
+  })
+
+  // The Owner's choice (2026-11-14): the smooth wheel is on for everyone, so a device asking for less motion has it too.
+  test('the wheel is still smoothed, as it is for everyone', async ({ page }) => {
+    await arrive(page)
+    await expect(page.locator('html')).toHaveClass(/\blenis\b/)
+    await wheelDown(page)
   })
 })
