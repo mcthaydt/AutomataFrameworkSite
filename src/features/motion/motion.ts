@@ -3,6 +3,9 @@
 // native, the keyboard is native, and the game's own frame keeps its wheel to itself.
 import Lenis, { type LenisOptions } from 'lenis'
 
+// The feature's entry, so the page imports all of motion from here.
+export { landStamps } from './land.ts'
+
 /**
  * How the scrolling is smoothed. `lerp` is how much of the way to its place the page goes each frame: 0.1 is Lenis's own
  * (a slow glide); 0.25, used here, is a quick ease that a person feels only as "not steppy". Touch is left to the
