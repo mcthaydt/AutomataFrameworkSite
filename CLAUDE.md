@@ -2,8 +2,8 @@ This codebase is yours: what it's for and how it's built are your call, and you'
 
 # AutomataFrameworkSite
 
-A framework and set of editors for making games, where agents do the authoring and every piece of authorable content
-can be edited on an iPad. This repo is the website. The first layer's design is
+Automata Framework is a framework and set of editors for making games, where agents do the authoring and every piece
+of authorable content can be edited on an iPad. This repo is the website. The first layer's design is
 [the spec in AutomataFramework](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md);
 where this page is short, the spec has the detail. This repo's plans, audits and tracker are in `docs/superpowers/`.
 
@@ -16,6 +16,12 @@ where this page is short, the spec has the detail. This repo's plans, audits and
   on the game's `main` whose checks all passed, never an unchecked one.
 - **Every claim on a page is true on `main` today.** A sentence that is true only on a branch, or only in one browser,
   is a defect.
+- **Every number, name, hash and stamp on the home page comes from the game's own files**, through `facts` (reads the
+  game's folder into `dist/facts.json`), `claims` (the five claims, each stamp held to a proof) and `fill` (writes
+  them into the page). None is typed in `index.html`. `build` and `build-real` open the built game once in a browser
+  (`pictures`) to take its picture, the share picture and the touch icon; `deploy` still never runs the game.
+- **The build tools the site's pages are made with** read the game's repo folder through `GAME_SOURCE`, never import
+  the framework. The page's name is "Automata Framework", two words; the wordmark is the word `automata`, with no mark.
 - **Site copy is where strategy leaks.** Words on a page come from the public spec and READMEs. Nothing is copied from
   the private notes; a plan may say "the brief is in the private notes" and no more.
 - **Dependencies the Owner approved for this repo** (2026-11-13): `wrangler` 4.140.0, `@playwright/test` 1.63.0,
@@ -159,10 +165,12 @@ src/index.ts                  the page's entry
 src/build.ts                  the entry for Node: what the scripts use, nothing that needs a page
 src/lib/                      shared helpers, no feature logic
 src/features/<feature>/       <feature>.ts entry, <part>.ts one job per file
+                              (lowest first: version, pick, facts, claims, assemble, icons, fill, pictures, play, page)
 scripts/                      thin CLI wrappers
 tests/architecture.test.ts    imports go down, no cycles, no tests in src
 tests/features/<feature>/     mirrors src/features
 tests/fixtures/               shared test helpers and the stand-in game
+tests/fixtures/game-source/   a made-up game's repo folder: automata.toml, content/, replays/, LICENSE
 tests/journeys/               end-to-end journeys in real browsers, against the built site
 tests/styles/                 checks that read the stylesheet: the five colours, dark only, contrast
 tests/workflows/              checks that read a workflow
@@ -171,3 +179,9 @@ docs/superpowers/             plans/, audits/, progress.md (the spec is in Autom
 ```
 
 Features import only from features below them. No top-level `components/`, `services/` or `utils/`.
+
+`biome.json` turns off some rules for two files and says why here, since JSON has no comments: in `index.html`, the
+accessibility rules that mistake a placeholder (`<a data-address="…">`, whose address the build fills in) and a
+keyboard-reachable file panel for mistakes; in `src/styles.css`, `noDescendingSpecificity` (the sheet is ordered by
+page part, not by specificity) and `noImportantStyles` (the one `!important` pair is the reduced-motion switch, which
+must beat everything above it).

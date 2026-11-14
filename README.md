@@ -1,12 +1,20 @@
-# AutomataFrameworkSite
+# Automata Framework: the website
 
-The website for AutomataFramework: one page where you press "Play the game" and play the first game made with it.
+The website for Automata Framework: one page that says what the toolkit is for and what already works, where you press
+"Play the first game" and play the first game made with it.
 
 - **The game comes from [AutomataFrameworkExamples](https://github.com/mcthaydt/AutomataFrameworkExamples).** This
   repo never imports it. Its `site` workflow picks the newest commit of the game whose checks all passed, builds the
   game with the game's own `pnpm build`, and shows it on the page, in a frame.
-- **The site wears Blueprint**, the look the spec's "Visual direction" gives the editors and the site. The colours and
-  fonts are in `src/styles.css`, and the pictures of every run are on the `ci-screens` branch.
+- **Every number, name and stamp on the page is the game's own.** The build reads the game's files (`automata.toml`,
+  its level, its recorded play, its licence) into `dist/facts.json`, beside `version.json`, and fills the page from
+  it. A claim that is not true of the game stops the build with a sentence that says which. Nothing is typed into
+  `index.html` that the game could change.
+- **The site has its own look**, the spec's "Visual direction": palette No. 325 (deep green ground, yellow words,
+  ocher for what can be pressed, red only as an edge or an icon) and the fonts Fraunces, Onest and JetBrains Mono. The
+  colours and fonts are in `src/styles.css`, and the pictures of every run are on the `ci-screens` branch.
+- **The pictures are taken by the build.** It opens the built game once in a browser and saves the picture the page
+  shows before Play, the picture a shared link shows, and the touch icon.
 - **The site is static files**, hosted on Cloudflare Pages at `automataframework.pages.dev`.
 - **Tests run only in GitHub Actions**, never on your machine. `pnpm lint`, `pnpm typecheck`, `pnpm knip` and
   `pnpm build` are quick checks you can run before you push.
@@ -40,7 +48,7 @@ pnpm exec wrangler pages dev dist
   picture a shared link shows, and the touch icon. It needs doing only once on a machine.
 - `pnpm build` makes the whole site in the `dist/` folder, with a small stand-in game inside it, so it works at once.
 - `pnpm exec wrangler pages dev dist` serves that folder the way Cloudflare Pages does. Open
-  <http://localhost:8788>, press "Play the game", and the stand-in game plays.
+  <http://localhost:8788>, press "Play the first game", and the stand-in game plays.
 
 To see the real game on the page instead of the stand-in:
 

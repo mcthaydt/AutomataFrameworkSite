@@ -2,7 +2,7 @@
   "name": "@automataframework/site",
   "version": "0.0.0",
   "private": true,
-  "description": "The AutomataFramework website: one page with the demo game playing.",
+  "description": "The Automata Framework website: one page that says what works today, with the demo game playing.",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@10.34.6",
