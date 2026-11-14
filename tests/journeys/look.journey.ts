@@ -223,6 +223,36 @@ for (const size of SIZES) {
       for (const family of families) expect(family).toContain(LABEL)
     })
 
+    // Audit M5: on a phone "360 steps" and "3 small files" broke into two lines and "4 places" and "MIT" did not.
+    test('each of the four numbers stands on one line, so every cell has the same heading', async ({
+      page,
+    }) => {
+      await arrive(page)
+      const heights = await page
+        .locator('.numbers dt')
+        .evaluateAll((all) => all.map((one) => Math.round(one.getBoundingClientRect().height)))
+      expect(heights).toHaveLength(4)
+      expect(new Set(heights).size, `heights ${heights}`).toBe(1)
+    })
+
+    // Audit M4: the version's link was a 44 px line and sat 8 px lower than the words beside it.
+    test('the words of the title block sit on one line, whatever the link is made of', async ({ page }) => {
+      await arrive(page)
+      const tops = await page.evaluate(() =>
+        [...document.querySelectorAll('.title-block > div:nth-child(-n + 2) dd')].map((one) => {
+          // The first text inside the cell, whatever element it is in: a range over the cell itself would count a link's
+          // padding as part of its words.
+          const words = document.createTreeWalker(one, NodeFilter.SHOW_TEXT).nextNode()
+          if (words === null) return -1
+          const range = document.createRange()
+          range.selectNodeContents(words)
+          return Math.round(range.getClientRects()[0]?.top ?? -1)
+        }),
+      )
+      expect(tops).toHaveLength(2)
+      expect(tops[0]).toBe(tops[1])
+    })
+
     test('sections are 128 px apart at 1024 px and wider, and 80 px apart below', async ({ page }) => {
       await arrive(page)
       const padding = await page

@@ -23,6 +23,8 @@ test('it gives the commands, in order: install, playwright install, build, serve
 test('it says how to put the real game in place of the stand-in, and where the page then is', () => {
   expect(section).toContain('GAME_DIR=')
   expect(section).toContain('GAME_SOURCE=')
+  // Without it the page would say "fixture" over the real game (audit M6).
+  expect(section).toContain('GAME_COMMIT=')
   expect(section).toContain('AutomataFrameworkExamples')
   expect(section).toContain('http://localhost:8788')
 })

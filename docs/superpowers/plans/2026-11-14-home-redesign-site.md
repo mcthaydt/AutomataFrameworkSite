@@ -1019,7 +1019,10 @@ test.describe('with reduced motion', () => {
 })
 ```
 
-- [x] **Step 2: The stylesheet.** All of it in CSS; no script. Buttons and links: `transition` of 140 ms on
+- [x] **Step 2: The stylesheet.** *(As built this is not all CSS, and the stamp and the smooth scroll are not what is
+  written here: Lenis (script) smooths the wheel and answers the links, `scroll-behavior` is gone, and the stamp was
+  later changed to land once on a clock when it is wholly in the window. The tracker's Stage 4 deviations and Stage 6
+  entry say how and why; what follows is the plan as it was written.)** All of it in CSS; no script. Buttons and links: `transition` of 140 ms on
   `filter`, `transform` and `text-decoration-thickness`; hover brightens a `.btn` (`filter: brightness(1.08)`) and
   thickens a link's underline; pressed moves a `.btn` down 1 px. The first screen: `.tag, h1, .lede, .actions` run
   one `arrive` (opacity 0 and 8 px lower, to rest) over 200 ms, each 40 ms after the one before, `both`. The stamp:

@@ -148,6 +148,25 @@
   }
 }
 
+/* On a narrow phone the four numbers stand one under another: two to a row, "360 steps" and "3 small files" broke into two
+   lines and "4 places" and "MIT" did not, so the cells had two heights of heading (audit M5). */
+@media (max-width: 479px) {
+  .numbers {
+    grid-template-columns: 1fr;
+  }
+
+  .numbers > div,
+  .numbers > div + div,
+  .numbers > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .numbers > div + div {
+    border-top: 1px solid var(--ground);
+  }
+}
+
 /* On a narrow phone the tag's arrow would wrap onto a line of its own, and it only decorates the words beside it. */
 @media (max-width: 479px) {
   .tag .icon {

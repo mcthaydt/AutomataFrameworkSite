@@ -230,8 +230,8 @@ h1 {
   font-family: var(--measure);
 }
 
+/* The link stays in its line, like the words beside it, and its padding makes the 44 px a thumb needs (audit M4: as a
+   44 px line it sat 8 px lower than the other cells' words). */
 .title-block a {
-  display: inline-block;
-  min-height: 44px;
-  line-height: 44px;
+  padding: 12px 0;
 }
