@@ -56,6 +56,14 @@ asked.
   | D | No. 340 | Black `#111314` | Neutral Gray `#b6bfc1` | Sea Green `#00b49b` | Peach Red `#f15a30` |
   | E | No. 310 | Deep Slate Olive `#253122` | Sulphur Yellow `#f5ecc2` | Pinkish Cinnamon `#eeb480` | Olive `#837e31` |
 
+  **The Owner's final call covers all three places:** A (No. 325) for the site, **E (No. 310) for the editors** and
+  **D (No. 340) for the Examples demo game's own screens** (its title, pause and settings screens; the game's art is
+  never restyled). The rows above are the values for the other two repos to use. In each, the ground is the page,
+  "Words" is text, lines and icons, "Touchable" takes the job marker yellow had, and the fourth colour is for small
+  marks only. This replaces the colours in the spec's "Visual direction" (one Blueprint palette, with a tint per
+  editor), which is amended in AutomataFramework before the editors' and the game's plans use it; this audit only
+  records the call.
+
   The values are from the open data set of the book (`dictionary-of-colour-combinations` 1.0.2, MIT), read for the
   drafts and not added to the site. Two shades in each draft are not the book's: the slightly lighter panels and the
   quieter words are mixed from the ground and the words. The plan names them, holds every pair of colours a person
