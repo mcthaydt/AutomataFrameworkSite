@@ -130,3 +130,9 @@ test('the live job waits for this build first and alone, then runs the other jou
   expect(rest).toBeGreaterThan(wait)
   expect(live).toContain('needs: [pick, deploy]')
 })
+
+// Playwright's `--project` takes every word after it as a project name, so a file named after it is read as a
+// project and the run stops with "Project(s) ... not found". The file comes first.
+test('the live wait names its file before --project', () => {
+  expect(live).toContain('pnpm test:journeys tests/journeys/live.journey.ts --project chromium')
+})
