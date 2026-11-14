@@ -15,12 +15,15 @@ review 10)
 |---|---|---|
 | 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
-| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`; Q1 is answered; Task 3 waits for the Owner's answer to Q2) | |
+| 4. Execution | In progress, 0% (Cycle 1's fixes, pull request 6, are on `main`; Q1 and Q2 are answered) | the plan, ticked as it goes |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 4 starts. Pull request 6 is on `main` (`3893c72`). The Owner answered Q2: (b), the chalk line goes
+  once the game plays; the plan says so now (Global Constraints, Task 3's two journeys and its stylesheet).
 
 - 2026-11-14: Stage 3. The plan audit: sound, true to the spec's "Visual direction", and ready to execute once pull
   request 6 is on `main`. Nothing blocking. Nine should-fix findings, all written into the plan by the audit's own

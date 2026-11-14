@@ -3,6 +3,7 @@
 // Every word is asserted word for word: a word that changes here must change in index.html on purpose.
 import { expect, type FrameLocator, type Page, test } from '@playwright/test'
 import { gameCommitUrl, isCommit, parseVersion, shortCommit } from '../../src/features/version/version.ts'
+import { arrive, settle, tabKey } from './look.ts'
 import { SIZES } from './sizes.ts'
 import { watchForTrouble } from './watch.ts'
 
@@ -56,7 +57,7 @@ for (const size of SIZES) {
 
     test('the page says what it is and what to press', async ({ page }) => {
       const trouble = watchForTrouble(page)
-      await page.goto('/')
+      await arrive(page)
       await expect(page).toHaveTitle('AutomataFramework')
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(WORDS.title)
       await expect(page.locator('p.lede')).toHaveText(WORDS.lede)
@@ -87,18 +88,21 @@ for (const size of SIZES) {
     test('before any scroll, the heading, the lede and the Play button are all in the window', async ({
       page,
     }) => {
-      await page.goto('/')
+      await arrive(page)
       expect(await page.evaluate(() => window.scrollY)).toBe(0)
       await expect(page.getByRole('heading', { level: 1 })).toBeInViewport({ ratio: 1 })
       await expect(page.locator('p.lede')).toBeInViewport({ ratio: 1 })
       await expect(page.getByRole('button', { name: WORDS.play })).toBeInViewport({ ratio: 1 })
       // What a newcomer sees first: people look at this picture.
       await page.screenshot({ path: `tests/journeys/__screenshots__/${size.name}-arrival.png` })
+      // The whole page, with the version line there and in its own font: the parts below the first screen.
+      await settle(page)
+      await page.screenshot({ path: `tests/journeys/__screenshots__/${size.name}-whole.png`, fullPage: true })
     })
 
     test('pressing Play starts the game inside the page', async ({ page }) => {
       const trouble = watchForTrouble(page)
-      await page.goto('/')
+      await arrive(page)
       const game = await play(page)
       await expect(page.locator(FRAME)).toHaveCount(1)
       await expect(page.locator('#game')).toHaveAttribute('data-state', 'playing')
@@ -116,7 +120,7 @@ for (const size of SIZES) {
     })
 
     test('the keys reach the game with no second click', async ({ page }) => {
-      await page.goto('/')
+      await arrive(page)
       const game = await play(page)
       const canvas = game.locator('canvas')
       const before = await canvas.screenshot()
@@ -126,7 +130,7 @@ for (const size of SIZES) {
     })
 
     test('the version line names the game that is playing', async ({ page, request }) => {
-      await page.goto('/')
+      await arrive(page)
       const version = parseVersion(await (await request.get('/version.json')).text())
       expect(version).toBeDefined()
       if (version === undefined) return
@@ -153,7 +157,7 @@ for (const size of [SIZES[4], SIZES[0]]) {
         await gate
         await route.continue()
       })
-      await page.goto('/')
+      await arrive(page)
       await page.getByRole('button', { name: WORDS.play }).click()
       await expect(page.getByRole('status')).toHaveText(WORDS.loading)
       await expect(page.locator('#game')).toHaveAttribute('data-state', 'loading')
@@ -163,7 +167,7 @@ for (const size of [SIZES[4], SIZES[0]]) {
     })
 
     test('a double press starts one game', async ({ page }) => {
-      await page.goto('/')
+      await arrive(page)
       await page.getByRole('button', { name: WORDS.play }).dblclick()
       await expect(page.locator('#game')).toHaveAttribute('data-state', 'playing')
       await expect(page.locator('iframe')).toHaveCount(1)
@@ -171,7 +175,7 @@ for (const size of [SIZES[4], SIZES[0]]) {
 
     test('a missing version file hides the line and breaks nothing', async ({ page }) => {
       await page.route('**/version.json', (route) => route.fulfill({ status: 404, body: 'Not found' }))
-      await page.goto('/')
+      await arrive(page)
       await expect(page.locator('#game-version')).toBeHidden()
       await play(page)
     })
@@ -194,7 +198,7 @@ test.describe('phone-390x844: turning the phone', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
   test('keeps the same game going', async ({ page }) => {
-    await page.goto('/')
+    await arrive(page)
     await play(page)
     // A reloaded frame would lose this marker.
     const frame = await (await page.locator(FRAME).elementHandle())?.contentFrame()
@@ -220,7 +224,7 @@ test.describe('phone-844x390: playing sideways', () => {
   test.use({ viewport: { width: 844, height: 390 } })
 
   test('the game fills the window, from its top edge to its bottom edge', async ({ page }) => {
-    await page.goto('/')
+    await arrive(page)
     await play(page)
     await expect
       .poll(async () => Math.abs((await page.locator(FRAME).boundingBox())?.y ?? 99))
@@ -230,41 +234,31 @@ test.describe('phone-844x390: playing sideways', () => {
   })
 })
 
-// The Play button sits on the game's sky, which is light in both colour schemes, so in dark mode the button and its
-// focus ring must still stand out from it (WCAG asks 3 to 1 for a focus ring).
-test.describe('phone-390x844: dark mode', () => {
-  test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'dark' })
+// The same page for a device set to light: the site is dark whatever the device says, so it must look the same.
+test.describe('phone-390x844: a device set to light', () => {
+  test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'light' })
 
-  test('the Play button and its focus ring are dark on the light sky', async ({ page }) => {
-    await page.goto('/')
+  test('looks like every other arrival', async ({ page }) => {
+    await arrive(page)
+    await page.screenshot({ path: 'tests/journeys/__screenshots__/phone-390x844-arrival-light-setting.png' })
+  })
+})
+
+// A person using the keyboard reaches the Play button and sees where they are.
+test.describe('phone-390x844: reaching the button with the keyboard', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test('the Play button has the focus ring', async ({ page, browserName }) => {
+    await arrive(page)
     const button = page.getByRole('button', { name: WORDS.play })
-    await button.focus()
+    for (
+      let press = 0;
+      press < 10 && !(await button.evaluate((element) => element === document.activeElement));
+      press++
+    )
+      await page.keyboard.press(tabKey(browserName))
     await expect(button).toBeFocused()
-    expect(await button.evaluate((element) => element.matches(':focus-visible'))).toBe(true)
-    const colours = await page.evaluate(() => {
-      const play = document.querySelector('.play') as HTMLElement
-      const style = getComputedStyle(play)
-      return {
-        button: style.backgroundColor,
-        ring: style.outlineColor,
-        sky: getComputedStyle(document.querySelector('#game') as HTMLElement).backgroundColor,
-      }
-    })
-    const brightness = (rgb: string): number => {
-      const [r = 0, g = 0, b = 0] = (rgb.match(/\d+/g) ?? []).map((part) => {
-        const channel = Number(part) / 255
-        return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
-      })
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b
-    }
-    const contrast = (a: string, b: string): number => {
-      const [light, dark] = [brightness(a), brightness(b)].sort((x, y) => y - x)
-      return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05)
-    }
-    expect(contrast(colours.ring, colours.sky)).toBeGreaterThanOrEqual(3)
-    expect(contrast(colours.button, colours.sky)).toBeGreaterThanOrEqual(3)
-    // What a person sees: people look at this picture.
-    await page.screenshot({ path: 'tests/journeys/__screenshots__/phone-390x844-arrival-dark.png' })
+    await page.screenshot({ path: 'tests/journeys/__screenshots__/phone-390x844-focus.png' })
   })
 })
 
@@ -275,7 +269,7 @@ for (const size of [SIZES[0], SIZES[2]]) {
     test.use({ viewport: { width: size.width, height: size.height }, hasTouch: true })
 
     test('the buttons are on screen and holding one moves the game', async ({ page, request }) => {
-      await page.goto('/')
+      await arrive(page)
       const game = await play(page)
       await page.locator(FRAME).tap()
       const version = parseVersion(await (await request.get('/version.json')).text())

@@ -1,37 +1,46 @@
-/* The home page. No font files: the system's own sans-serif. Words are at least 18 px, touch targets at least 44 px. */
-:root {
-  color-scheme: light dark;
-  --page: #fbfaf7;
-  --words: #1b1b24;
-  /* The Play button and its focus ring sit on the sky, which is light in both colour schemes, so they stay dark in
-     both: dark on the sky is about 10 to 1, and a pale button on it would be 1.4 to 1. */
-  --button: #1b1b24;
-  --button-words: #ffffff;
-  /* The game's own sky, so the frame shows no flash of another colour while it loads. */
-  --sky: #9fd3f0;
-}
+/* The site wears Blueprint, the look the spec's "Visual direction" gives the editors and the site: deep blue paper,
+   chalk lines and words, pencil for quieter words, and one marker yellow that means "you can touch this". These five
+   are the only colours named anywhere on the site, and dark is the only theme for now. The game in the frame is never
+   restyled: nothing here reaches inside it, and nothing is drawn over it. Words are at least 18 px, touch targets at
+   least 44 px.
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --page: #14141b;
-    --words: #f2f1ec;
-  }
+   The two fonts are the site's own files, from packages (the safety header allows fonts from nowhere else), and only
+   their Latin files, because every word on the site is English: the day the site has another language, that
+   language's files are added here. */
+@import "@fontsource/ibm-plex-sans-condensed/latin-400.css";
+@import "@fontsource/ibm-plex-sans-condensed/latin-600.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+
+:root {
+  color-scheme: dark;
+  --paper: #0a1f3c;
+  --hatch: #0e2a50;
+  --chalk: #eaf2fa;
+  --pencil: #8fb0d3;
+  --marker: #ffd447;
+  /* Words and labels; numbers and measures. Each ends in the device's own fonts, which show while the files arrive. */
+  --label: "IBM Plex Sans Condensed", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --measure: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  /* One square of the drawing paper's grid, and the corner every box shares. */
+  --square: 24px;
+  --corner: 2px;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Drawing paper: a faint grid of hatch lines on the paper. The lines are so close to the paper (1.15 to 1) that words
+   over them read as words on paper. */
 body {
   margin: 0;
-  background: var(--page);
-  color: var(--words);
-  font:
-    18px / 1.5 system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--hatch) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hatch) 1px, transparent 1px);
+  background-size: var(--square) var(--square);
+  color: var(--chalk);
+  font: 400 18px / 1.5 var(--label);
 }
 
 .page {
@@ -40,9 +49,30 @@ body {
   padding: 0 max(16px, env(safe-area-inset-right)) 32px max(16px, env(safe-area-inset-left));
 }
 
+/* Marker yellow is for what can be touched, and for nothing else. */
 a {
-  color: inherit;
+  color: var(--marker);
   text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The ring is chalk, with a gap, so it shows against the paper and beside the yellow button alike. */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--chalk);
+  outline-offset: 3px;
+}
+
+/* Labels are written like the notes on a drawing: capitals, a little apart. Sentences never are. The capitals are made
+   here, so the words in the page stay as they are read out. */
+h1,
+h2,
+.play,
+.status,
+footer a {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Shrinks with the window so the name never runs past the edge of a narrow phone, in any font. */
@@ -54,8 +84,10 @@ h1 {
 }
 
 h2 {
-  margin: 32px 0 8px;
-  font-size: 1.35rem;
+  margin: 32px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--chalk);
+  font-size: 1.25rem;
   line-height: 1.3;
 }
 
@@ -72,11 +104,45 @@ li {
   margin-bottom: 6px;
 }
 
+li::marker {
+  color: var(--pencil);
+}
+
 .lede {
   margin-bottom: 16px;
 }
 
-/* The game's place. The button, the loading line and the frame all live inside it. */
+/* An icon is as tall as the words beside it and takes their colour (the SVG's fill is currentColor). No rule gives an
+   icon a colour of its own. */
+.icon {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.25em;
+}
+
+.help {
+  padding-left: 0;
+  list-style: none;
+}
+
+.help li {
+  display: flex;
+  gap: 10px;
+}
+
+footer .icon,
+.home .icon {
+  margin-right: 8px;
+}
+
+.help .icon {
+  margin-top: 0.15em;
+}
+
+/* The game's place: a sheet of hatch with a chalk line round it until the game plays. The line is an outline, drawn
+   outside the box, so the frame fills the box edge to edge and the line is never over the game. No rounded corner
+   here: it would cut the game's own corners. */
 #game {
   position: relative;
   display: grid;
@@ -85,7 +151,13 @@ li {
   aspect-ratio: 16 / 9;
   max-height: 80svh;
   overflow: hidden;
-  background: var(--sky);
+  background: var(--hatch);
+  outline: 1px solid var(--chalk);
+}
+
+/* Once the game plays nothing of the site's is drawn round it (the Owner): the line goes. */
+#game[data-state="playing"] {
+  outline: none;
 }
 
 /* A phone held upright: tall instead of wide, so the game has room for its touch buttons under the level. */
@@ -131,38 +203,40 @@ li {
 }
 
 .play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   min-width: 200px;
   min-height: 56px;
   padding: 8px 24px;
   border: 0;
-  border-radius: 12px;
-  background: var(--button);
-  color: var(--button-words);
-  font: inherit;
+  border-radius: var(--corner);
+  background: var(--marker);
+  color: var(--paper);
+  font-family: inherit;
   font-size: 20px;
-  font-weight: 700;
   cursor: pointer;
 }
 
-.play:focus-visible {
-  outline: 4px solid var(--button);
-  outline-offset: 4px;
+/* `display` on a class beats the `hidden` attribute, and the button must stay hidden until the script shows it. */
+.play[hidden] {
+  display: none;
 }
 
-.status {
+/* A note pinned to the sheet: paper with a thin chalk edge, so it reads over the hatch and over a loading game. */
+.status,
+.no-script {
   margin: 0;
   padding: 8px 16px;
-  border-radius: 8px;
-  background: var(--page);
-  color: var(--words);
-  font-weight: 700;
+  border: 1px solid var(--chalk);
+  border-radius: var(--corner);
+  background: var(--paper);
+  color: var(--chalk);
 }
 
 .no-script {
-  margin: 0;
-  padding: 16px;
-  background: var(--page);
-  color: var(--words);
+  margin: 16px;
 }
 
 #game iframe {
@@ -179,16 +253,26 @@ li {
   z-index: 1;
 }
 
+/* A measure, like the title block of a drawing: pencil, in the number font, digits in columns. */
+#game-version {
+  color: var(--pencil);
+  font-family: var(--measure);
+  font-variant-numeric: tabular-nums;
+}
+
 footer {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;
   margin-top: 32px;
+  padding-top: 12px;
+  border-top: 1px solid var(--chalk);
 }
 
 footer a,
 .next a,
-#game-version a {
+#game-version a,
+.home {
   display: inline-block;
   min-height: 44px;
   line-height: 44px;

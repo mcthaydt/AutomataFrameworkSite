@@ -9,6 +9,19 @@ The website for AutomataFramework: one page where you press "Play the game" and 
 - **Tests run only in GitHub Actions**, never on your machine. `pnpm lint`, `pnpm typecheck`, `pnpm knip` and
   `pnpm build` are quick checks you can run before you push.
 
+## Icons
+
+An icon is one line, put before the words it goes with:
+
+```html
+<button type="button"><i data-icon="play"></i>Play the game</button>
+```
+
+- The name is a file name from Phosphor's regular set: look in `node_modules/@phosphor-icons/core/assets/regular/`.
+- `pnpm build` writes the picture in. If there is no icon of that name, the build stops and says which name, in which
+  page.
+- An icon never stands without words beside it, and it takes the colour of those words.
+
 ## Try it on your machine
 
 You need [Node](https://nodejs.org) 24 or newer and [pnpm](https://pnpm.io). Then, from this folder:

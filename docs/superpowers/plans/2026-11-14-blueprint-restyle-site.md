@@ -4,8 +4,8 @@
 > Steps use checkbox (`- [ ]`) syntax for tracking. No subagents (project rule).
 
 > **Audited 2026-11-14** ([`audits/2026-11-14-blueprint-restyle-plan-audit.md`](../audits/2026-11-14-blueprint-restyle-plan-audit.md)).
-> Its findings S1 to S9 are written into this plan already; its notes N1 to N7 are for execution to read. One
-> question for the Owner is open (Q2, below); Task 3 waits for it.
+> Its findings S1 to S9 are written into this plan already; its notes N1 to N7 are for execution to read. Q2 (the chalk
+> line round the game) is answered: (b), the line goes once the game plays (see below).
 
 **Goal:** The home page and the 404 page wear Blueprint, the look the spec's "Visual direction" section gives the
 editors and the site, with not one word of copy changed and the game in the frame left exactly as it is. Onboarding
@@ -32,19 +32,18 @@ the private notes and nothing from it is copied here.
 file) and 2 (iPad-first: touch sizes and every picture at phone and tablet size, upright and sideways). It breaks
 none: no framework dependency, no 3D, no monorepo.
 
-## Open for the Owner (answer before Task 3 starts)
+## Asked of the Owner, and answered (Q2)
+
+**Q2 is answered: (b).** The coordinator passed on the Owner's answer on 2026-11-14: the thin chalk line goes once the
+game plays, so nothing of the site's is drawn round a playing game. Task 3, Step 5 has
+`#game[data-state="playing"] { outline: none; }`, and "the game's own picture is left alone" expects `#game`'s
+`outline-style` to be `none` once it plays (and `solid` before). The question as it was asked:
 
 **Q2. Once the game is playing, does the thin chalk line stay round it?** Two audits of this plan read the spec's
-"the game's art is never restyled" two ways, so it is the Owner's to say:
+"the game's art is never restyled" two ways:
 
-- (a) **The line stays.** It is drawn outside the game's box, beside the game and never over it, and the game keeps
-  the same frame before and after Play. **The plan is written for (a).**
-- (b) **The line goes when the game plays.** Nothing of the site's is drawn round a playing game. Task 3, Step 5
-  gains `#game[data-state="playing"] { outline: none; }`, and "the game's own picture is left alone" also expects
-  `#game`'s `outline-style` to be `none` once it plays. Nothing else changes.
-
-Tasks 1 and 2 do not depend on it. Execution does not start Task 3 until the coordinator passes on the Owner's
-answer; it never picks one by default.
+- (a) The line stays. It is drawn outside the game's box, beside the game and never over it.
+- (b) **The line goes when the game plays.** Nothing of the site's is drawn round a playing game. **Chosen.**
 
 ## Asked of the Owner, and answered
 
@@ -83,9 +82,9 @@ with that pull request merged: it changes the same stylesheet and the same journ
 - **Dark is the only theme.** The page ignores the device's light or dark setting. No light theme in this plan.
 - **Square corners of 2 px, 1 px chalk lines, no shadows** (nothing on the site floats).
 - **The game's art is never restyled.** No filter, tint, opacity, blend, rounded corner or border is put on the frame
-  or on the game's place once the game plays. Whether the 1 px chalk line round the game's place stays once the game
-  plays is Q2; it is an outline, drawn outside the box, so in either answer it is never over the game. The site
-  names no colour of the game.
+  or on the game's place once the game plays. The 1 px chalk line round the game's place is there
+  until the game plays and goes then (Q2, answered (b)); it is an outline, drawn outside the box, so it is never over
+  the game. The site names no colour of the game.
 - **Every icon is Phosphor regular and has its words beside it.** No icon stands alone.
 - **The strict header stays byte for byte.** `public/_headers` is not edited. No font, icon, style or script comes
   from another address or from a `data:` address.
@@ -584,6 +583,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     expect(await style('body', 'color')).toBe(TOKENS.chalk)
     expect(await style('#game', 'background-color')).toBe(TOKENS.hatch)
     expect(await style('#game', 'outline-color')).toBe(TOKENS.chalk)
+    expect(await style('#game', 'outline-style')).toBe('solid')
     expect(await style('#game-version', 'color')).toBe(TOKENS.pencil)
     expect(await page.locator('meta[name="color-scheme"]').getAttribute('content')).toBe('dark')
     expect(await page.locator('meta[name="theme-color"]').getAttribute('content')).toBe('#0A1F3C')
@@ -649,6 +649,8 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     await page.getByRole('button', { name: 'Play the game' }).click()
     const frame = page.locator('iframe[title="The demo game"]')
     await expect(page.locator('#game')).toHaveAttribute('data-state', 'playing')
+    // Q2 (b): once the game plays, nothing of the site's is drawn round it, so the chalk line is gone.
+    expect(await page.locator('#game').evaluate((node) => getComputedStyle(node).outlineStyle)).toBe('none')
     for (const element of [frame, page.locator('#game')]) {
       const style = await element.evaluate((node) => {
         const s = getComputedStyle(node)
@@ -837,6 +839,11 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     overflow: hidden;
     background: var(--hatch);
     outline: 1px solid var(--chalk);
+  }
+
+  /* Once the game plays nothing of the site's is drawn round it (the Owner, Q2): the line goes. */
+  #game[data-state="playing"] {
+    outline: none;
   }
 
   /* …the two media rules (the upright phone; the short window, with the playing game at 100svh) stay exactly as they
