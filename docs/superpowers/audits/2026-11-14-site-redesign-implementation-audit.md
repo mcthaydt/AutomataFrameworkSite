@@ -24,12 +24,14 @@ green at `4ceba86`. Nothing here stops the stage.
 **One thing must be put right before the merge (B1):** the pull request's own description carries a Claude credit
 with a session link, which the rule forbids and the `commit-authors` check does not catch.
 
-**Six things should be fixed in Stage 6 (F1 to F6),** three of them in the places the Owner asked to be looked at
+**Seven things should be fixed in Stage 6 (F1 to F7),** three of them in the places the Owner asked to be looked at
 closely:
 
 - the share picture has a button drawn in it, and the tracker says it has none (F1);
 - the stamp's landing is real but cannot be seen: it happens in the bottom 32 px of the window (F2);
 - on a phone the bar that stays at the top holds only the word `automata`, and takes a tenth of the screen (F4).
+
+And one journey failed once, on this audit's own pull request, on code that had passed minutes before (F7).
 
 **Four questions are the Owner's (Q1 to Q4)**; none is decided here and nothing waits for them but their own fix.
 
@@ -74,7 +76,7 @@ closely:
   The other journeys were read for what they cover, not line by line.
 - CI's pictures were read from `ci-screens` at `pr-17` and `pr-17-real`: arrival, whole page, playing, loading and
   not-found, at phone, tablet and computer sizes, in Chromium and WebKit, and Firefox where they differed.
-- The 15 check runs of `4ceba86` were read from the pull request: all green (`live` and `deploy` skipped, as they
+- The 15 check runs of `4ceba86` were read from the pull request (see F7 for one later run of the same code): all green (`live` and `deploy` skipped, as they
   are on a pull request). The `check` job's log shows **231 Node tests**; the journey counts were not recounted.
 - The site was built in a cloud container around the real game (AutomataFrameworkExamples at `1aca8cf`, built with
   its own `pnpm build`), with `pnpm build` only, which the plan allows. **No test was run locally.** The built page
@@ -149,6 +151,19 @@ page part into files under `src/styles/` that `src/styles.css` imports in order 
 buttons; the first screen and the sheet; the parts below; other sizes; motion and the share card), with the six
 colours still named in one file only; `tests/styles/` reads all of them; the 600-line rule also reads `.css`; and
 the two journey files are split by what they prove before they grow.
+
+**F7. One journey failed once on code that had just passed.** This audit's pull request (18) adds documents to
+`4ceba86` and nothing else. On its first run, against the real game in Chromium, "tablet-1180x820: pressing each
+Play button starts the game inside the page" failed: after a press, the game inside the frame did not say it was
+playing within 5 seconds. The other 179 journeys of that job passed, and the same journey had passed on `4ceba86`
+minutes earlier. This repo's rule (`playwright.config.ts`): "a journey that passes on a retry is a defect to find,
+not something to hide." **The cause is not known**, and it cannot be read from the run: the workflow keeps the
+pictures and throws away Playwright's own record of the failure, and no trace is taken. It may be the game slow to
+start on a busy runner, or a press that started nothing; the two need different fixes and nothing kept tells them
+apart. *Fix:* `journeys.yml` uploads `test-results/` when a job fails, and the config takes a trace on failure
+(`trace: 'retain-on-failure'`), so the next one can be read; then the journey says which button it pressed in its
+failure message (the loop presses three), and the cause is found before the Owner's review. No retry, and no longer
+wait, until the cause is known.
 
 ## Minor
 
@@ -242,6 +257,6 @@ smooth wheel should be tried by hand, with a mouse and with a trackpad.
 
 ## What happens next
 
-B1 is fixed on the pull request as it stands (a description, not a commit). Stage 6 takes F1 to F6 and the minor
+B1 is fixed on the pull request as it stands (a description, not a commit). Stage 6 takes F1 to F7 and the minor
 notes it agrees with, on its own branch, with the Owner's answers to Q1 to Q4 where a fix depends on one (F2 on Q1,
 part of F1 on Q2). Then Stage 7, the Owner's review, with the list above.
