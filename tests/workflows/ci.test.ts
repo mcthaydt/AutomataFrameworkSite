@@ -66,3 +66,13 @@ test('the journeys run once per engine, none cancelling another', () => {
   expect(engines).toContain('fail-fast: false')
   expect(engines).toContain(`pnpm test:journeys --project ${expr('matrix.engine')}`)
 })
+
+// Audit F7: a journey failed once on code that had just passed and the run kept nothing to say why.
+test('a failed journey leaves its trace and its error behind, for every engine', () => {
+  const engines = job(journeys, 'engines')
+  expect(engines).toMatch(
+    /- uses: actions\/upload-artifact@[0-9a-f]{40} # v\S+\n {8}if: failure\(\)\n {8}with:\n {10}name: test-results-\$\{\{ matrix\.engine \}\}\n {10}path: test-results\/\*\*/,
+  )
+  // The pictures job downloads only `screens-*`, so this upload is never mistaken for a picture.
+  expect(screens).toContain("--pattern 'screens-*'")
+})

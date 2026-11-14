@@ -2,7 +2,7 @@
 // first press works, and what happens to a slow game, a double tap, a turned phone and a page with no JavaScript.
 // Every word is asserted word for word: a word that changes here must change in index.html on purpose. Every number is
 // read from the `facts.json` the build wrote, so a page that said one thing and a game that held another would fail.
-import { expect, type FrameLocator, type Page, test } from '@playwright/test'
+import { type ConsoleMessage, expect, type FrameLocator, type Page, test } from '@playwright/test'
 import { isCommit, parseVersion } from '../../src/features/version/version.ts'
 import { addresses, GAME_REPO, siteFacts, words } from './facts.ts'
 import { arrive, fitsSideways, tabKey } from './look.ts'
@@ -66,11 +66,43 @@ const playNames = (width: number): string[] =>
 
 const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true })
 
-/** Presses a Play button (the sheet's by default) and waits until the game inside the frame says it is playing. */
+/** How long a game may take to say it is playing. Not made longer until a failure has shown that time is the cause. */
+const PLAYING_MS = 5_000
+
+/**
+ * Presses a Play button (the sheet's by default) and waits until the game inside the frame says it is playing. When it
+ * does not, the failure names the button that was pressed and says what the game was doing instead (audit F7): the
+ * state it showed, the words on its screen, what its console said and how long it had been. When it does, how long it
+ * took is printed, so a run that passes slowly can be told from one that passes fast.
+ */
 async function play(page: Page, name: string = WORDS.play.sheet): Promise<FrameLocator> {
+  const said: string[] = []
+  const listen = (message: ConsoleMessage): void => {
+    if (message.type() === 'error' || message.type() === 'warning')
+      said.push(`${message.type()}: ${message.text()}`)
+  }
+  page.on('console', listen)
+  const pressed = Date.now()
   await button(page, name).click()
   const game = page.frameLocator(FRAME)
-  await expect(game.locator('#game[data-state="playing"]')).toBeAttached()
+  const root = game.locator('#game')
+  try {
+    await expect(root, `"${name}" was pressed`).toHaveAttribute('data-state', 'playing', {
+      timeout: PLAYING_MS,
+    })
+  } catch (error) {
+    const state = await root.getAttribute('data-state', { timeout: 500 }).catch(() => 'no game page yet')
+    const words = await root.innerText({ timeout: 500 }).catch(() => '(nothing to read)')
+    const frames = await page.locator(FRAME).count()
+    throw new Error(
+      `Pressing "${name}" did not start the game: after ${Date.now() - pressed} ms its state was ` +
+        `"${state}" (frames on the page: ${frames}). Its words: ${JSON.stringify(words)}. ` +
+        `Its console: ${JSON.stringify(said)}.\n${error instanceof Error ? error.message : String(error)}`,
+    )
+  } finally {
+    page.off('console', listen)
+  }
+  console.log(`"${name}" was playing after ${Date.now() - pressed} ms`)
   return game
 }
 

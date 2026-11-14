@@ -49,6 +49,15 @@ jobs:
           name: screens-${{ matrix.engine }}
           path: tests/journeys/__screenshots__/**
           if-no-files-found: ignore
+      # What a failed journey leaves: Playwright's trace and the error's context for each, so a failure that does not
+      # come again can still be read. Open a trace with `pnpm exec playwright show-trace <file>`.
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: test-results-${{ matrix.engine }}
+          path: test-results/**
+          retention-days: 14
+          if-no-files-found: ignore
 
   # The same pictures, also as plain files on the `ci-screens` branch, because a cloud session can read the repository
   # through the GitHub API but is refused by the host that serves artifacts. Layout: `<commit>/<engine>/<name>.png`

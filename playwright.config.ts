@@ -18,7 +18,15 @@ const config: PlaywrightTestConfig = defineConfig({
   // A button that is not there should fail in seconds, not at the end of a 30 second test. Motion is off for every journey
   // but `motion.journey.ts`, which turns it on: a picture or a measurement taken while the page is still arriving would
   // differ from run to run, and an engine's animation timing is not what these journeys are about.
-  use: { baseURL, actionTimeout: 8_000, navigationTimeout: 15_000, reducedMotion: 'reduce' },
+  use: {
+    baseURL,
+    actionTimeout: 8_000,
+    navigationTimeout: 15_000,
+    reducedMotion: 'reduce',
+    // A failed journey keeps Playwright's own record of it (a trace: every step, the page at each, the network and the
+    // console), which CI uploads. Before this a journey that failed once on code that had just passed left nothing to read.
+    trace: 'retain-on-failure',
+  },
   projects: ENGINES.map((engine) => ({ name: engine, use: { browserName: engine } })),
   ...(process.env.BASE_URL === undefined
     ? {
