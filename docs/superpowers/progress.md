@@ -5,18 +5,39 @@ The tracker every stage reads first and updates last. One section per cycle; new
 ## Cycle 3: the home page looks finished
 
 A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
-site). The spec, plan and the stages after it wait on the Owner's answers to its five questions.
+site). It stands in for the spec, with the "Visual direction" section of the spec in AutomataFramework.
 
-Overall: **5%** (the design audit is 5 points; the rest is shared out when the plan is written)
+Overall: **15%** (the design audit is 5 points, the plan 10, its audit 5, execution 40, the implementation audit 15,
+fixes 15, the Owner's review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
 | The Owner's answers (Q1 to Q5) | Done, 100% | the audit's "The Owner's answers" |
 | The Owner's pick of fonts | Done, 100% | the audit's "The fonts" |
-| 2. Plan | Not started | |
+| 2. Plan | Done, 100% | [`plans/2026-11-14-home-redesign-site.md`](plans/2026-11-14-home-redesign-site.md) |
+| 3. Plan audit | Not started | |
+| 4. Execution | Not started (Task 3 waits for the Owner's answer to the plan's Q1) | |
+| 5. Implementation audit | Not started | |
+| 6. Fixes | Not started | |
+| 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 2. The plan: nine tasks. The colours and fonts first (No. 325; Fraunces, Onest, JetBrains Mono),
+  on the page as it is. Then three small Node features so nothing on the page is typed: `facts` reads the game's own
+  files at the commit being shown and writes `facts.json`, `claims` holds the five claims and stops the build when a
+  "Works today" stamp has no proof, `fill` writes both into the pages. The build takes the game's real picture, the
+  share picture and the touch icon itself, in a browser. Then the page: the top bar, the first screen, the game on
+  its sheet, the numbers, the level's file, the checks, the five claims, the close and the footer; small motion in
+  the stylesheet; the 404 page; and the pictures read against a written list. The strict header is not touched and
+  the site still does not depend on the framework. Journeys in Chromium, WebKit and Firefox at phone and tablet
+  size, upright and sideways, at desktop size and at 320 px. One Owner question, Q1: whether "Built for agents" is
+  stamped "Works today" or "Being built" (Task 3 waits for it). The game playing by itself before Play is left for
+  the plan that follows the demo's "watch" state. Found while planning: Eugenia Red is 3.64 to 1 on the ground, so
+  it is an edge and an icon and never words; after an editor's save the engines no longer end at the recorded
+  number, so the page says they end the same; the fonts' Latin files have no arrow characters. The packages' files
+  and the colours' contrast were read and worked out; no test was run.
 
 - 2026-11-14: the Owner picked the fonts: Fraunces, Onest and JetBrains Mono for the site and the editors; Fredoka
   with M PLUS Rounded 1c, Jua and ZCOOL KuaiLe for the Examples screens and the demo games, with no second font.
