@@ -15,7 +15,7 @@ review 10)
 |---|---|---|
 | 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
-| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`; Q1 is answered) | |
+| 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`; Q1 is answered; Task 3 waits for the Owner's answer to Q2) | |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
@@ -23,13 +23,17 @@ review 10)
 ### Log
 
 - 2026-11-14: Stage 3. The plan audit: sound, true to the spec's "Visual direction", and ready to execute once pull
-  request 6 is on `main`. Nothing blocking. Six should-fix findings, all written into the plan by the audit's own
+  request 6 is on `main`. Nothing blocking. Nine should-fix findings, all written into the plan by the audit's own
   pull request: S1, the "How to play" icons were pencil and the spec gives icons to chalk; S2, a mistyped icon name
   would not reach the plan's own error, because resolving a missing icon does not throw; S3, the 404 page's heading
   is a sentence set in capitals, now said and tested; S4, two journeys could run before the version line and its
   font arrive (a `settle` helper); S5, two rules that contradicted what the plan builds (the chalk line round the
-  playing game, the `theme-color` meta); S6, Q1 is answered (a), the `@fontsource` packages at 5.3.0. Seven notes for
-  execution, no new Owner question. Checked against the published packages and the draft pictures; no test was run.
+  playing game, the `theme-color` meta); S6, Q1 is answered (a), the `@fontsource` packages at 5.3.0. A second audit of the same
+  plan was written at the same time by another session (pull request 8); what it found and this one had not is taken
+  in as S7 to S9 (compare the real game's pictures with `live/`, measure every link at 44 px, ask whether the press
+  plainly worked). Seven notes for execution. One Owner question, Q2: whether the chalk line stays round the game
+  once it plays (the two audits read it differently); Task 3 waits for it. Checked against the published packages
+  and the draft pictures; no test was run.
 
 - 2026-11-14: Stage 2. The plan: four tasks. The two fonts come from packages and are served as the site's own
   files; Phosphor's regular icons are written into the pages when the site is built; one stylesheet holds the five

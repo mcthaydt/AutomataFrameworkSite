@@ -4,10 +4,13 @@
 > Steps use checkbox (`- [ ]`) syntax for tracking. No subagents (project rule).
 
 > **Audited 2026-11-14** ([`audits/2026-11-14-blueprint-restyle-plan-audit.md`](../audits/2026-11-14-blueprint-restyle-plan-audit.md)).
-> Its findings S1 to S6 are written into this plan already; its notes N1 to N7 are for execution to read.
+> Its findings S1 to S9 are written into this plan already; its notes N1 to N7 are for execution to read. One
+> question for the Owner is open (Q2, below); Task 3 waits for it.
 
 **Goal:** The home page and the 404 page wear Blueprint, the look the spec's "Visual direction" section gives the
-editors and the site, with not one word of copy changed and the game in the frame left exactly as it is.
+editors and the site, with not one word of copy changed and the game in the frame left exactly as it is. Onboarding
+(a first-time player learns what to do, how to do it and that they did it) is kept by the unchanged words and checked
+in Task 4 by questions 1, 2 and 11.
 
 **Architecture:** One stylesheet (`src/styles.css`) holds the five Blueprint colours as custom properties and is the
 only place a colour or a font is named, but for one line in each page: the `theme-color` meta, which a browser reads
@@ -28,6 +31,20 @@ the private notes and nothing from it is copied here.
 **Principles served:** 1 (agent-first: an icon is one documented line of HTML, a colour is one named value in one
 file) and 2 (iPad-first: touch sizes and every picture at phone and tablet size, upright and sideways). It breaks
 none: no framework dependency, no 3D, no monorepo.
+
+## Open for the Owner (answer before Task 3 starts)
+
+**Q2. Once the game is playing, does the thin chalk line stay round it?** Two audits of this plan read the spec's
+"the game's art is never restyled" two ways, so it is the Owner's to say:
+
+- (a) **The line stays.** It is drawn outside the game's box, beside the game and never over it, and the game keeps
+  the same frame before and after Play. **The plan is written for (a).**
+- (b) **The line goes when the game plays.** Nothing of the site's is drawn round a playing game. Task 3, Step 5
+  gains `#game[data-state="playing"] { outline: none; }`, and "the game's own picture is left alone" also expects
+  `#game`'s `outline-style` to be `none` once it plays. Nothing else changes.
+
+Tasks 1 and 2 do not depend on it. Execution does not start Task 3 until the coordinator passes on the Owner's
+answer; it never picks one by default.
 
 ## Asked of the Owner, and answered
 
@@ -66,9 +83,9 @@ with that pull request merged: it changes the same stylesheet and the same journ
 - **Dark is the only theme.** The page ignores the device's light or dark setting. No light theme in this plan.
 - **Square corners of 2 px, 1 px chalk lines, no shadows** (nothing on the site floats).
 - **The game's art is never restyled.** No filter, tint, opacity, blend, rounded corner or border is put on the frame
-  or on the game's place once the game plays. The one thing that stays is the 1 px chalk line round the game's place:
-  it is an outline, drawn outside the box, so it is beside the game and never over it. The site names no colour of
-  the game.
+  or on the game's place once the game plays. Whether the 1 px chalk line round the game's place stays once the game
+  plays is Q2; it is an outline, drawn outside the box, so in either answer it is never over the game. The site
+  names no colour of the game.
 - **Every icon is Phosphor regular and has its words beside it.** No icon stands alone.
 - **The strict header stays byte for byte.** `public/_headers` is not edited. No font, icon, style or script comes
   from another address or from a `data:` address.
@@ -649,6 +666,11 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   })
   ```
 
+  Also in the per-size block, **"everything that can be pressed is big enough for a thumb"**: after `arrive` and
+  `settle`, every visible `a[href]` and every visible `button` has a bounding box at least 44 px high (rounded, as
+  `home.journey.ts` rounds for Firefox), and the Play button at least 56. The icons now sit inside the footer's
+  links, and until this journey nothing measured them, the link in "What to do next" or the version line's link.
+
   Outside the per-size block, each with its own `test.describe` and `test.use`:
 
   - **`phone-320x568: a 320 px phone`** (Review Focus 2): after `arrive`, the document is no wider than the window,
@@ -681,7 +703,9 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   (see "What this replaces"). In the per-size "before any scroll" test, after the existing picture, call
   `await settle(page)` and then take
   `await page.screenshot({ path: \`tests/journeys/__screenshots__/${size.name}-whole.png\`, fullPage: true })`, so
-  people can see the parts below the first screen, with the version line there and in its own font. Add, at `phone-390x844` with `colorScheme: 'light'`, a test that
+  people can see the parts below the first screen, with the version line there and in its own font. Every picture this
+  plan adds is written under `tests/journeys/__screenshots__/`, the only folder `journeys.yml` uploads. Add, at
+  `phone-390x844` with `colorScheme: 'light'`, a test that
   takes `phone-390x844-arrival-light-setting.png` after `arrive`; and at `phone-390x844` a test that focuses the Play
   button with the keyboard (`page.keyboard.press('Tab')` until it is focused, `Alt+Tab` in WebKit) and takes
   `phone-390x844-focus.png`.
@@ -937,12 +961,17 @@ ten minutes of all three engines. A journey that passes only on a second run is 
      paper on the Play button), with none in pencil?
   6. Do the heading, the lede and the Play button all fit in the arrival picture, upright and sideways, on the phone
      and the tablet?
-  7. Does the playing game look exactly as it does in the pictures from before this work (`main/` on `ci-screens`):
-     the same colours, no tint, no rounded corner, no line over it?
+  7. Does the playing game look exactly as it does in the pictures from before this work: the same colours, no
+     tint, no rounded corner, no line over it? Compare like with like: the stand-in game's `pr-<number>/` with
+     `main/`, and the real game's `pr-<number>-real/` with `live/` (`main/` holds the stand-in game, never the real
+     one).
   8. Does "Loading the game…" read as a note on the sheet, and does the focus ring show clearly?
   9. Does the page on a device set to light look the same as the others?
   10. Is anything cut off, overlapping, or wider than the window? On the phone, does any link drop to a line of its
       own and leave a gap in its sentence (the plan audit's N3)? Report that one; do not fix it here.
+
+  11. After Play is pressed, do the loading note and then the game make it plain that the press worked
+      (`phone-390x844-loading.png`, then `<size>.png`)?
 
   A "no" is a defect: fix it in this task if it is a value in the stylesheet, with a journey that would have caught
   it; report it and stop if it is anything else.

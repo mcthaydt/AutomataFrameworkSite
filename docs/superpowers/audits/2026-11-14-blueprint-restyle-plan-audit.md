@@ -13,11 +13,17 @@ and the draft pictures the plan was drawn from.
 The plan is sound and true to the spec. It is **ready to execute** once pull request 6 is on `main`. Nothing in it is
 blocking.
 
-Six should-fix findings (S1 to S6) are small and are **already written into the plan** by this audit's pull request,
+Nine should-fix findings (S1 to S9) are small and are **already written into the plan** by this audit's pull request,
 so execution follows the plan as it now reads. Seven notes (N1 to N7) are for execution to read; none changes a step.
-There is no new question for the Owner, and Q1 (which font packages) is answered.
+Q1 (which font packages) is answered. There is **one new question for the Owner, Q2**: whether the thin chalk line
+stays round the game once it plays. Tasks 1 and 2 do not wait for it; Task 3 does.
 
 Nothing here reopens a decision the Owner made.
+
+**A second audit of the same plan** was written at the same time by another session (pull request 8, the same file
+name). The two agree on everything they both looked at but Q2. Its findings that this one had missed were checked
+and are taken in here as S7 to S9, so this file and the plan carry both audits' findings. Only one of the two pull
+requests should be merged.
 
 ## What was asked, and the answer to each
 
@@ -52,6 +58,8 @@ Nothing here reopens a decision the Owner made.
 
 ## Should fix (all applied to the plan)
 
+S1 to S6 are this audit's own. S7 to S9 come from the second audit.
+
 **S1. The "How to play" icons were pencil; the spec gives icons to chalk.** The spec's table: chalk is for "text,
 borders, icons", pencil for "quieter text and hints". The plan's sheet had `.help .icon { color: var(--pencil) }`,
 which also disagreed with the plan itself: Task 2's test says an icon is "coloured like the words beside it", and
@@ -80,15 +88,42 @@ Tab journey could count the real game's version link after it had started walkin
 journey.
 
 **S5. Two of the plan's own rules contradicted what it builds.** (a) "No … border is put on the frame or on anything
-around it once the game plays", yet the chalk line round the game's place stays while the game plays (rightly: it is
-an outline, outside the box). (b) "The only place a colour is named" is the stylesheet, yet both pages get a
-`theme-color` meta with the paper colour, and nothing checked the 404 page's two metas. *Applied:* both sentences now
-say what is true; the Node test holds each page's `theme-color` to paper and allows no other colour in the HTML; the
-404 journey checks both metas.
+around it once the game plays", yet the sheet keeps the chalk line round the game's place while the game plays. Which
+of the two is meant is Q2. (b) "The only place a colour is named" is the stylesheet, yet both pages get a
+`theme-color` meta with the paper colour, and nothing checked the 404 page's two metas. *Applied:* (a) the rule now
+points at Q2; (b) the sentence says what is true, the Node test holds each page's `theme-color` to paper and allows
+no other colour in the HTML, and the 404 journey checks both metas.
 
 **S6. Q1 is answered and the plan still stopped for it.** The coordinator passed on the Owner's yes to
 `@fontsource/ibm-plex-sans-condensed` 5.3.0 and `@fontsource/jetbrains-mono` 5.3.0 (2026-11-14). *Applied:* the plan
 records the answer and Task 1 no longer stops to ask.
+
+**S7. Task 4 compared the real game's pictures with the stand-in game's** (from the second audit; checked). Question
+7 said to compare with `main/` on `ci-screens`. `main/` is written by `ci`, which plays the stand-in game; the real
+game's latest pictures are in `live/`, written by `site`. *Applied:* question 7 compares `pr-<number>/` with `main/`
+and `pr-<number>-real/` with `live/`.
+
+**S8. No journey measured the home page's links at 44 px** (from the second audit; checked). Only the Play button and
+the 404 page's link were measured, and Task 2 puts icons inside the footer's links. *Applied:* a per-size journey
+measures every visible link and button.
+
+**S9. Onboarding's third part was not asked about** (from the second audit). A first-time player must learn what to
+do, how to do it and that they did it. Questions 1 and 2 cover the first two. *Applied:* question 11 asks whether
+the loading note and then the game make it plain that the press worked; the Goal names onboarding; and the plan says
+every new picture goes under `tests/journeys/__screenshots__/`.
+
+## For the Owner
+
+**Q2. Once the game is playing, does the thin chalk line stay round it?** Before Play, the game's place is a sheet
+with a 1 px chalk line round it. The plan's sheet keeps that line while the game plays; one of the plan's own rules
+said nothing is put round a playing game. The spec says the game's art is never restyled, and both readings keep to
+it, because the line is outside the game and never over it.
+
+- (a) The line stays: the game has the same frame before and after Play. The plan is written this way.
+- (b) The line goes once the game plays: nothing of the site's is drawn round a playing game. Three lines of the
+  plan change.
+
+This audit does not pick. Task 3 waits for the answer.
 
 ## Notes (nothing to change)
 
