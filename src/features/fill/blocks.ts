@@ -2,7 +2,7 @@
 // rows, the table of places the recorded play runs, and the cards of the five claims. Pure: facts in, markup out. Every
 // value that came from a game passes through `escapeHtml`, so a name or a row with markup in it is shown as words.
 import type { Claim } from '../claims/claims.ts'
-import { STAMP_WORDS } from '../claims/claims.ts'
+import { STAMP_WORDS, titleShown } from '../claims/claims.ts'
 import type { GameFacts } from '../facts/facts.ts'
 
 /** Words as the page shows them: the four characters that could open or close markup are written out. */
@@ -63,7 +63,7 @@ export function claimCards(claims: readonly Claim[]): string {
       const icon = claim.state === 'works' ? '<i data-icon="check"></i>' : ''
       const stamp = `<span class="stamp ${claim.state}">${icon}<span>${STAMP_WORDS[claim.state]}</span></span>`
       const number = String(at + 1).padStart(2, '0')
-      return `<li class="claim"><span class="number">${number}</span><h3>${escapeHtml(claim.title)}</h3><p>${escapeHtml(claim.line)}</p>${stamp}</li>`
+      return `<li class="claim"><span class="number">${number}</span><h3>${escapeHtml(titleShown(claim))}</h3><p>${escapeHtml(claim.line)}</p>${stamp}</li>`
     })
     .join('')
 }

@@ -15,6 +15,7 @@
   {
     "id": "after-demo",
     "title": "The part after the demo is already done",
+    "whileBuilding": "The part after the demo comes built in",
     "line": "Saves, menus, settings, controls, sound and languages.",
     "state": "building"
   },

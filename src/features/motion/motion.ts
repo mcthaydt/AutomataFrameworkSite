@@ -5,10 +5,10 @@ import Lenis, { type LenisOptions } from 'lenis'
 
 /**
  * How the scrolling is smoothed. `lerp` is how much of the way to its place the page goes each frame: 0.1 is Lenis's own
- * (a slow glide); 0.2 is a quick ease that a person feels only as "not steppy". Touch is left to the browser
- * (`syncTouch` off). `respectReducedMotion` is off because the Owner asked for this smoothing for everyone (2026-11-14:
- * "it shouldn't be that obnoxious"); a long scroll that a press starts still jumps when the device asks for less motion
- * (see `reveal`).
+ * (a slow glide); 0.25, used here, is a quick ease that a person feels only as "not steppy". Touch is left to the
+ * browser (`syncTouch` off). `respectReducedMotion` is off because the Owner asked for this smoothing for everyone
+ * (2026-11-14: "it shouldn't be that obnoxious"); a long scroll that a press starts still jumps when the device asks for
+ * less motion (see `reveal`).
  */
 export const SUBTLE: LenisOptions = {
   lerp: 0.25,
@@ -49,6 +49,7 @@ export function startSmoothScroll(win: Window): () => void {
     if (target === null) return
     event.preventDefault()
     reveal(target)
+    moveFocusTo(target)
     win.history.pushState(null, '', `#${id}`)
   }
   doc.addEventListener('click', onClick)
@@ -58,6 +59,18 @@ export function startSmoothScroll(win: Window): () => void {
     lenis.destroy()
     running = undefined
   }
+}
+
+/**
+ * Puts the keyboard, and a screen reader, where the page has just travelled to. A browser's own jump to `#today` does
+ * this; the page answers the press itself, so it has to (audit F3). Without it the next Tab goes to whatever followed
+ * the link that was pressed, in the top bar, and a screen reader says nothing has changed. A section is not something
+ * a person tabs to, so it can take the focus but is not in the tab order (`tabindex="-1"`), and the stylesheet draws no
+ * ring on it. Nothing scrolls: `reveal` already took the page there.
+ */
+export function moveFocusTo(target: HTMLElement): void {
+  if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
+  target.focus({ preventScroll: true })
 }
 
 /**

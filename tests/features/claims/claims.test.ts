@@ -6,6 +6,7 @@ import {
   checkClaims,
   PROOFS,
   STAMP_WORDS,
+  titleShown,
 } from '#src/features/claims/claims.ts'
 import { readFacts } from '#src/features/facts/facts.ts'
 
@@ -75,3 +76,16 @@ test('a claim being built is never held to a proof', () => {
 
 test('the stamps say exactly these words', () =>
   expect(STAMP_WORDS).toEqual({ works: 'Works today', building: 'Being built' }))
+
+// The Owner's answer to Q4 (2026-11-14): until "after the demo" works, its card says it "comes built in".
+test("a claim being built shows its while-building title, and one that works shows the spec's", () => {
+  const after = CLAIMS.find((claim) => claim.id === 'after-demo')
+  expect(after && titleShown(after)).toBe('The part after the demo comes built in')
+  expect(after && titleShown({ ...after, state: 'works' })).toBe('The part after the demo is already done')
+  const checks = CLAIMS.find((claim) => claim.id === 'checks')
+  expect(checks && titleShown(checks)).toBe("Your agent can't quietly break your game")
+  // No other claim has softer words: the other four titles are the spec's own.
+  expect(CLAIMS.filter((claim) => claim.whileBuilding !== undefined).map((claim) => claim.id)).toEqual([
+    'after-demo',
+  ])
+})

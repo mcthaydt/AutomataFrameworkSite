@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { CLAIMS } from '#src/features/claims/claims.ts'
+import { CLAIMS, titleShown } from '#src/features/claims/claims.ts'
 import type { GameFacts } from '#src/features/facts/facts.ts'
 import { claimCards, engineRows, escapeHtml, levelFile } from '#src/features/fill/blocks.ts'
 
@@ -106,7 +106,7 @@ test("the claims: one card each, numbered 01 to 05, with its title, its line and
   cards.forEach((card, at) => {
     const claim = CLAIMS[at]
     expect(card).toContain(`<span class="number">0${at + 1}</span>`)
-    expect(card).toContain(`<h3>${escapeHtml(claim?.title ?? '')}</h3>`)
+    expect(card).toContain(`<h3>${escapeHtml(claim === undefined ? '' : titleShown(claim))}</h3>`)
     expect(card).toContain(`<p>${escapeHtml(claim?.line ?? '')}</p>`)
   })
   // A card that works has class "stamp works" and a check icon; a card being built has "stamp building" and none.
