@@ -19,9 +19,10 @@ short of "finished" or short of true (S1 to S11). **All fourteen are already wri
 pull request, each marked "audit B1" and so on where it lands, so execution follows the plan as it now reads.
 Twelve notes (N1 to N12) are for execution to read; none changes a step.
 
-The plan's own question, **Q1** (the "Built for agents" stamp), is still open and is not asked again here. There
-is **one new question for the Owner, Q2**: whether the line under the claim keeps "the next six weeks", a number
-nobody measured. Nothing waits for Q2.
+The plan's own question, **Q1** (the "Built for agents" stamp), was open and was not asked again here. This audit
+asked **one new question, Q2**: whether the line under the claim keeps "the next six weeks", a number nobody
+measured. **The Owner answered both the same day** (see "For the Owner"), and the plan carries the answers, so
+nothing is open.
 
 Nothing here reopens a decision the Owner made.
 
@@ -196,8 +197,11 @@ as a card: the wordmark, "Being built", the claim, the lede and the top of the g
 
 ## For the Owner
 
-**Q1 (the plan's): open, not asked again.** Whether "Built for agents" is stamped "Works today" or "Being built".
-Task 3 waits for it.
+**Both are answered (the Owner, 2026-11-14): Q1 is (a) and Q2 is (b).** "Built for agents" is stamped "Being
+built", and the line under the claim reads "...are what take the weeks after that." Both are written into the
+plan. The questions follow as they were asked.
+
+**Q1 (the plan's).** Whether "Built for agents" is stamped "Works today" or "Being built".
 
 **Q2 (new). Does the line under the claim keep "the next six weeks"?** "Saves, menus, settings, touch controls and
 publishing are what take the next six weeks." It is the line of the draft the Owner saw. "Six weeks" is a number
@@ -207,9 +211,8 @@ stopped an unmeasured "about 15 minutes" for the same reason.
 - (a) Keep it as drawn.
 - (b) "...are what take the weeks after that." **Recommended.**
 
-Nothing waits for it: the page is built with the draft's words until the answer, and either answer is one sentence
-in the page and the same sentence in a journey.
+Nothing waited for it.
 
 ## What happens next
 
-Stage 4 (execution) follows the plan as it now reads. Tasks 1, 2, 4 and 5 can start; Task 3 waits for Q1.
+Stage 4 (execution) follows the plan as it now reads. Every task can start: no question is open.

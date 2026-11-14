@@ -17,12 +17,16 @@ fixes 15, the Owner's review 10)
 | The Owner's pick of fonts | Done, 100% | the audit's "The fonts" |
 | 2. Plan | Done, 100% | [`plans/2026-11-14-home-redesign-site.md`](plans/2026-11-14-home-redesign-site.md) |
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-home-redesign-plan-audit.md`](audits/2026-11-14-home-redesign-plan-audit.md) |
-| 4. Execution | Not started (Task 3 waits for the Owner's answer to the plan's Q1; nothing waits for Q2) | |
+| 4. Execution | Not started (nothing is open: the Owner answered Q1 and Q2) | |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: the Owner answered both questions. Q1 (a): "Built for agents" is stamped "Being built", so one claim
+  reads "Works today" and four "Being built", and no second proof is written. Q2 (b): the line under the claim reads
+  "...are what take the weeks after that." Both are in the plan; nothing is open and every task can start.
 
 - 2026-11-14: Stage 3. The plan audit: sound in shape and true to the Owner's answers, not ready as written. Three
   blocking findings: B1, the loading note and the note about JavaScript were drawn over the game's picture (they

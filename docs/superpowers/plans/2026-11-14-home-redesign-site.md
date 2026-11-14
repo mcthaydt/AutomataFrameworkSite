@@ -34,35 +34,15 @@ for execution to read.
 read, and the page shows the files an agent works on) and the rule that onboarding comes first. It breaks none: no
 framework dependency, no 3D, no monorepo.
 
-## Open for the Owner (Q1): Task 3 waits for it
+## The Owner's answers (2026-11-14): nothing is open
 
-Reported to the coordinator. Nothing here is decided by this plan.
-
-**Q1. Is "Built for agents" stamped "Works today" or "Being built"?** The audit says a claim is stamped "Works today"
-only when all of its sentence is true. The spec's sentence for this claim names four things: small files with plain
-names, agent skills, an MCP server, and `automata check`. Only the first is on `main` today.
-
-- (a) **"Being built"**, until all four exist. The section that shows the level's file stays on the page either way,
-  as the part that works. One claim would then read "Works today" ("Your agent can't quietly break your game") and
-  four "Being built". **Recommended:** it is the strict reading of the Owner's own rule.
-- (b) "Works today", with the card's line saying only what is true: "Small files with plain names that an agent can
-  find and change." Two stamps then read "Works today", as in the draft the Owner saw.
-
-Either answer is one word in `src/features/claims/library/claims.json` (Task 3, Step 3) and one line in a journey.
-
-## Open for the Owner (Q2): nothing waits for it
-
-From the plan audit, reported to the coordinator. Nothing here is decided by this plan.
-
-**Q2. Does the line under the claim keep "the next six weeks"?** It is the line of the draft the Owner saw. "Six
-weeks" is a number nobody measured, and this repo's rule is that every claim on a page is true on `main` today (the
-first cycle's audit stopped an unmeasured "about 15 minutes" for the same reason).
-
-- (a) Keep it, as drawn: "...are what take the next six weeks."
-- (b) Say it without a number: "...are what take the weeks after that." **Recommended by the audit.**
-
-Until the answer, the page is built with the words of the draft, (a). Either answer is one sentence in `index.html`
-and the same sentence in `home.journey.ts`.
+- **Q1. "Built for agents" is stamped "Being built"** (the Owner: (a)). The spec's sentence for the claim names four
+  things (small files with plain names, agent skills, an MCP server, `automata check`) and only the first is on
+  `main` today, so the claim waits until all four exist. One claim reads "Works today" ("Your agent can't quietly
+  break your game") and four read "Being built". The section that shows the level's file stays on the page, as the
+  part that works, and the card's line says what is here and what is not.
+- **Q2. The line under the claim has no number** (the Owner: (b); asked by the plan audit). It reads "...are what
+  take the weeks after that.", not "the next six weeks", which nobody measured.
 
 ## Depends on
 
@@ -400,8 +380,6 @@ test('a folder with no automata.toml stops with a sentence that names the folder
 
 ### Task 3: The claims and their stamps
 
-**Waits for Q1.** Everything but the one word marked below can be written first.
-
 **Files:**
 - Create: `src/features/claims/{claims,proofs}.ts`, `src/features/claims/library/claims.json`,
   `tests/features/claims/claims.test.ts`
@@ -416,7 +394,7 @@ test('a folder with no automata.toml stops with a sentence that names the folder
 export type ClaimState = 'works' | 'building'
 export interface Claim { readonly id: string; readonly title: string; readonly line: string
                          readonly state: ClaimState; readonly proof?: ProofName }
-export type ProofName = 'same-in-every-engine' | 'small-files'
+export type ProofName = 'same-in-every-engine'   // one proof today; a claim that comes to work brings its own
 export const PROOFS: Record<ProofName, (facts: GameFacts) => string | undefined>  // a sentence when it does not hold
 export const CLAIMS: readonly Claim[]
 export class ClaimError extends Error {}
@@ -434,7 +412,6 @@ test('a claim that works names a proof, and a claim being built names none', …
 test('every claim stamped as working holds for the stand-in game', () => checkClaims(CLAIMS, fixtureFacts))
 test('same-in-every-engine fails when an engine is missing', …)   // engines: ['Node','Chrome'] → a sentence
 test('same-in-every-engine fails when there is no recorded play to run', …)   // steps: 0
-test('small-files fails when a content file is not JSON', …)      // files: ['content/level.bin']
 test('a working claim whose proof fails stops the build, naming the claim', () =>
   expect(() => checkClaims(CLAIMS, { ...fixtureFacts, engines: ['Node'] })).toThrow(/can't quietly break/))
 test('a working claim with no proof stops the build', …)
@@ -444,8 +421,8 @@ test('no line promises what is being built as if it were here', …)
 
 - [ ] **Step 2: `proofs.ts`.** `same-in-every-engine` holds when `facts.engines` is exactly Node, Chrome, Safari and
   Firefox, `facts.replay.steps > 0` and `facts.replay.ending` is 16 hex digits. (It is true because `pick` only ever
-  shows a commit that passed `REQUIRED_CHECKS`; the comment says so.) `small-files` holds when `facts.files` has at
-  least one path and every path ends `.json`.
+  shows a commit that passed `REQUIRED_CHECKS`; the comment says so.) There is no second proof yet (Q1's answer: only one
+  claim works today), and none is written ahead of the claim that needs it.
 
 - [ ] **Step 3: `library/claims.json`**, in this order:
 
@@ -455,8 +432,8 @@ test('no line promises what is being built as if it were here', …)
     "line": "One recorded play, run again in four places on every change.",
     "state": "works", "proof": "same-in-every-engine" },
   { "id": "agents", "title": "Built for agents",
-    "line": "Small files with plain names that an agent can find and change.",
-    "state": "<Q1: 'building' for (a); 'works' with \"proof\": \"small-files\" for (b)>" },
+    "line": "Small files with plain names today. Agent skills and a way for an agent to run the game are next.",
+    "state": "building" },
   { "id": "after-demo", "title": "The part after the demo is already done",
     "line": "Saves, menus, settings, controls, sound and languages.", "state": "building" },
   { "id": "editors", "title": "Change it yourself, without another prompt",
@@ -466,8 +443,7 @@ test('no line promises what is being built as if it were here', …)
 ]
 ```
 
-  With (a), the `agents` line becomes "Small files with plain names today. Agent skills and a way for an agent to run
-  the game are next." so the card says what is here and what is not.
+  The `agents` line says what is here and what is not (Q1's answer), so the card never promises the whole claim.
 
 - [ ] **Step 4: Verify and commit.** `feat(claims): the five claims, each stamp held to a proof`. Push; `ci` green.
 
@@ -707,7 +683,7 @@ test('facts.json is served and says which game the page shows', …)
     <div class="wrap">
       <a class="tag" href="#today"><b>Being built</b><span>See what works today</span><i data-icon="arrow-right"></i></a>
       <h1>Finish the game your agent started.</h1>
-      <p class="lede">Your coding agent can make a playable demo in a weekend. Saves, menus, settings, touch controls and publishing are what take the next six weeks. Automata Framework is a toolkit that will have them built in.</p>
+      <p class="lede">Your coding agent can make a playable demo in a weekend. Saves, menus, settings, touch controls and publishing are what take the weeks after that. Automata Framework is a toolkit that will have them built in.</p>
       <div class="actions">
         <button type="button" class="btn main" data-play hidden><i data-icon="play"></i>Play the first game</button>
         <a class="btn second" data-address="files"><i data-icon="github-logo"></i>See how it is made</a>
@@ -972,7 +948,7 @@ test('the numbers, the file and the table are the game\'s own', …)
 //   replay-ending is replay.ending; the four data-address links start 'https://github.com/mcthaydt/AutomataFrameworkExamples'
 test('five claims, each with a stamp that says where it stands', …)
 //   5 cards, numbered 01 to 05, the five titles in order; each stamp is 'Works today' or 'Being built';
-//   'checks' is 'Works today'; 'after-demo', 'editors' and 'publish' are 'Being built'; 'agents' as Q1 was answered
+//   'checks' is 'Works today'; 'agents', 'after-demo', 'editors' and 'publish' are 'Being built' (Q1's answer)
 test('"What works today" in the bar, the tag and the footer all go to the list', …)
 //   each link, clicked, leaves #today's heading in the window
 ```
