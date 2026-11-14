@@ -59,8 +59,15 @@ export const playNames = (width: number): string[] =>
 
 export const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true })
 
-/** How long a game may take to say it is playing. Not made longer until a failure has shown that time is the cause. */
-export const PLAYING_MS = 5_000
+/**
+ * How long a game may take to say it is playing, the same 15 seconds the build allows for its own picture of the game.
+ * Audit F7: with 5 seconds a journey failed once on a Chromium tablet. The times printed by every press since show the
+ * cause: the first press of a test starts the game cold (a page, a WebAssembly file and a software-drawn canvas) and
+ * takes 1.0 to 1.3 seconds against 0.5 to 0.7 for the next, and one in this run took 3.8 seconds when the runner's
+ * other worker was busy. A game that hangs still fails (with its state and its console in the message); a game that is
+ * only slow does not fail a journey that is not about speed, and its time is printed so a creeping one is seen.
+ */
+export const PLAYING_MS = 15_000
 
 /**
  * Presses a Play button (the sheet's by default) and waits until the game inside the frame says it is playing. When it
