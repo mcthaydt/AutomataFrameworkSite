@@ -7,7 +7,7 @@ The tracker every stage reads first and updates last. One section per cycle; new
 A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
 site). It stands in for the spec, with the "Visual direction" section of the spec in AutomataFramework.
 
-Overall: **15%** (the design audit is 5 points, the plan 10, its audit 5, execution 40, the implementation audit 15,
+Overall: **20%** (the design audit is 5 points, the plan 10, its audit 5, execution 40, the implementation audit 15,
 fixes 15, the Owner's review 10)
 
 | Stage | State | Output |
@@ -16,13 +16,28 @@ fixes 15, the Owner's review 10)
 | The Owner's answers (Q1 to Q5) | Done, 100% | the audit's "The Owner's answers" |
 | The Owner's pick of fonts | Done, 100% | the audit's "The fonts" |
 | 2. Plan | Done, 100% | [`plans/2026-11-14-home-redesign-site.md`](plans/2026-11-14-home-redesign-site.md) |
-| 3. Plan audit | Not started | |
-| 4. Execution | Not started (Task 3 waits for the Owner's answer to the plan's Q1) | |
+| 3. Plan audit | Done, 100% | [`audits/2026-11-14-home-redesign-plan-audit.md`](audits/2026-11-14-home-redesign-plan-audit.md) |
+| 4. Execution | Not started (Task 3 waits for the Owner's answer to the plan's Q1; nothing waits for Q2) | |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 3. The plan audit: sound in shape and true to the Owner's answers, not ready as written. Three
+  blocking findings: B1, the loading note and the note about JavaScript were drawn over the game's picture (they
+  move into the sheet, beside it); B2, the size journey asked 18 px of every `p` while the page's small labels are
+  `p` at 13 px (a label is now known by its class); B3, the first screen is about 620 px tall on a 320 by 568 phone,
+  so Play was below the fold (smaller sizes there). Eleven should-fix: S1, the top bar stays at the top; S2, lines
+  the colour of what they lie on; S3, the small Play buttons are 48 px; S4, labels are Onest's, as the spec says;
+  S5, a stamp could rest half faded; S6, the real game could be shown with the stand-in's facts; S7, a game that
+  moves would stop every build; S8, Playwright loaded inside the function, and a Node test of the pictures' server;
+  S9, the placeholders' loose ends; S10, the share picture is laid out as a card; S11, three wordings ("4 places",
+  "Part of the file is shown here", "all of the game's content"). All fourteen are written into the plan. Twelve
+  notes for execution. The palette's contrast was worked out again and agrees; the two font packages were unpacked
+  and read; one build was tried (Vite leaves a picture's address alone when the file is not there yet). Q1 is still
+  open. One new Owner question, Q2: whether the line under the claim keeps "the next six weeks", an unmeasured
+  number (nothing waits for it). No test was run: documents only.
 
 - 2026-11-14: Stage 2. The plan: nine tasks. The colours and fonts first (No. 325; Fraunces, Onest, JetBrains Mono),
   on the page as it is. Then three small Node features so nothing on the page is typed: `facts` reads the game's own
