@@ -9,7 +9,7 @@ sizes. It serves principle 1 (agent-first: the page shows the files an agent wor
 comes first.
 
 This is a design audit, not a stage of a running cycle: it comes before a plan. It decides nothing that is the
-Owner's; the five questions at the end are his.
+Owner's; the five questions at the end were his, and his answers are below.
 
 ## The answer first
 
@@ -31,6 +31,42 @@ was drawn with the site's real fonts, icons, colours and the real game's picture
 
 The draft's whole page: [desktop](2026-11-14-home-design/draft-desktop.png),
 [phone](2026-11-14-home-design/draft-phone.png).
+
+## The Owner's answers (2026-11-13 and 14)
+
+Given after the first drafts. They replace the recommendations under "For the Owner" below, which is kept as it was
+asked.
+
+- **The name is "Automata Framework"**, two words, wherever a person reads it. **The logo is the word "automata"**,
+  lower case, with no drawn mark (Q5: b). The drafts drawn before this answer show the old name and a drawn mark.
+- **Q1, the colours: neither.** "I don't like the colors": the site takes a palette from *A Dictionary of Color
+  Combinations* (Sanzo Wada). This is for the site only for now; whether the editors and the demo's screens follow is
+  decided after the site. The fonts, icons, square corners and the rule that the bright colour means "you can touch
+  this" stay. Five combinations were drawn, each with a dark ground, light words and one bright colour; **the pick
+  is still open**:
+
+  ![The draft in five combinations from the book, and in Blueprint](2026-11-14-home-design/palettes.png)
+
+  | | Combination | Ground | Words | Touchable | Fourth |
+  |---|---|---|---|---|---|
+  | A | No. 325 | Deep Slate Green `#112f2c` | Naples Yellow `#fbe6a0` | Yellow Ocher `#e2b540` | Eugenia Red `#da525d` |
+  | B | No. 276 | Black `#111314` | Seashell Pink `#fdd4bd` | Yellow Green `#afd472` | Eosine Pink `#f37f94` |
+  | C | No. 190 | Black `#111314` | Ivory Buff `#ebd3a2` | English Red `#d96629` | none |
+  | D | No. 340 | Black `#111314` | Neutral Gray `#b6bfc1` | Sea Green `#00b49b` | Peach Red `#f15a30` |
+  | E | No. 310 | Deep Slate Olive `#253122` | Sulphur Yellow `#f5ecc2` | Pinkish Cinnamon `#eeb480` | Olive `#837e31` |
+
+  The values are from the open data set of the book (`dictionary-of-colour-combinations` 1.0.2, MIT), read for the
+  drafts and not added to the site. Two shades in each draft are not the book's: the slightly lighter panels and the
+  quieter words are mixed from the ground and the words. The plan names them, holds every pair of colours a person
+  reads to a contrast test, and changes `tests/styles/`, the spec's "Visual direction" (in AutomataFramework) and
+  this repo's `CLAUDE.md` to say the site has its own palette.
+- **Q2, the claim: (a)** "Finish the game your agent started."
+- **Q3, the game before Play: (b)** the game plays its recorded play by itself on arrival, and Play hands over the
+  controls. **This needs work in AutomataFrameworkExamples first**: a way for the built game to start in a "watch"
+  state that replays `replays/level-1.json` with nothing drawn over it, and to take input when told to. That is its
+  own cycle in that repo, and the site's plan depends on it. Until it lands, the site shows the game's real picture
+  (Q3's a), so the redesign does not wait.
+- **Q4, the list: (a)** all five claims, each stamped "Works today" or "Being built".
 
 ## What makes today's page feel unfinished
 

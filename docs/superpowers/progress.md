@@ -12,10 +12,16 @@ Overall: **5%** (the design audit is 5 points; the rest is shared out when the p
 | Stage | State | Output |
 |---|---|---|
 | Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
-| The Owner's answers (Q1 to Q5) | Waiting | |
+| The Owner's answers (Q1 to Q5) | Four of five given; the palette's pick is open | the audit's "The Owner's answers" |
 | 2. Plan | Not started | |
 
 ### Log
+
+- 2026-11-14: the Owner's answers. The name is "Automata Framework" and the logo is the word "automata". The
+  colours are a palette from *A Dictionary of Color Combinations*, on the site only for now; five were drawn and the
+  pick is open. The claim is "Finish the game your agent started." The game plays its recorded play by itself
+  before Play is pressed, which needs work in AutomataFrameworkExamples first. All five claims are listed with
+  stamps.
 
 - 2026-11-14: the design audit. Nine findings (no first screen, one type size, no rhythm, Blueprint only as paint,
   words about the page, no proof shown, no motion, a dead end, no icon or share picture), a table of what the old
