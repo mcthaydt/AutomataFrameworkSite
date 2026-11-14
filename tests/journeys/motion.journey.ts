@@ -2,7 +2,7 @@
 // stamp landing as its card scrolls in, a button answering a pointer. The other journeys run with motion off (see
 // `playwright.config.ts`); this one turns it on for itself. Motion is only ever a nicety, so what these prove is that it
 // always ends fully shown and that it is gone when asked.
-import { expect, type Locator, type Page, test } from '@playwright/test'
+import { expect, type Locator, test } from '@playwright/test'
 import { arrive } from './look.ts'
 import { SIZES } from './sizes.ts'
 
