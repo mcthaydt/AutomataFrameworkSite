@@ -8,7 +8,7 @@ Spec: [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/Automa
 in AutomataFramework (Stage 1 was done there). The project-wide tracker is AutomataFramework's
 [`progress.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/progress.md).
 
-Overall: **74%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **89%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
@@ -17,10 +17,20 @@ review 10)
 | 3. Plan audit | Done, 100% | [`audits/2026-11-13-m1-site-plan-audit.md`](audits/2026-11-13-m1-site-plan-audit.md) |
 | 4. Execution | In progress, 91% (Tasks 1 to 7 done and merged; Task 8, going live, waits for the Owner's Cloudflare settings) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
 | 5. Implementation audit | Done, 100% | [`audits/2026-11-13-m1-site-implementation-audit.md`](audits/2026-11-13-m1-site-implementation-audit.md) |
-| 6. Fixes | Not started | |
+| 6. Fixes | Done in code, 100% (F1 to F6; F7 is settled by the Owner); waits for CI on its pull request | this branch's pull request |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 6, the fixes. F1: `decide` takes the run's ref and says in words that a run off `main` is built
+  and tested but never deployed, and the `deploy` job's `if` also requires `github.ref == 'refs/heads/main'`. F2: the
+  `site` workflow's jobs are `build-real` and `journeys-real` (their checks are `build-real` and
+  `journeys-real / engines (…)`), so `ci`'s `check`, `build` and `journeys / engines (…)` are the only checks of those
+  names, and a test reads both workflows and fails on a shared name. F3: in the short-window rule the playing game is
+  `100svh`, with a journey at 844 by 390 (and in the turning-the-phone journey). F4: the Play button and its ring stay
+  dark in both colour schemes, with a dark-mode journey and picture. F5: the touch journey `tap()`s each button before
+  the hold. F6: a "Try it on your machine" section in the README and `tests/docs/readme.test.ts`. F7 stays as the
+  Owner ruled (a), and the merge session checks authors. Lint, typecheck and knip pass; the tests wait for CI.
 
 - 2026-11-14: Stage 5. The implementation audit of `main` at `97b0940`: the build is what the plan asked for and
   `main` is green (73 Node tests, 40 journeys per engine; the real game passed the same journeys in `site`). The

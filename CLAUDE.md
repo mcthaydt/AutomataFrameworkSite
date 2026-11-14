@@ -150,6 +150,7 @@ tests/features/<feature>/     mirrors src/features
 tests/fixtures/               shared test helpers and the stand-in game
 tests/journeys/               end-to-end journeys in real browsers, against the built site
 tests/workflows/              checks that read a workflow
+tests/docs/                   checks that read the README
 docs/superpowers/             plans/, audits/, progress.md (the spec is in AutomataFramework)
 ```
 

@@ -5,7 +5,7 @@ import { expr, head, job, readWorkflow } from './read.ts'
 // These checks read the `site` workflow's text because a workflow only runs on GitHub.
 const site = readWorkflow('site.yml')
 const pick = job(site, 'pick')
-const build = job(site, 'build')
+const build = job(site, 'build-real')
 const deploy = job(site, 'deploy')
 const live = job(site, 'live')
 
@@ -52,15 +52,20 @@ test('the deploy job never checks out or builds the game', () => {
 })
 
 test('nothing is deployed unless the journeys passed against the real game', () => {
-  expect(deploy).toMatch(/needs: \[pick, journeys\]/)
-  expect(job(site, 'journeys')).toContain('needs: build')
-  expect(job(site, 'journeys')).toContain('uses: ./.github/workflows/journeys.yml')
+  expect(deploy).toMatch(/needs: \[pick, journeys-real\]/)
+  expect(job(site, 'journeys-real')).toContain('needs: build-real')
+  expect(job(site, 'journeys-real')).toContain('uses: ./.github/workflows/journeys.yml')
 })
 
-test('a pull request is never deployed: deploy asks only what `pick` decided', () => {
-  // `decide` is tested in tests/features/pick; here, that the job obeys it and nothing else.
-  expect(deploy).toContain(`if: needs.pick.outputs.deploy == 'true'`)
+test('a pull request is never deployed: deploy asks what `pick` decided, and that the run is on main', () => {
+  // `decide` is tested in tests/features/pick; here, that the job obeys it, and that it checks the ref itself, so a
+  // run started by hand on a branch can never reach the job that holds the token.
+  expect(deploy).toContain(`if: needs.pick.outputs.deploy == 'true' && github.ref == 'refs/heads/main'`)
   expect(deploy.match(/^ {4}if:/gm)).toHaveLength(1)
+})
+
+test('`pick` is told the ref, so it can say in words why a branch is not deployed', () => {
+  expect(readFileSync(new URL('../../scripts/pick-game.ts', import.meta.url), 'utf8')).toContain('GITHUB_REF')
 })
 
 test('the game is checked out at the picked commit, without credentials', () => {
