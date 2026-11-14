@@ -18,7 +18,8 @@ Overall: **5%** (the design audit is 5 points; the rest is shared out when the p
 ### Log
 
 - 2026-11-14: the Owner's final call on colours: A (No. 325) for the site, E (No. 310) for the editors, D (No. 340)
-  for the Examples demo game's screens. The audit holds all three sets of values.
+  for the Examples demo game's screens, and B (No. 276) for the 2D and 3D example games themselves. The audit holds
+  all four sets of values.
 
 - 2026-11-14: the Owner picked the palette: A, No. 325 (Deep Slate Green, Naples Yellow, Yellow Ocher, Eugenia Red).
   Every question is answered and the plan can start.

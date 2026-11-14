@@ -64,6 +64,11 @@ asked.
   editor), which is amended in AutomataFramework before the editors' and the game's plans use it; this audit only
   records the call.
 
+  **And B (No. 276) for the 2D and the 3D example games** (the Owner, a minute later: "B for 2D and 3D example
+  game"). This is read as the example games' own art, the colours the games themselves are drawn in, with D staying
+  for the demo's title, pause and settings screens. If the Owner meant B to replace D for those screens too, the
+  Examples plan asks before it starts; the row above has B's values either way.
+
   The values are from the open data set of the book (`dictionary-of-colour-combinations` 1.0.2, MIT), read for the
   drafts and not added to the site. Two shades in each draft are not the book's: the slightly lighter panels and the
   quieter words are mixed from the ground and the words. The plan names them, holds every pair of colours a person
