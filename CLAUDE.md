@@ -26,6 +26,8 @@ where this page is short, the spec has the detail. This repo's plans, audits and
 - **The site wears Blueprint** (the spec's "Visual direction"). The five colours and the two fonts are named only in
   `src/styles.css`, and `tests/styles/` holds the sheet to them. Marker yellow is only for what can be touched. Dark is
   the only theme. Nothing is drawn on or over the game: its art is never restyled.
+- **The fonts' and icons' licence notices** are in `public/licences.txt` (the Owner, 2026-11-14), served at
+  `/licences.txt`. Move a font or icon package to a new version, and copy its `LICENSE` there again.
 
 ## Principles
 

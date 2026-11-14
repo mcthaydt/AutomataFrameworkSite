@@ -99,7 +99,7 @@ with that pull request merged: it changes the same stylesheet and the same journ
   `ci-screens` branch.
 - **Dependencies:** exactly the three packages above, pinned to exact versions, as `devDependencies`. Nothing else.
 - **No AI attribution** in commits, the pull request or docs. Before the first commit:
-  `git config --global user.name "Dawson McThay" && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
+  `git config --global user.name McThayDT && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
 - **Conventional Commits**, one commit per task at least; a source file has at most 600 lines.
 - **Privacy:** nothing from the private notes (no product names, no references) goes in this repo.
 

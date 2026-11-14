@@ -17,7 +17,7 @@ review 10)
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
 | 4. Execution | Done, 100% | [pull request 10](https://github.com/mcthaydt/AutomataFrameworkSite/pull/10); pictures: [`ci-screens/pr-10`](https://github.com/mcthaydt/AutomataFrameworkSite/tree/ci-screens/pr-10) |
 | 5. Implementation audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-implementation-audit.md`](audits/2026-11-14-blueprint-restyle-implementation-audit.md) |
-| 6. Fixes | Done but for Q3 and Q4, 100% | the pull request that carries this row |
+| 6. Fixes | Done, 100% | the pull request that carries this row |
 | 7. Owner review | Not started | |
 
 ### Log
@@ -28,8 +28,12 @@ review 10)
   its `git config` line says `McThayDT`. M1: the commit name above is now "the pictures under `cf1084cd…/`". M2: the
   plan's steps are ticked. M3: the Tab journey collects what each stop focused and expects as many different things
   as stops. M4: the colours test also fails on a colour written as a word. M5: one `fitsSideways`, in `look.ts`. M6 is
-  the Owner's to look at in Stage 7 and is left alone. Q3 (licence notices) and Q4 (the old author name in old
-  documents) are the Owner's and are not acted on; nothing here makes either harder. No test was run locally.
+  the Owner's to look at in Stage 7 and is left alone. Q3 (the Owner chose (a)): `public/licences.txt` carries the two fonts' and the icons'
+  notices, copied from the packages' own `LICENSE` files at the pinned versions, with a journey that serves it. Q4 (the
+  Owner chose (b)): the old author name is replaced by `McThayDT` in the plans, the audits and `CLAUDE.md`; git history
+  is not rewritten, and `LICENSE` (the copyright line) is left alone for the Owner to say. Changing the account's
+  display name, which fixes future merge commits, is the Owner's: `gh api -X PATCH user -f name=McThayDT`. No test was
+  run locally.
 
 - 2026-11-14: Stage 5. The implementation audit of `main` at `5388563` (pull request 10): the site wears Blueprint as
   the spec's "Visual direction" describes it, and `main` is green in `ci` and `site`. The Owner's four decisions all

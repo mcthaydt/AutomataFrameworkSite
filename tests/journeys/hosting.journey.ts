@@ -22,6 +22,26 @@ test('a missing file of the game answers 404, not the home page', async ({ reque
   expect(response.status()).toBe(404)
 })
 
+// The fonts' and icons' licences ask that their notice travel with every copy; the site serves it as a plain file.
+test('the licence notices of the fonts and icons are served as plain text', async ({ request }) => {
+  const response = await request.get('/licences.txt')
+  expect(response.status()).toBe(200)
+  expect(response.headers()['content-type'] ?? '').toContain('text/plain')
+  const text = await response.text()
+  for (const notice of [
+    'IBM Plex Sans Condensed',
+    'Copyright 2019 IBM Corp.',
+    'JetBrains Mono',
+    'Copyright 2020 The JetBrains Mono Project Authors',
+    'SIL OPEN FONT LICENSE Version 1.1',
+    'Phosphor Icons',
+    'Copyright (c) 2023 Phosphor Icons',
+    'MIT License',
+  ]) {
+    expect(text, notice).toContain(notice)
+  }
+})
+
 test('every page is sent with its safety headers', async ({ request }) => {
   for (const address of ['/', '/play/', '/no-such-page']) {
     const response = await request.get(address)
