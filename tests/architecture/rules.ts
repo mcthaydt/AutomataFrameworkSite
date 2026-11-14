@@ -165,6 +165,22 @@ function cycles(sources: ReadonlyMap<string, Source>): string[][] {
   return groups
 }
 
+/**
+ * The line limit for the files `checkArchitecture` does not read as code: the stylesheet's parts, the journeys, the
+ * scripts and the tests (audit F6: the stylesheet reached 1,094 lines and nothing noticed, because only `.ts` under
+ * `src/` was counted). Any text file may be given; each over the limit is one violation.
+ */
+export function checkLineLimit(files: SourceFiles): Violation[] {
+  const out: Violation[] = []
+  for (const [file, text] of Object.entries(files)) {
+    const lines = text.split('\n')
+    if (lines[lines.length - 1] === '') lines.pop()
+    if (lines.length > MAX_LINES)
+      out.push({ file, rule: 'at-most-600-lines', detail: `${lines.length} lines; split the file by job.` })
+  }
+  return out.sort((a, b) => a.file.localeCompare(b.file))
+}
+
 /** Every broken rule, sorted by file then rule, so two runs read the same. An empty list is a clean tree. */
 export function checkArchitecture(files: SourceFiles): Violation[] {
   const out: Violation[] = []

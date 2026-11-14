@@ -34,7 +34,8 @@ where this page is short, the spec has the detail. This repo's plans, audits and
 - **The site has its own palette and fonts** (the spec's "Visual direction"; the Owner picked them, 2026-11-14).
   Palette No. 325 from *A Dictionary of Color Combinations*: `ground` (Deep Slate Green), `words` (Naples Yellow),
   `touch` (Yellow Ocher) and `mark` (Eugenia Red), and two shades mixed from them, `raised` (6% words in the ground)
-  and `quiet` (70%). Those six are named only in `src/styles.css`, and `tests/styles/` holds the sheet to them. `touch`
+  and `quiet` (70%). Those six are named only in `src/styles/base.css` (the sheet is split by page part into
+  `src/styles/`, and `src/styles.css` imports the parts in order), and `tests/styles/` holds every part to them. `touch`
   is only for what can be touched, and `mark` is an edge or an icon and never carries words (it is 3.64 to 1 on the
   ground). Fonts: Fraunces for the claim, titles and wordmark, Onest for words and labels, JetBrains Mono for numbers
   and file names. Dark is the only theme. Nothing is drawn on or over the game: its art is never restyled.
@@ -164,17 +165,18 @@ implementations or incomplete integrations. Do your best work."
 index.html, 404.html          the pages (Vite's entries)
 public/                       files served as they are (`_headers`)
 src/index.ts                  the page's entry
+src/styles.css, src/styles/   the stylesheet: styles.css imports the parts (base, bar, hero, parts, sizes, motion) in order
 src/build.ts                  the entry for Node: what the scripts use, nothing that needs a page
 src/lib/                      shared helpers, no feature logic
 src/features/<feature>/       <feature>.ts entry, <part>.ts one job per file
                               (lowest first: version, pick, facts, claims, assemble, icons, fill, pictures, motion, play, page)
 scripts/                      thin CLI wrappers
-tests/architecture.test.ts    imports go down, no cycles, no tests in src
+tests/architecture.test.ts    imports go down, no cycles, no tests in src, no file (a .ts, a .css, a journey) over 600 lines
 tests/features/<feature>/     mirrors src/features
 tests/fixtures/               shared test helpers and the stand-in game
 tests/fixtures/game-source/   a made-up game's repo folder: automata.toml, content/, replays/, LICENSE
 tests/journeys/               end-to-end journeys in real browsers, against the built site
-tests/styles/                 checks that read the stylesheet: the five colours, dark only, contrast
+tests/styles/                 checks that read the stylesheet's parts: the six colours, dark only, contrast
 tests/workflows/              checks that read a workflow
 tests/docs/                   checks that read the README
 docs/superpowers/             plans/, audits/, progress.md (the spec is in AutomataFramework)
@@ -184,6 +186,6 @@ Features import only from features below them. No top-level `components/`, `serv
 
 `biome.json` turns off some rules for two files and says why here, since JSON has no comments: in `index.html`, the
 accessibility rules that mistake a placeholder (`<a data-address="…">`, whose address the build fills in) and a
-keyboard-reachable file panel for mistakes; in `src/styles.css`, `noDescendingSpecificity` (the sheet is ordered by
+keyboard-reachable file panel for mistakes; in `src/styles/*.css`, `noDescendingSpecificity` (the sheet is ordered by
 page part, not by specificity) and `noImportantStyles` (the one `!important` pair is the reduced-motion switch, which
 must beat everything above it).

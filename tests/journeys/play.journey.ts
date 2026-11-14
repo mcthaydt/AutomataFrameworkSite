@@ -121,6 +121,9 @@ for (const size of [SIZES[4], SIZES[0]]) {
         await expect(page.locator('[data-play]:visible')).toHaveCount(0)
         await expect(page.locator('.sheet-head b')).toHaveText(facts.name)
         await expect(page.locator('.claims .stamp')).toHaveCount(5)
+        // The stamp's landing is the page's script: with none, the stamp is simply there (audit F2).
+        await expect(page.locator('.stamp.works')).toHaveCSS('opacity', '1')
+        await expect(page.locator('.stamp.works')).not.toHaveAttribute('data-landing', /.*/)
         expect(
           await page.locator('#game').evaluate((game) => [...game.children].map((child) => child.tagName)),
         ).toEqual(['IMG'])

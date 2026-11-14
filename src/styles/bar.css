@@ -1,0 +1,85 @@
+/* The top bar, and the buttons that sit in it and everywhere else. */
+
+/* ---- The top bar: the word and three things to press. Kept at the top only where it has them and room to spare (sizes.css). ---- */
+
+.top {
+  position: relative;
+  z-index: 10;
+  height: 64px;
+  background: var(--ground);
+  border-bottom: 1px solid var(--raised);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--words);
+  font: 600 24px / 1 var(--title);
+  text-decoration: none;
+}
+
+.top nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.top nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+/* ---- Buttons: labels in capitals, set by the sheet, so the words in the page stay as they are read out. ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--corner);
+  font: 600 15px / 1 var(--label);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.btn.main {
+  background: var(--touch);
+  color: var(--ground);
+}
+
+.btn.second {
+  border: 1px solid var(--quiet);
+  background: var(--raised);
+  color: var(--touch);
+}
+
+.btn.small {
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.btn .icon {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+/* `display` on a class beats the `hidden` attribute, and a Play button must stay unseen until the script shows it. */
+.btn[hidden] {
+  display: none;
+}

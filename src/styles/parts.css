@@ -1,0 +1,365 @@
+/* The page below the first screen: the numbers, the two parts that show the real thing, the five claims with their
+   stamps, the page that is not there, the close and the footer. */
+
+/* ---- The numbers ---- */
+
+/* A band across the window; its four cells line up with the page's own columns. */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: none;
+  padding-block: 32px;
+  padding-inline: max(var(--gutter), calc((100% - (1248px - 2 * var(--gutter))) / 2));
+  background: var(--raised);
+}
+
+/* A line that divides is the colour of the ground it lies on, never of the raised ground it divides. */
+.numbers > div {
+  padding: 8px 24px;
+}
+
+.numbers > div:first-child {
+  padding-left: 0;
+}
+
+.numbers > div + div {
+  border-left: 1px solid var(--ground);
+}
+
+.numbers dt {
+  font: 500 32px / 1.2 var(--title);
+}
+
+.numbers dd {
+  margin-top: 4px;
+  color: var(--quiet);
+}
+
+/* ---- The parts below: words beside the real thing ---- */
+
+.part {
+  padding: 128px 0;
+  border-top: 1px solid var(--raised);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.split.flip {
+  grid-template-columns: 7fr 5fr;
+}
+
+.split.flip .text {
+  order: 2;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kicker::before {
+  content: "";
+  width: 28px;
+  border-top: 1px solid var(--quiet);
+}
+
+.part h2 {
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  line-height: 1.05;
+}
+
+.sub {
+  margin-top: 16px;
+  color: var(--quiet);
+  font-size: 19px;
+}
+
+.points {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 0;
+  list-style: none;
+  color: var(--quiet);
+}
+
+.points li {
+  display: flex;
+  gap: 12px;
+}
+
+.points .icon {
+  margin-top: 0.2em;
+  color: var(--words);
+}
+
+.points strong {
+  color: var(--words);
+  font-weight: 600;
+}
+
+.more {
+  margin-top: 16px;
+}
+
+.more a {
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+}
+
+.panel {
+  min-width: 0;
+  border: 1px solid var(--words);
+  background: var(--ground);
+  box-shadow: 10px 10px 0 var(--raised);
+}
+
+.panel-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--raised);
+  color: var(--quiet);
+  font: 400 15px / 1.5 var(--measure);
+  overflow-wrap: anywhere;
+}
+
+.panel-foot {
+  padding: 8px 20px;
+  border-top: 1px solid var(--raised);
+  color: var(--quiet);
+}
+
+.panel-foot a {
+  padding: 12px 0;
+}
+
+.panel-foot [data-fact] {
+  color: var(--words);
+  font: 400 15px / 1.5 var(--measure);
+  overflow-wrap: anywhere;
+}
+
+.code {
+  padding: 16px 20px;
+  overflow-x: auto;
+  font: 400 15px / 1.8 var(--measure);
+  white-space: pre;
+}
+
+.code:focus-visible {
+  outline: 3px solid var(--words);
+  outline-offset: -3px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.row code {
+  font: inherit;
+}
+
+/* The line that runs from a row of the file to its note takes the room between them. */
+.leader {
+  flex: 1;
+  min-width: 16px;
+  border-top: 1px solid var(--quiet);
+}
+
+.note {
+  padding: 2px 8px;
+  border: 1px solid var(--words);
+  background: var(--raised);
+  font: 600 13px / 1.5 var(--label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 20px;
+  text-align: left;
+}
+
+thead th {
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  border-top: 1px solid var(--raised);
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+.same {
+  color: var(--quiet);
+  white-space: nowrap;
+}
+
+.same .icon {
+  margin-right: 8px;
+  color: var(--words);
+}
+
+/* ---- What works today: five cards, each with a stamp that says where it stands ---- */
+
+.claims {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-top: 48px;
+  padding: 0;
+  list-style: none;
+}
+
+.claim {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 20px;
+  background: var(--raised);
+}
+
+/* A line between two cards is the ground colour: a raised line on a raised ground would be no line at all. */
+.claim + .claim {
+  border-left: 1px solid var(--ground);
+}
+
+.number {
+  margin-bottom: 12px;
+  color: var(--quiet);
+  font: 400 15px / 1 var(--measure);
+}
+
+.claim h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.claim p {
+  margin-bottom: 24px;
+  color: var(--quiet);
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 6px 10px;
+  border-radius: var(--corner);
+  font: 600 13px / 1.2 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* "Works today": a 2 px mark edge and a mark icon, a little crooked, like a stamp. The words stay the words colour. */
+.stamp.works {
+  border: 2px solid var(--mark);
+  color: var(--words);
+  rotate: -3deg;
+}
+
+.stamp.works .icon {
+  color: var(--mark);
+}
+
+.stamp.building {
+  border: 1px dashed var(--quiet);
+  color: var(--quiet);
+}
+
+/* ---- The page that is not there: the same bar, one sentence and one way home ---- */
+
+.lost {
+  padding-block: 96px 128px;
+}
+
+.lost h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+.lost p {
+  margin: 16px 0 32px;
+  color: var(--quiet);
+}
+
+/* ---- The close and the footer ---- */
+
+.closing {
+  padding: 128px 0;
+  background: var(--raised);
+  text-align: center;
+}
+
+.closing h2 {
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  line-height: 1.05;
+}
+
+.closing p {
+  margin: 16px 0 32px;
+  color: var(--quiet);
+  font-size: 19px;
+}
+
+footer {
+  border-top: 1px solid var(--raised);
+}
+
+footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px 64px;
+  padding-block: 48px;
+}
+
+footer p {
+  margin-top: 8px;
+  color: var(--quiet);
+}
+
+footer nav {
+  display: flex;
+  gap: 64px;
+}
+
+footer h3 {
+  margin: 0 0 8px;
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+footer nav a {
+  display: block;
+  min-height: 44px;
+  line-height: 44px;
+}

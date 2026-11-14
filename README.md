@@ -12,7 +12,7 @@ The website for Automata Framework: one page that says what the toolkit is for a
   `index.html` that the game could change.
 - **The site has its own look**, the spec's "Visual direction": palette No. 325 (deep green ground, yellow words,
   ocher for what can be pressed, red only as an edge or an icon) and the fonts Fraunces, Onest and JetBrains Mono. The
-  colours and fonts are in `src/styles.css`, and the pictures of every run are on the `ci-screens` branch.
+  colours and fonts are in `src/styles/base.css`, and the pictures of every run are on the `ci-screens` branch.
 - **The pictures are taken by the build.** It opens the built game once in a browser and saves the picture the page
   shows before Play, the picture a shared link shows, and the touch icon.
 - **The site is static files**, hosted on Cloudflare Pages at `automataframework.pages.dev`.

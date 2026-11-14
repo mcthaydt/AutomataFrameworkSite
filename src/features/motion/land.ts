@@ -4,7 +4,7 @@
 // rests half faded. The page's own script is what hides it, so without the script, or where the device asks for less
 // motion, or in a browser with no way to know what is in view, the stamp is simply there.
 //
-// The words that name the state live here and in `src/styles.css` (`[data-landing]`).
+// The words that name the state live here and in `src/styles/parts.css` (`[data-landing]`).
 
 /** The attribute that says where a stamp stands: it is `waiting` until it has landed. */
 export const LANDING = 'data-landing'

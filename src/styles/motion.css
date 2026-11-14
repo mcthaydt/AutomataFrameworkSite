@@ -1,0 +1,120 @@
+/* The little motion, the smooth scrolling's one rule, the share card and the switch for less motion. Last, so
+   nothing above can win. */
+
+/* ---- A little motion, all of it here, none of it needed to read or press anything ---- */
+
+/* A button or a link answers a pointer and a press: the colour brightens, an underline thickens, a press sits 1 px lower. */
+a,
+.btn {
+  transition:
+    filter 140ms ease-out,
+    transform 140ms ease-out,
+    text-decoration-thickness 140ms ease-out;
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    filter: brightness(1.08);
+  }
+
+  a:hover {
+    text-decoration-thickness: 0.18em;
+  }
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* The first screen arrives once, a word group at a time, and ends fully shown. */
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.tag,
+h1,
+.lede,
+.actions {
+  animation: arrive 200ms ease-out both;
+}
+
+h1 {
+  animation-delay: 40ms;
+}
+
+.lede {
+  animation-delay: 80ms;
+}
+
+.actions {
+  animation-delay: 120ms;
+}
+
+/* The "Works today" stamp lands once, on a clock, when the whole of it is in the window (the Owner's answer to Q1; audit
+   F2). The page's script (src/features/motion/land.ts) sets `data-landing="waiting"` and later `landed`. Without the
+   script, or when a device asks for less motion, nothing sets it and the stamp is simply there. */
+.stamp.works {
+  transition:
+    opacity 220ms ease-out,
+    scale 220ms ease-out;
+}
+
+.stamp.works[data-landing="waiting"] {
+  opacity: 0;
+  scale: 1.4;
+}
+
+/* Lenis smooths the scrolling (src/features/motion) and travels to a place a press names, so the browser's own smooth
+   scroll is not asked for. Lenis's stylesheet is these lines of it; its rule that blocks pointer events on frames is
+   left out on purpose, because the game is a frame and must keep them. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+/* The share picture (audit S10, F1; the Owner's answer to Q2: "drop the intro line so the game fills about a third of
+   the card"): a card for a link preview, so nothing in it asks to be pressed, and no line of it is the lede, which the
+   preview prints under the picture anyway. What shows is the wordmark, "Being built", the claim and the top of the
+   sheet with the game's own words and the start of its level. Only `takePictures` ever sets this attribute. */
+:root[data-picture="share"] .top nav,
+:root[data-picture="share"] .tag span,
+:root[data-picture="share"] .tag .icon,
+:root[data-picture="share"] .actions,
+:root[data-picture="share"] .lede,
+:root[data-picture="share"] .sheet-head .btn,
+:root[data-picture="share"] .sheet-head .how,
+:root[data-picture="share"] .sheet-head .status {
+  display: none;
+}
+
+:root[data-picture="share"] .tag {
+  border: 0;
+  padding: 0;
+}
+
+:root[data-picture="share"] .hero {
+  padding-top: 40px;
+  text-align: center;
+}
+
+:root[data-picture="share"] h1 {
+  margin-inline: auto;
+  font-size: 5.25rem;
+}
+
+:root[data-picture="share"] .sheet {
+  margin-top: 40px;
+}
+
+/* Last, so nothing above can win: a person who asks for less motion gets none. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
