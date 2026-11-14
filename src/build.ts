@@ -2,6 +2,7 @@
 export * from './features/assemble/assemble.ts'
 export * from './features/claims/claims.ts'
 export * from './features/facts/facts.ts'
+export * from './features/fill/fill.ts'
 export * from './features/icons/icons.ts'
 export * from './features/pick/pick.ts'
 export * from './features/version/version.ts'
