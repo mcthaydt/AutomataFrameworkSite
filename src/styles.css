@@ -3,6 +3,8 @@
   color-scheme: light dark;
   --page: #fbfaf7;
   --words: #1b1b24;
+  /* The Play button and its focus ring sit on the sky, which is light in both colour schemes, so they stay dark in
+     both: dark on the sky is about 10 to 1, and a pale button on it would be 1.4 to 1. */
   --button: #1b1b24;
   --button-words: #ffffff;
   /* The game's own sky, so the frame shows no flash of another colour while it loads. */
@@ -13,8 +15,6 @@
   :root {
     --page: #14141b;
     --words: #f2f1ec;
-    --button: #f2f1ec;
-    --button-words: #14141b;
   }
 }
 
@@ -121,6 +121,13 @@ li {
     max-height: none;
     min-height: 160px;
   }
+
+  /* Once the game is playing it takes the whole window: it was scrolled to the top, and a thumb that swipes on it must
+     play, not scroll the page. */
+  #game[data-state="playing"] {
+    flex: none;
+    height: 100svh;
+  }
 }
 
 .play {
@@ -138,7 +145,7 @@ li {
 }
 
 .play:focus-visible {
-  outline: 4px solid var(--words);
+  outline: 4px solid var(--button);
   outline-offset: 4px;
 }
 

@@ -36,7 +36,14 @@ try {
   // The live site may not exist yet, or may be unreachable. Either way there is no last good game to keep.
 }
 
-const decision = decide({ event, site, picked, live, hostReady: env.HOST_READY === 'true' })
+const decision = decide({
+  event,
+  site,
+  ref: env.GITHUB_REF ?? '',
+  picked,
+  live,
+  hostReady: env.HOST_READY === 'true',
+})
 console.log(decision.reason)
 
 if (env.GITHUB_OUTPUT) {

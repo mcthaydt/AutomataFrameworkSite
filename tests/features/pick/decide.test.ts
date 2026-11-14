@@ -5,7 +5,14 @@ const SITE = 'c'.repeat(40)
 const OLD = 'd'.repeat(40)
 const A = 'a'.repeat(40)
 const B = 'b'.repeat(40)
-const base = { event: 'push', site: SITE, picked: A, live: undefined, hostReady: true } as const
+const base = {
+  event: 'push',
+  site: SITE,
+  ref: 'refs/heads/main',
+  picked: A,
+  live: undefined,
+  hostReady: true,
+} as const
 
 test('rule 1: with no game at all there is nothing to build', () =>
   expect(decide({ ...base, picked: undefined })).toEqual({
@@ -54,6 +61,21 @@ test('rule 5: otherwise it builds, and deploys when the site can be hosted', () 
     reason:
       'Building the site at ccccccc with the game at aaaaaaa. It will not be deployed: the Owner has not added CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID.',
   } satisfies Decision)
+})
+
+test('rule 2b: a run on any branch but main is built and never deployed, even when the site can be hosted', () => {
+  const reason = 'This run is on "some-branch", not main, so the site is built and tested but never deployed.'
+  for (const event of ['workflow_dispatch', 'push', 'repository_dispatch', 'schedule'] as const) {
+    expect(decide({ ...base, event, ref: 'refs/heads/some-branch' })).toEqual({
+      game: A,
+      build: true,
+      deploy: false,
+      reason,
+    } satisfies Decision)
+  }
+  // A tag, or no ref at all, is not main either.
+  expect(decide({ ...base, ref: 'refs/tags/v1' }).deploy).toBe(false)
+  expect(decide({ ...base, ref: '' }).deploy).toBe(false)
 })
 
 test('when GitHub cannot be asked, the last good game is kept', () =>

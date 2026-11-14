@@ -42,6 +42,10 @@ async function play(page: Page): Promise<FrameLocator> {
   return game
 }
 
+/** The height of the game's frame, in pixels, or 0 when there is none. */
+const frameHeight = async (page: Page): Promise<number> =>
+  (await page.locator(FRAME).boundingBox())?.height ?? 0
+
 /** True while the document is no wider than the window: no sideways scrolling. */
 const fitsSideways = (page: Page): Promise<boolean> =>
   page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)
@@ -199,11 +203,68 @@ test.describe('phone-390x844: turning the phone', () => {
     })
     await page.setViewportSize({ width: 844, height: 390 })
     await expect(page.locator(FRAME)).toBeVisible()
+    // Turned sideways, the game still takes the whole window, not what is left under the heading.
+    await expect.poll(() => frameHeight(page)).toBeGreaterThanOrEqual(389)
+    await expect.poll(() => frameHeight(page)).toBeLessThanOrEqual(391)
     expect(
       await frame?.evaluate(() => (window as unknown as { keptThroughTheTurn?: boolean }).keptThroughTheTurn),
     ).toBe(true)
     await expect(page.frameLocator(FRAME).locator('#game')).toHaveAttribute('data-state', 'playing')
     expect(await fitsSideways(page)).toBe(true)
+  })
+})
+
+// A phone held sideways has little height, so the playing game must take all of it: a thumb that swipes there has to play,
+// not scroll the page.
+test.describe('phone-844x390: playing sideways', () => {
+  test.use({ viewport: { width: 844, height: 390 } })
+
+  test('the game fills the window, from its top edge to its bottom edge', async ({ page }) => {
+    await page.goto('/')
+    await play(page)
+    await expect
+      .poll(async () => Math.abs((await page.locator(FRAME).boundingBox())?.y ?? 99))
+      .toBeLessThanOrEqual(1)
+    await expect.poll(() => frameHeight(page)).toBeGreaterThanOrEqual(389)
+    await expect.poll(() => frameHeight(page)).toBeLessThanOrEqual(391)
+  })
+})
+
+// The Play button sits on the game's sky, which is light in both colour schemes, so in dark mode the button and its
+// focus ring must still stand out from it (WCAG asks 3 to 1 for a focus ring).
+test.describe('phone-390x844: dark mode', () => {
+  test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'dark' })
+
+  test('the Play button and its focus ring are dark on the light sky', async ({ page }) => {
+    await page.goto('/')
+    const button = page.getByRole('button', { name: WORDS.play })
+    await button.focus()
+    await expect(button).toBeFocused()
+    expect(await button.evaluate((element) => element.matches(':focus-visible'))).toBe(true)
+    const colours = await page.evaluate(() => {
+      const play = document.querySelector('.play') as HTMLElement
+      const style = getComputedStyle(play)
+      return {
+        button: style.backgroundColor,
+        ring: style.outlineColor,
+        sky: getComputedStyle(document.querySelector('#game') as HTMLElement).backgroundColor,
+      }
+    })
+    const brightness = (rgb: string): number => {
+      const [r = 0, g = 0, b = 0] = (rgb.match(/\d+/g) ?? []).map((part) => {
+        const channel = Number(part) / 255
+        return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+      })
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    }
+    const contrast = (a: string, b: string): number => {
+      const [light, dark] = [brightness(a), brightness(b)].sort((x, y) => y - x)
+      return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05)
+    }
+    expect(contrast(colours.ring, colours.sky)).toBeGreaterThanOrEqual(3)
+    expect(contrast(colours.button, colours.sky)).toBeGreaterThanOrEqual(3)
+    // What a person sees: people look at this picture.
+    await page.screenshot({ path: 'tests/journeys/__screenshots__/phone-390x844-arrival-dark.png' })
   })
 })
 
@@ -230,10 +291,14 @@ for (const size of [SIZES[0], SIZES[2]]) {
         expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(size.height)
         expect(box?.width ?? 0).toBeGreaterThanOrEqual(44)
         expect(box?.height ?? 0).toBeGreaterThanOrEqual(44)
+        // A real tap: Playwright checks that this button is what receives the touch at its middle, and fails if a layer
+        // of the page or of the game covers it. (A made-up event goes straight to the button and would not notice.)
+        await button.tap()
       }
       const canvas = game.locator('canvas')
       const before = await canvas.screenshot()
       const right = game.getByRole('button', { name: 'Right', exact: true })
+      // A tap cannot be held, so the hold alone is sent as events.
       await right.dispatchEvent('pointerdown', { pointerType: 'touch', isPrimary: true })
       await expect.poll(async () => (await canvas.screenshot()).equals(before)).toBe(false)
       await right.dispatchEvent('pointerup', { pointerType: 'touch', isPrimary: true })
