@@ -31,7 +31,8 @@ closely:
 - the stamp's landing is real but cannot be seen: it happens in the bottom 32 px of the window (F2);
 - on a phone the bar that stays at the top holds only the word `automata`, and takes a tenth of the screen (F4).
 
-And one journey failed once, on this audit's own pull request, on code that had passed minutes before (F7).
+And two journeys each failed once, on this audit's own pull request, on code that had passed minutes before (F7).
+That is the finding to take first: until it is understood, a green run of this build is partly luck.
 
 **Four questions are the Owner's (Q1 to Q4)**; none is decided here and nothing waits for them but their own fix.
 
@@ -76,7 +77,7 @@ And one journey failed once, on this audit's own pull request, on code that had 
   The other journeys were read for what they cover, not line by line.
 - CI's pictures were read from `ci-screens` at `pr-17` and `pr-17-real`: arrival, whole page, playing, loading and
   not-found, at phone, tablet and computer sizes, in Chromium and WebKit, and Firefox where they differed.
-- The 15 check runs of `4ceba86` were read from the pull request (see F7 for one later run of the same code): all green (`live` and `deploy` skipped, as they
+- The 15 check runs of `4ceba86` were read from the pull request (see F7 for two later runs of the same code): all green (`live` and `deploy` skipped, as they
   are on a pull request). The `check` job's log shows **231 Node tests**; the journey counts were not recounted.
 - The site was built in a cloud container around the real game (AutomataFrameworkExamples at `1aca8cf`, built with
   its own `pnpm build`), with `pnpm build` only, which the plan allows. **No test was run locally.** The built page
@@ -152,18 +153,27 @@ buttons; the first screen and the sheet; the parts below; other sizes; motion an
 colours still named in one file only; `tests/styles/` reads all of them; the 600-line rule also reads `.css`; and
 the two journey files are split by what they prove before they grow.
 
-**F7. One journey failed once on code that had just passed.** This audit's pull request (18) adds documents to
-`4ceba86` and nothing else. On its first run, against the real game in Chromium, "tablet-1180x820: pressing each
-Play button starts the game inside the page" failed: after a press, the game inside the frame did not say it was
-playing within 5 seconds. The other 179 journeys of that job passed, and the same journey had passed on `4ceba86`
-minutes earlier. This repo's rule (`playwright.config.ts`): "a journey that passes on a retry is a defect to find,
-not something to hide." **The cause is not known**, and it cannot be read from the run: the workflow keeps the
-pictures and throws away Playwright's own record of the failure, and no trace is taken. It may be the game slow to
-start on a busy runner, or a press that started nothing; the two need different fixes and nothing kept tells them
-apart. *Fix:* `journeys.yml` uploads `test-results/` when a job fails, and the config takes a trace on failure
-(`trace: 'retain-on-failure'`), so the next one can be read; then the journey says which button it pressed in its
-failure message (the loop presses three), and the cause is found before the Owner's review. No retry, and no longer
-wait, until the cause is known.
+**F7. Two journeys each failed once on code that had just passed.** This audit's pull request (18) adds
+documents to `4ceba86` and nothing else, and it has run the checks twice. Both times one journey of 180 failed,
+against the real game, a different one each time:
+
+- Run 1, Chromium: "tablet-1180x820: pressing each Play button starts the game inside the page". After a press,
+  the game inside the frame did not say it was playing within 5 seconds.
+- Run 2, WebKit: "the game's picture is a picture of the game, not of a blank frame" counted 1 colour in
+  `/game.png`. Chromium and Firefox read the same file from the same build in the same run and passed, so the
+  picture was not blank: WebKit's canvas gave back nothing for a 2560 by 1440 picture, once.
+
+Both had passed on `4ceba86` minutes earlier, and the stand-in game's journeys passed in all three engines both
+times. This repo's rule (`playwright.config.ts`): "a journey that passes on a retry is a defect to find, not
+something to hide." **Neither cause is known**, and neither can be read from the runs: the workflow keeps the
+pictures and throws away Playwright's own record of a failure, and no trace is taken. The first may be the game
+slow to start on a busy runner, or a press that started nothing; the two need different fixes and nothing kept
+tells them apart. The second is the journey's own way of looking (a full-size canvas in the page), not the page.
+*Fix, first in Stage 6:* `journeys.yml` uploads `test-results/` when a job fails and the config takes a trace on
+failure (`trace: 'retain-on-failure'`), so the next one can be read; the Play journey says which of its three
+buttons it pressed in its failure message; the picture journey reads the file's bytes in Node (the PNG's own
+pixels) instead of through a browser's canvas, which also frees it from the engine; and each cause is found
+before the Owner's review. No retry, and no longer wait, until a cause is known.
 
 ## Minor
 

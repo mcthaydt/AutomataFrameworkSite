@@ -33,9 +33,9 @@ fixes 15, the Owner's review 10)
   cannot be seen; F3, a press on one of the page's own links leaves the keyboard and a screen reader behind; F4, on
   a phone the kept bar holds only the wordmark, and at every size a 16 px strip of the sheet's bar shows above the
   playing game; F5, three statements in the entry below are not true (answer 10, answer 13, the Node test count,
-  which is 231); F6, the stylesheet is 1,094 lines against a limit of 600; F7, one journey (a Play button on a sideways tablet,
-  Chromium, the real game) failed once on this audit's own documents-only pull request and the run kept nothing to
-  say why. Eight minor notes. Measured, since a
+  which is 231); F6, the stylesheet is 1,094 lines against a limit of 600; F7, two journeys each failed once on this audit's own documents-only pull request, a different one in each
+  of its two runs, both against the real game (a Play button on a sideways tablet in Chromium; the picture's
+  colour count in WebKit), and the runs kept nothing to say why: that is the first thing for Stage 6. Eight minor notes. Measured, since a
   cloud session cannot feel it: one 100 px wheel notch is 63% done at 80 ms and at rest at about 300 ms, ending
   exactly, with touch and keyboard left to the browser. The game's words in its picture are 14.6 px on a computer,
   11 px on an upright tablet and 5 px on a phone. Four questions for the Owner, none decided: Q1, how the stamp
