@@ -1,0 +1,90 @@
+/* The six colours (the only place any colour is named), the fonts, the corner and the gutter, and what every page shares:
+   the reset, the type, links and the focus ring, icons and the width of a page. */
+
+:root {
+  color-scheme: dark;
+  --ground: #112f2c;
+  --raised: #1f3a33;
+  --words: #fbe6a0;
+  --quiet: #b5af7d;
+  --touch: #e2b540;
+  --mark: #da525d;
+  /* Titles; words and labels; numbers and measures. Each ends in the device's own fonts, which show while the files arrive. */
+  --title: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --label: "Onest Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --measure: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  /* One square of the drawing's grid, the corner every box shares, and the side gutter of every page. */
+  --square: 48px;
+  --corner: 2px;
+  --gutter: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background-color: var(--ground);
+  color: var(--words);
+  font: 400 18px / 1.5 var(--label);
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--words);
+  color: var(--ground);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--title);
+  font-weight: 500;
+}
+
+h2 {
+  text-wrap: balance;
+}
+
+p,
+ul,
+dl,
+dd {
+  margin: 0;
+}
+
+/* The touch colour is for what can be touched, and for nothing else. A link's underline is 1 px, 3 px below the words. */
+a {
+  color: var(--touch);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* The ring is the words colour, with a gap, so it shows against the ground and beside a touch-coloured button alike. */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--words);
+  outline-offset: 3px;
+}
+
+/* An icon is as tall as the words beside it and takes their colour (the SVG's fill is currentColor). */
+.icon {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.25em;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1248px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}

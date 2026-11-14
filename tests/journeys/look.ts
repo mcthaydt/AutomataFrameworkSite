@@ -25,7 +25,7 @@ export function loadedFonts(page: Page): Promise<string[]> {
   )
 }
 
-/** The six colours (palette No. 325 and its two mixed shades) as a browser reports them (`rgb(r, g, b)`). The stylesheet's own hex values are in `src/styles.css`. */
+/** The six colours (palette No. 325 and its two mixed shades) as a browser reports them (`rgb(r, g, b)`). The stylesheet's own hex values are in `src/styles/base.css`. */
 export const TOKENS = {
   ground: 'rgb(17, 47, 44)',
   raised: 'rgb(31, 58, 51)',

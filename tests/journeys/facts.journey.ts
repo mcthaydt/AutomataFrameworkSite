@@ -2,6 +2,7 @@
 // what the page's head tells a browser and a shared link. Desktop size, in every engine; most need no page at all.
 import { expect, type Page, test } from '@playwright/test'
 import { parseVersion } from '../../src/features/version/version.ts'
+import { readPicture } from './png.ts'
 
 test.use({ viewport: { width: 1440, height: 900 } })
 
@@ -39,26 +40,14 @@ test("the game's picture, the share picture and the icons are the site's own fil
   expect(await sizeOf(page, '/apple-touch-icon.png')).toEqual([180, 180])
 })
 
-test("the game's picture is a picture of the game, not of a blank frame", async ({ page }) => {
-  await page.goto('/')
-  const colours = await page.evaluate(async () => {
-    const image = new Image()
-    image.src = '/game.png'
-    await image.decode()
-    const canvas = document.createElement('canvas')
-    // At the picture's own size: a browser that shrinks by taking one pixel in many (Firefox does) would see a flat
-    // picture as two colours, and the stand-in game is flat.
-    canvas.width = image.naturalWidth
-    canvas.height = image.naturalHeight
-    const context = canvas.getContext('2d')
-    if (context === null) return 0
-    context.drawImage(image, 0, 0)
-    const data = context.getImageData(0, 0, canvas.width, canvas.height).data
-    const seen = new Set<string>()
-    for (let at = 0; at < data.length; at += 4) seen.add(`${data[at]},${data[at + 1]},${data[at + 2]}`)
-    return seen.size
-  })
-  expect(colours).toBeGreaterThan(3)
+// Read from the file's own bytes in Node, not drawn on a canvas in the browser: a browser short of memory may hand back an
+// empty canvas for a picture this large (WebKit did, once, and the journey counted one colour in a good picture).
+test("the game's picture is a picture of the game, not of a blank frame", async ({ request }) => {
+  const response = await request.get('/game.png')
+  const picture = readPicture(await response.body())
+  expect([picture.width, picture.height]).toEqual([2560, 1440])
+  // The stand-in game is flat and still has its words and a ground, so more than three colours means "not blank".
+  expect(picture.colours).toBeGreaterThan(3)
 })
 
 test('the page tells a browser and a shared link what it is', async ({ page }) => {

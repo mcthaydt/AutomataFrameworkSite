@@ -12,7 +12,7 @@ The website for Automata Framework: one page that says what the toolkit is for a
   `index.html` that the game could change.
 - **The site has its own look**, the spec's "Visual direction": palette No. 325 (deep green ground, yellow words,
   ocher for what can be pressed, red only as an edge or an icon) and the fonts Fraunces, Onest and JetBrains Mono. The
-  colours and fonts are in `src/styles.css`, and the pictures of every run are on the `ci-screens` branch.
+  colours and fonts are in `src/styles/base.css`, and the pictures of every run are on the `ci-screens` branch.
 - **The pictures are taken by the build.** It opens the built game once in a browser and saves the picture the page
   shows before Play, the picture a shared link shows, and the touch icon.
 - **The site is static files**, hosted on Cloudflare Pages at `automataframework.pages.dev`.
@@ -55,7 +55,8 @@ To see the real game on the page instead of the stand-in:
 ```
 git clone https://github.com/mcthaydt/AutomataFrameworkExamples ../AutomataFrameworkExamples
 (cd ../AutomataFrameworkExamples && pnpm install && pnpm build)
-GAME_DIR=../AutomataFrameworkExamples/dist GAME_SOURCE=../AutomataFrameworkExamples pnpm build
+GAME_DIR=../AutomataFrameworkExamples/dist GAME_SOURCE=../AutomataFrameworkExamples \
+GAME_COMMIT=$(git -C ../AutomataFrameworkExamples rev-parse HEAD) pnpm build
 pnpm exec wrangler pages dev dist
 ```
 
@@ -63,7 +64,9 @@ pnpm exec wrangler pages dev dist
 - `GAME_DIR=… pnpm build` builds the site again, with that game inside it, in place of the stand-in. `GAME_SOURCE=…`
   always goes with it: it is the game's own folder, where the numbers on the page are read from (the game's name, its
   level, its recorded play and its licence). A build with `GAME_DIR` and no `GAME_SOURCE` stops and says so, because
-  the page would otherwise show one game's numbers beside another game.
+  the page would otherwise show one game's numbers beside another game. `GAME_COMMIT=…` names the version of the game
+  the page shows (the line above reads it from the game's folder); without it the page says "fixture", which is the
+  stand-in's.
 - The last line serves it, at the same address as before.
 
 Something went wrong? Read the last line the command printed: it says what is missing. The most common cause is an older

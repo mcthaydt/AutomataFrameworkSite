@@ -16,17 +16,19 @@ import {
 /** The three failures with a plain sentence of their own: the build ends on the sentence, not on a stack of code. */
 const SENTENCES = [FactsError, ClaimError, FillError]
 
-/** What a Vite plugin hook is bound to: `error` stops the build with a message and nothing else. */
-interface Stopper {
-  error(message: string): never
-}
-
-/** Runs `work`; a failure with its own sentence stops the build with that sentence (audit N3). */
-function orStop<T>(context: Stopper, work: () => T): T {
+/**
+ * Runs `work`; a failure with its own sentence ends the build on that sentence, and nothing after it (audit N3, M3).
+ * Stopping through the bundler (`this.error`) printed the sentence and then thirteen lines of the bundler's own stack,
+ * so the sentence is printed here and the build exits.
+ */
+function orStop<T>(work: () => T): T {
   try {
     return work()
   } catch (error) {
-    if (SENTENCES.some((kind) => error instanceof kind)) context.error((error as Error).message)
+    if (SENTENCES.some((kind) => error instanceof kind)) {
+      console.error(`\n${(error as Error).message}`)
+      process.exit(1)
+    }
     throw error
   }
 }
@@ -40,7 +42,7 @@ function fill(): Plugin {
   return {
     name: 'fill',
     buildStart() {
-      facts = orStop(this, () =>
+      facts = orStop(() =>
         readFacts({
           sourceDir: sourceFolder(process.env),
           commit: process.env.GAME_COMMIT ?? 'fixture',
@@ -50,9 +52,7 @@ function fill(): Plugin {
     transformIndexHtml(html, ctx) {
       const known = facts
       if (known === undefined) return html
-      return orStop(this as unknown as Stopper, () =>
-        fillPage(html, known, CLAIMS, ctx.path.replace(/^\//, '')),
-      )
+      return orStop(() => fillPage(html, known, CLAIMS, ctx.path.replace(/^\//, '')))
     },
   }
 }

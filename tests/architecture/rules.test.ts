@@ -1,6 +1,6 @@
 // Lifted from AutomataFramework@ec4fddd9: tests/architecture/rules.test.ts
 import { expect, test } from 'vitest'
-import { checkArchitecture, type SourceFiles } from './rules.ts'
+import { checkArchitecture, checkLineLimit, type SourceFiles } from './rules.ts'
 
 // Each case is a made-up file map with exactly one fault, so the answer is one rule's name. Files in a feature
 // folder are named after the feature's entry, so `feature-has-entry` stays quiet unless it is the one under test.
@@ -34,6 +34,18 @@ test('no tests in src', () => expect(one({ 'src/lib/a.test.ts': '' })).toEqual([
 
 test('a file has at most 600 lines', () =>
   expect(one({ 'src/lib/a.ts': 'x\n'.repeat(601) })).toEqual(['at-most-600-lines']))
+
+test('a stylesheet part or a journey is held to the same 600 lines', () => {
+  const files = {
+    'src/styles/a.css': 'a {}\n'.repeat(601),
+    'tests/journeys/b.journey.ts': 'x\n'.repeat(600),
+    'tests/journeys/c.journey.ts': 'x\n'.repeat(601),
+  }
+  expect(checkLineLimit(files).map((v) => v.file)).toEqual([
+    'src/styles/a.css',
+    'tests/journeys/c.journey.ts',
+  ])
+})
 
 test('a feature folder has its entry file', () =>
   expect(one({ 'src/features/version/other.ts': '' })).toEqual(['feature-has-entry']))

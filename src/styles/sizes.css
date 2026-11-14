@@ -1,0 +1,218 @@
+/* How the page changes for other sizes of window. Last of the layout, so a size's rule wins over a base rule. */
+
+/* ---- Other sizes of window ---- */
+
+/* The bar is kept at the top only where it has its three things to press (700 px wide) and the window is tall enough to
+   spare it. On a phone it holds the word alone, so it scrolls away with the page, and a press that brings the game up
+   puts the game's own top edge at the window's (audit F4). Where the bar is kept, a press stops short of it: the game
+   flush under it (64 px) with no strip of the page between, and the other places 16 px further down, so a heading is
+   not set hard against the bar's line. In a window under 500 px high the playing game takes the whole window. */
+@media (min-width: 700px) and (min-height: 500px) {
+  .top {
+    position: sticky;
+    top: 0;
+  }
+
+  #today,
+  .sheet {
+    scroll-margin-top: 80px;
+  }
+
+  #game {
+    scroll-margin-top: 64px;
+  }
+}
+
+/* A section takes the keyboard's focus when a link brings it up (audit F3), and a section is not a control: no ring. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+@media (max-width: 1023px) {
+  .part {
+    padding: 80px 0;
+  }
+
+  .closing {
+    padding-block: 80px;
+  }
+
+  .split,
+  .split.flip {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .split.flip .text {
+    order: 0;
+  }
+
+  .claims {
+    grid-template-columns: 1fr;
+  }
+
+  .claim + .claim {
+    border-top: 1px solid var(--ground);
+    border-left: 0;
+  }
+
+  .numbers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .numbers > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .numbers > div:nth-child(n + 3) {
+    border-top: 1px solid var(--ground);
+  }
+}
+
+@media (max-width: 759px) {
+  :root {
+    --gutter: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+
+  .hero {
+    padding-bottom: 64px;
+    text-align: left;
+  }
+
+  .lede {
+    margin-left: 0;
+    font-size: 19px;
+  }
+
+  h1 {
+    margin-left: 0;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+
+  .sheet {
+    margin-top: 48px;
+  }
+
+  .sheet-head .quiet {
+    display: none;
+  }
+
+  .how {
+    flex-basis: 100%;
+  }
+
+  .title-block {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .title-block > div:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--raised);
+    border-left: 0;
+  }
+
+  .closing {
+    text-align: left;
+  }
+
+  .closing .btn {
+    width: 100%;
+  }
+
+  /* A note goes under its row instead of beside it, so no row is wider for it. */
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .leader {
+    display: none;
+  }
+
+  th,
+  td {
+    padding: 12px 16px;
+  }
+
+  footer nav {
+    gap: 40px;
+  }
+}
+
+/* On a narrow phone the four numbers stand one under another: two to a row, "360 steps" and "3 small files" broke into two
+   lines and "4 places" and "MIT" did not, so the cells had two heights of heading (audit M5). */
+@media (max-width: 479px) {
+  .numbers {
+    grid-template-columns: 1fr;
+  }
+
+  .numbers > div,
+  .numbers > div + div,
+  .numbers > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .numbers > div + div {
+    border-top: 1px solid var(--ground);
+  }
+}
+
+/* On a narrow phone the tag's arrow would wrap onto a line of its own, and it only decorates the words beside it. */
+@media (max-width: 479px) {
+  .tag .icon {
+    display: none;
+  }
+}
+
+/* The bar keeps only the word on a phone: its three things are below the first screen's own buttons. */
+@media (max-width: 699px) {
+  .top nav {
+    display: none;
+  }
+}
+
+/* Smaller first screens, so the wordmark, the claim, the lede and the main button fit before any scroll (audit B3): a
+   320 by 568 phone, and any window under 600 px high. */
+@media (max-width: 359px), (max-height: 599px) {
+  .tag {
+    display: none;
+  }
+
+  h1 {
+    margin-top: 0;
+    font-size: 2.1rem;
+  }
+
+  .lede {
+    font-size: 18px;
+  }
+}
+
+/* A phone on its side: the same four things fit, and the claim can be a little larger. */
+@media (max-height: 499px) {
+  .hero {
+    padding-top: 24px;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  .lede {
+    margin-top: 12px;
+  }
+
+  .actions {
+    margin-top: 16px;
+  }
+}

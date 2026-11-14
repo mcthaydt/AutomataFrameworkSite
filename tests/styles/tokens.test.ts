@@ -1,7 +1,7 @@
 // The stylesheet's colours, read as text: they are palette No. 325's four and the two shades mixed from them, and no
 // others; dark is the only theme, and the pairs the page puts together are readable. A browser draws the rest; the
 // journeys measure that.
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { expect, test } from 'vitest'
 import { contrast } from '../fixtures/contrast.ts'
 
@@ -9,9 +9,37 @@ import { contrast } from '../fixtures/contrast.ts'
 const BOOK = { ground: '#112F2C', words: '#FBE6A0', touch: '#E2B540', mark: '#DA525D' }
 const MIXED = { raised: '#1F3A33', quiet: '#B5AF7D' }
 const SPEC = { ...BOOK, ...MIXED }
-const css = readFileSync(new URL('../../src/styles.css', import.meta.url), 'utf8')
+// The sheet is `src/styles.css`, which imports the parts in `src/styles/`; every rule below holds for the parts together.
+const PARTS = readdirSync(new URL('../../src/styles/', import.meta.url))
+  .filter((name) => name.endsWith('.css'))
+  .sort()
+const part = (name: string): string =>
+  readFileSync(new URL(`../../src/styles/${name}`, import.meta.url), 'utf8')
+const entry = readFileSync(new URL('../../src/styles.css', import.meta.url), 'utf8')
+const css = [entry, ...PARTS.map(part)].join('\n')
 const token = (name: string): string =>
   new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6});`).exec(css)?.[1]?.toUpperCase() ?? ''
+
+// The sheet's entry imports every part, in the order the rules must win, and no part is left out of it.
+test('the entry imports every part, once, in the order the layout needs', () => {
+  expect([...entry.matchAll(/@import "\.\/styles\/([a-z-]+\.css)";/g)].map((match) => match[1])).toEqual([
+    'base.css',
+    'bar.css',
+    'hero.css',
+    'parts.css',
+    'sizes.css',
+    'motion.css',
+  ])
+  expect(PARTS).toEqual(['bar.css', 'base.css', 'hero.css', 'motion.css', 'parts.css', 'sizes.css'])
+})
+
+// Where a colour is named, it is named once: the six hex values are in base.css and in no other part.
+test('the six colours are named in base.css and nowhere else', () => {
+  for (const name of PARTS) {
+    const hex = part(name).match(/#[0-9a-fA-F]{3,8}\b/g) ?? []
+    expect(hex.length, name).toBe(name === 'base.css' ? 6 : 0)
+  }
+})
 
 test.each(Object.entries(SPEC))("%s is the spec's colour, %s", (name, value) =>
   expect(token(name)).toBe(value),

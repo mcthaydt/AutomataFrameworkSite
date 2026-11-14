@@ -1,5 +1,5 @@
 // The little motion the page has, and that it stays off for a person who asks for less: the first screen arriving, a
-// stamp landing as its card scrolls in, a button answering a pointer. The other journeys run with motion off (see
+// stamp landing when it is in view, a button answering a pointer. The other journeys run with motion off (see
 // `playwright.config.ts`); this one turns it on for itself. Motion is only ever a nicety, so what these prove is that it
 // always ends fully shown and that it is gone when asked.
 import { expect, type Locator, type Page, test } from '@playwright/test'
@@ -69,26 +69,57 @@ for (const size of SHOWN_AT) {
       }
     })
 
-    // Audit S5: the landing follows the scroll and ends the moment the whole stamp is in the window, so a page at rest
-    // never shows the stamp half faded, wherever it rests.
-    test('a stamp that is wholly in the window is wholly landed, wherever the page rests', async ({
+    // Audit F2, and the Owner's answer to Q1: the stamp waits out of sight, lands once on a clock when the whole of it is
+    // in the window, and is never left half faded.
+    test('the "Works today" stamp waits, lands once when wholly in the window, and stays landed', async ({
       page,
     }) => {
       await arrive(page)
       const stamp = page.locator('.stamp.works')
-      await scrollBottomTo(stamp, 8)
-      const landed = (): Promise<{ opacity: string; scale: string }> =>
+      const state = (): Promise<{ landing: string | null; opacity: string; scale: string }> =>
         stamp.evaluate((element) => {
           const s = getComputedStyle(element)
-          return { opacity: s.opacity, scale: s.scale }
+          return { landing: element.getAttribute('data-landing'), opacity: s.opacity, scale: s.scale }
         })
-      await expect.poll(landed).toEqual({ opacity: '1', scale: expect.stringMatching(/^(none|1)$/) })
-      // Pressing "What works today" in the bar travels there, and the stamp is landed when it arrives.
+      // Far below the window, it is waiting, out of sight and a little large.
+      await expect.poll(state).toEqual({ landing: 'waiting', opacity: '0', scale: '1.4' })
+      // With a good part of it (16 px) still below the window's edge it has not landed; once all of it is in, it does.
+      await stamp.evaluate((element) => {
+        const box = element.getBoundingClientRect()
+        window.scrollTo({ top: box.bottom + window.scrollY - window.innerHeight - 16, behavior: 'instant' })
+      })
+      await page.evaluate(() => new Promise((done) => setTimeout(done, 300)))
+      expect((await state()).landing).toBe('waiting')
+      await scrollBottomTo(stamp, 8)
+      await expect
+        .poll(state)
+        .toEqual({ landing: 'landed', opacity: '1', scale: expect.stringMatching(/^(none|1)$/) })
+      // It takes about a fifth of a second (220 ms), on a clock and not on the scroll.
+      expect(await stamp.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe(
+        '0.22s, 0.22s',
+      )
+      // Once: away and back, it is landed the whole time and does not wait again.
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+      expect((await state()).landing).toBe('landed')
+      await scrollBottomTo(stamp, 8)
+      expect(await state()).toEqual({
+        landing: 'landed',
+        opacity: '1',
+        scale: expect.stringMatching(/^(none|1)$/),
+      })
+    })
+
+    test('a press on "What works today" brings the stamp in, and it lands', async ({ page }) => {
+      await arrive(page)
       // The bar's link on a wide window, the tag's on a phone, where the bar keeps only its Play button.
       await page.locator('a[href="#today"]:visible').first().click()
       await expect(page.locator('#today h2')).toBeInViewport()
-      await expect.poll(landed).toEqual({ opacity: '1', scale: expect.stringMatching(/^(none|1)$/) })
+      await expect
+        .poll(() => page.locator('.stamp.works').evaluate((element) => element.getAttribute('data-landing')))
+        .toBe('landed')
+      await expect
+        .poll(() => page.locator('.stamp.works').evaluate((element) => getComputedStyle(element).opacity))
+        .toBe('1')
     })
 
     // Super subtle smoothing (Lenis): a turn of the wheel ends where the browser would have put it.
@@ -98,13 +129,21 @@ for (const size of SHOWN_AT) {
       await wheelDown(page)
     })
 
-    test('a press on "What works today" travels there and stops short of the bar', async ({ page }) => {
+    // Where the bar is kept (700 px wide and up) a press stops 80 px short of it; on a phone there is no kept bar, so the
+    // place is at the window's top edge (audit F4).
+    test('a press on "What works today" travels there, and stops short of the bar where there is one', async ({
+      page,
+    }) => {
       await arrive(page)
+      const kept = size.width >= 700
       await page.locator('a[href="#today"]:visible').first().click()
       await expect(page.locator('#today h2')).toBeInViewport()
-      await expect
-        .poll(async () => (await page.locator('#today').boundingBox())?.y ?? -1)
-        .toBeGreaterThanOrEqual(78)
+      const top = async (): Promise<number> =>
+        Math.round((await page.locator('#today').boundingBox())?.y ?? -99)
+      // 80 where the bar is kept (it clears the bar by 16 px), flush with the window's top where it is not. The page is
+      // long enough to scroll all the way there at every size.
+      await expect.poll(top).toBeLessThanOrEqual(kept ? 82 : 2)
+      expect(await top()).toBeGreaterThanOrEqual(kept ? 78 : -1)
       await expect(page).toHaveURL(/#today$/)
     })
 
@@ -127,13 +166,15 @@ for (const size of SHOWN_AT) {
 test.describe('with reduced motion', () => {
   test.use({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' })
 
-  test('nothing moves', async ({ page }) => {
+  test("nothing moves but the wheel's easing", async ({ page }) => {
     await arrive(page)
     expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)
     await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }))
     expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)
     for (const stamp of await page.locator('.stamp').all())
       expect(await stamp.evaluate((element) => getComputedStyle(element).opacity)).toBe('1')
+    // Nothing is made to wait: with less motion the stamp is simply there (the script does not hide it).
+    expect(await page.locator('[data-landing]').count()).toBe(0)
     const durations = await page
       .locator('a, .btn')
       .evaluateAll((all) => all.map((element) => getComputedStyle(element).transitionDuration))
