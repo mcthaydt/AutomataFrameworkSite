@@ -28,8 +28,8 @@ review 10)
   `main` would deploy (fix before Task 8); F2, `ci` and `site` share job names, so required checks are ambiguous; F3,
   the playing game is too short on a sideways phone; F4, the Play button and its focus ring fade in dark mode; F5,
   the touch journey skips hit testing; F6, the README has no commands for a first-time developer; F7, one commit on
-  `main` is authored by "Claude". Six minor notes, and one Owner question (Q1, about F7's commit). All of Stage 4's
-  rulings stand. `main`'s protection is now on.
+  `main` is authored by "Claude". Six minor notes, and one Owner question (Q1, about F7's commit), answered (a): the
+  commit stays, and the merge session checks commit authors before every merge. All of Stage 4's rulings stand. `main`'s protection is now on.
 
 - 2026-11-13: Stage 4, Task 7 done: the `site` workflow. The Owner chose to keep the strict header (the eval was zod's
   probe), the framework fixed it (AutomataFramework 9109fa3), Examples moved its pin (9fab3c0), and the re-run of
