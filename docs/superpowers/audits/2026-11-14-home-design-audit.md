@@ -82,6 +82,64 @@ asked.
   (Q3's a), so the redesign does not wait.
 - **Q4, the list: (a)** all five claims, each stamped "Works today" or "Being built".
 
+## The fonts (asked 2026-11-14, the pick is open)
+
+The Owner, after the palettes: "we need a better font combination too now, the palette is too great for basic
+fonts", and then: two combinations, one for **the site and the editors**, one for **the Examples screens and both
+demo games**. The first must cover the editors' nine languages (Latin, Cyrillic, Korean, Japanese, Chinese); the
+second the games' six (Latin, Korean, Japanese, Chinese). Every font below is under the SIL Open Font License and
+comes as a Fontsource package, so the site serves its own files and the safety header does not change. The Korean,
+Japanese and Chinese packages are cut into many small files and a page fetches only the ones its words need; a game
+that draws its words on a canvas has to ask for them itself, which is the game's plan to settle. **Each package is a
+new dependency and needs the Owner's yes.**
+
+### Combination 1: the site and the editors
+
+A face for the claim and titles, a face for words and buttons, a mono for measures. The draft in the site's palette:
+
+![The site's first screen in four font combinations](2026-11-14-home-design/fonts-site.png)
+
+The same four as an editor's bar and words in all nine languages, in the editors' palette:
+
+![The editors' sample in nine languages](2026-11-14-home-design/fonts-editors.png)
+
+| | Titles | Words | Mono | Packages |
+|---|---|---|---|---|
+| 1A | Instrument Serif | Geist | Geist Mono | `@fontsource/instrument-serif`, `@fontsource-variable/geist`, `@fontsource-variable/geist-mono` |
+| 1B | Fraunces | Onest | JetBrains Mono | `@fontsource-variable/fraunces`, `@fontsource-variable/onest`, and `@fontsource/jetbrains-mono` (already approved) |
+| 1C | Bricolage Grotesque | Manrope | Martian Mono | `@fontsource-variable/bricolage-grotesque`, `@fontsource-variable/manrope`, `@fontsource-variable/martian-mono` |
+| 1D | Unbounded | Onest | JetBrains Mono | `@fontsource-variable/unbounded`, `@fontsource-variable/onest`, and `@fontsource/jetbrains-mono` (already approved) |
+
+All four add `@fontsource/noto-sans-kr`, `@fontsource/noto-sans-jp` and `@fontsource/noto-sans-sc` for the editors
+(the site is English only today and needs none of the three). Every words face and mono covers Cyrillic. The title
+faces of 1A, 1B and 1C are Latin only, so a Russian, Korean, Japanese or Chinese title is set in the words face,
+heavier (the sample shows it); 1D's Unbounded has Cyrillic of its own.
+
+**Recommended: 1B.** Fraunces is warm and a little odd, which is what the green and ocher ask for, and it is the one
+that looks least like every other tool's site. Onest was drawn for Cyrillic as much as Latin and stays clear at
+small sizes in a tool. 1A is the safe second: it is the look of many current launch sites, and its words and mono are
+the old site's own.
+
+### Combination 2: the Examples screens and the demo games
+
+One Latin face with a partner for each of Japanese, Korean and Chinese. Each is shown twice, in the Examples
+screens' palette (No. 340) and the games' (No. 276), in all six languages:
+
+![A title screen in six languages, three combinations, two palettes](2026-11-14-home-design/fonts-games.png)
+
+| | Latin | Japanese | Korean | Chinese | Packages |
+|---|---|---|---|---|---|
+| 2A | Fredoka | M PLUS Rounded 1c | Jua | ZCOOL KuaiLe | `@fontsource/fredoka`, `@fontsource/m-plus-rounded-1c`, `@fontsource/jua`, `@fontsource/zcool-kuaile` |
+| 2B | Oxanium | Zen Kaku Gothic New | Gothic A1 | Noto Sans SC | `@fontsource/oxanium`, `@fontsource/zen-kaku-gothic-new`, `@fontsource/gothic-a1`, `@fontsource/noto-sans-sc` |
+| 2C | Space Grotesk | Noto Sans JP | Noto Sans KR | Noto Sans SC | `@fontsource/space-grotesk`, `@fontsource/noto-sans-jp`, `@fontsource/noto-sans-kr`, `@fontsource/noto-sans-sc` |
+
+**Recommended: 2B.** Every language has a regular and a bold, numbers look the same in all six, and small words stay
+readable on a phone. 2A has the most character and suits the pink and green best, but Jua and ZCOOL KuaiLe come in
+one weight only, their numbers are odd (the "80" in the Chinese card), and small words get hard to read; it would
+need a second, plainer face for settings and long text. 2C is the plainest and the safest.
+
+These fonts are the screens' and the menus'. A game's own art keeps whatever look its maker gives it.
+
 ## What makes today's page feel unfinished
 
 Each finding names where it shows. "The old site" means the first attempt's Home.

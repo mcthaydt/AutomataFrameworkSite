@@ -13,9 +13,15 @@ Overall: **5%** (the design audit is 5 points; the rest is shared out when the p
 |---|---|---|
 | Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
 | The Owner's answers (Q1 to Q5) | Done, 100% | the audit's "The Owner's answers" |
+| The Owner's pick of fonts | Waiting | the audit's "The fonts" |
 | 2. Plan | Not started | |
 
 ### Log
+
+- 2026-11-14: the fonts. The Owner asked for better ones than the two the site has: one combination for the site and
+  the editors (nine languages), one for the Examples screens and the demo games (six). Four of the first and three
+  of the second were drawn in their palettes and languages, with the packages each needs. Recommended: Fraunces,
+  Onest and JetBrains Mono; and Oxanium with Zen Kaku Gothic New, Gothic A1 and Noto Sans SC. The pick is open.
 
 - 2026-11-14: the Owner's final call on colours: A (No. 325) for the site, E (No. 310) for the editors, D (No. 340)
   for the Examples demo game's screens, and B (No. 276) for the 2D and 3D example games themselves. The audit holds
