@@ -29,8 +29,10 @@ test('the licence notices of the fonts and icons are served as plain text', asyn
   expect(response.headers()['content-type'] ?? '').toContain('text/plain')
   const text = await response.text()
   for (const notice of [
-    'IBM Plex Sans Condensed',
-    'Copyright 2019 IBM Corp.',
+    'Fraunces',
+    'Copyright 2020 The Fraunces Project Authors',
+    'Onest',
+    'Copyright 2021 The Onest Project Authors',
     'JetBrains Mono',
     'Copyright 2020 The JetBrains Mono Project Authors',
     'SIL OPEN FONT LICENSE Version 1.1',

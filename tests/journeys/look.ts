@@ -2,9 +2,11 @@
 // pictured (a late font moves the words), and say which fonts the browser really loaded.
 import type { Page } from '@playwright/test'
 
+/** The font for the claim, titles and the wordmark. */
+export const TITLE = 'Fraunces Variable'
 /** The font for words and labels. */
-export const LABEL = 'IBM Plex Sans Condensed'
-/** The font for numbers and measures. */
+export const LABEL = 'Onest Variable'
+/** The font for numbers, file names and measures. */
 export const MEASURE = 'JetBrains Mono'
 
 /** Opens an address and waits until every font the page asked for so far has arrived (or failed). */
@@ -32,13 +34,14 @@ export function loadedFonts(page: Page): Promise<string[]> {
   )
 }
 
-/** The five Blueprint colours as a browser reports them (`rgb(r, g, b)`). The stylesheet's own hex values are in `src/styles.css`. */
+/** The six colours (palette No. 325 and its two mixed shades) as a browser reports them (`rgb(r, g, b)`). The stylesheet's own hex values are in `src/styles.css`. */
 export const TOKENS = {
-  paper: 'rgb(10, 31, 60)',
-  hatch: 'rgb(14, 42, 80)',
-  chalk: 'rgb(234, 242, 250)',
-  pencil: 'rgb(143, 176, 211)',
-  marker: 'rgb(255, 212, 71)',
+  ground: 'rgb(17, 47, 44)',
+  raised: 'rgb(31, 58, 51)',
+  words: 'rgb(251, 230, 160)',
+  quiet: 'rgb(181, 175, 125)',
+  touch: 'rgb(226, 181, 64)',
+  mark: 'rgb(218, 82, 93)',
 } as const
 
 /** Everything on the page that says something. A `li` whose words are in a `span` is counted once, by its `span`. */

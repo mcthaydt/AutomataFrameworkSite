@@ -19,13 +19,17 @@ where this page is short, the spec has the detail. This repo's plans, audits and
 - **Site copy is where strategy leaks.** Words on a page come from the public spec and READMEs. Nothing is copied from
   the private notes; a plan may say "the brief is in the private notes" and no more.
 - **Dependencies the Owner approved for this repo** (2026-11-13): `wrangler` 4.140.0, `@playwright/test` 1.63.0,
-  `@types/node` 24.19.1, and (2026-11-14, for the Blueprint
-  look) `@fontsource/ibm-plex-sans-condensed` 5.3.0, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core`
-  2.1.1, all development-only. `knip.json` is told to ignore the three, because knip reads neither CSS `@import`s
-  (the fonts) nor the icon reader's `import.meta.resolve` (the icons).
-- **The site wears Blueprint** (the spec's "Visual direction"). The five colours and the two fonts are named only in
-  `src/styles.css`, and `tests/styles/` holds the sheet to them. Marker yellow is only for what can be touched. Dark is
-  the only theme. Nothing is drawn on or over the game: its art is never restyled.
+  `@types/node` 24.19.1, and (2026-11-14, for the site's look) `@fontsource-variable/fraunces` 5.3.0,
+  `@fontsource-variable/onest` 5.3.1, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core` 2.1.1, all
+  development-only. `knip.json` is told to ignore the four, because knip reads neither CSS `@import`s (the fonts) nor
+  the icon reader's `import.meta.resolve` (the icons).
+- **The site has its own palette and fonts** (the spec's "Visual direction"; the Owner picked them, 2026-11-14).
+  Palette No. 325 from *A Dictionary of Color Combinations*: `ground` (Deep Slate Green), `words` (Naples Yellow),
+  `touch` (Yellow Ocher) and `mark` (Eugenia Red), and two shades mixed from them, `raised` (6% words in the ground)
+  and `quiet` (70%). Those six are named only in `src/styles.css`, and `tests/styles/` holds the sheet to them. `touch`
+  is only for what can be touched, and `mark` is an edge or an icon and never carries words (it is 3.64 to 1 on the
+  ground). Fonts: Fraunces for the claim, titles and wordmark, Onest for words and labels, JetBrains Mono for numbers
+  and file names. Dark is the only theme. Nothing is drawn on or over the game: its art is never restyled.
 - **The fonts' and icons' licence notices** are in `public/licences.txt` (the Owner, 2026-11-14), served at
   `/licences.txt`. Move a font or icon package to a new version, and copy its `LICENSE` there again.
 

@@ -1,28 +1,36 @@
 Licences of what this site's pages are made with
 ================================================
 
-The words on these pages are set in two fonts, and the small pictures beside them are icons. Each comes with a
+The words on these pages are set in three fonts, and the small pictures beside them are icons. Each comes with a
 licence, and the licence asks that its notice travel with every copy. Here they are.
 
 
-IBM Plex Sans Condensed (the words and labels)
-----------------------------------------------
+Fraunces (the claim, the titles and the wordmark; package @fontsource-variable/fraunces 5.3.0)
+-----------------------------------------------------------------------------------------------
 
-Copyright 2019 IBM Corp. All rights reserved.
+Copyright 2020 The Fraunces Project Authors (github.com/undercasetype/Fraunces)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1. The licence is copied below.
 
 
-JetBrains Mono (the numbers)
-----------------------------
+Onest (the words and labels; package @fontsource-variable/onest 5.3.1)
+-----------------------------------------------------------------------
+
+Copyright 2021 The Onest Project Authors (https://github.com/simpals/onest)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1. The licence is copied below.
+
+
+JetBrains Mono (the numbers and file names)
+-------------------------------------------
 
 Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1. The licence is copied below.
 
 
-SIL Open Font License, Version 1.1 (both fonts)
------------------------------------------------
+SIL Open Font License, Version 1.1 (all three fonts)
+----------------------------------------------------
 
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
 

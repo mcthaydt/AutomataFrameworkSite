@@ -12,6 +12,7 @@ import {
   MEASURE,
   READABLE,
   settle,
+  TITLE,
   TOKENS,
   tabKey,
 } from './look.ts'
@@ -31,9 +32,12 @@ for (const size of SIZES) {
       page.on('request', (request) => asked.push(request.url()))
       await arrive(page)
       await expect(page.locator('#game-version')).toBeVisible()
-      await expect.poll(() => loadedFonts(page)).toEqual([`${LABEL} 400`, `${LABEL} 600`, `${MEASURE} 400`])
+      await expect
+        .poll(() => loadedFonts(page))
+        .toEqual([`${TITLE} 100 900`, `${MEASURE} 400`, `${LABEL} 100 900`])
       const family = (selector: string): Promise<string> =>
         page.locator(selector).evaluate((element) => getComputedStyle(element).fontFamily)
+      expect(await family('h1')).toContain(TITLE)
       expect(await family('body')).toContain(LABEL)
       expect(await family('#game-version')).toContain(MEASURE)
       // Nothing is fetched from anywhere but this site, and no font is an inlined data: address.
@@ -43,7 +47,7 @@ for (const size of SIZES) {
       expect(trouble()).toEqual([])
     })
 
-    test('the page is blue paper with chalk words, whatever the device is set to', async ({ page }) => {
+    test('the page is deep green with yellow words, whatever the device is set to', async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'light' })
       await arrive(page)
       const style = (selector: string, property: string): Promise<string> =>
@@ -51,14 +55,14 @@ for (const size of SIZES) {
           .locator(selector)
           .first()
           .evaluate((element, name) => getComputedStyle(element).getPropertyValue(name), property)
-      expect(await style('body', 'background-color')).toBe(TOKENS.paper)
-      expect(await style('body', 'color')).toBe(TOKENS.chalk)
-      expect(await style('#game', 'background-color')).toBe(TOKENS.hatch)
-      expect(await style('#game', 'outline-color')).toBe(TOKENS.chalk)
+      expect(await style('body', 'background-color')).toBe(TOKENS.ground)
+      expect(await style('body', 'color')).toBe(TOKENS.words)
+      expect(await style('#game', 'background-color')).toBe(TOKENS.raised)
+      expect(await style('#game', 'outline-color')).toBe(TOKENS.words)
       expect(await style('#game', 'outline-style')).toBe('solid')
-      expect(await style('#game-version', 'color')).toBe(TOKENS.pencil)
+      expect(await style('#game-version', 'color')).toBe(TOKENS.quiet)
       expect(await page.locator('meta[name="color-scheme"]').getAttribute('content')).toBe('dark')
-      expect(await page.locator('meta[name="theme-color"]').getAttribute('content')).toBe('#0A1F3C')
+      expect(await page.locator('meta[name="theme-color"]').getAttribute('content')).toBe('#112F2C')
     })
 
     test('every word can be read: 4.5 to 1 or more against what is behind it', async ({ page }) => {
@@ -70,22 +74,22 @@ for (const size of SIZES) {
         expect(contrast(words, ground), what).toBeGreaterThanOrEqual(4.5)
     })
 
-    test('yellow means you can touch it, and only that', async ({ page }) => {
+    test('the touch colour means you can touch it, and only that', async ({ page }) => {
       await arrive(page)
-      // Every link and the button is marker yellow, in its words or in its ground...
+      // Every link and the button is the touch colour, in its words or in its ground...
       for (const { what, words, ground } of await colours(page, 'a, button'))
-        expect([words, ground], what).toContain(TOKENS.marker)
+        expect([words, ground], what).toContain(TOKENS.touch)
       // ...and nothing else on the page is.
-      const others = await page.evaluate((marker) => {
-        const yellow: string[] = []
+      const others = await page.evaluate((touch) => {
+        const found: string[] = []
         for (const element of document.querySelectorAll('body *')) {
           if (element.closest('a, button, iframe')) continue
           const style = getComputedStyle(element)
-          if ([style.color, style.backgroundColor, style.borderTopColor, style.outlineColor].includes(marker))
-            yellow.push(element.tagName)
+          if ([style.color, style.backgroundColor, style.borderTopColor, style.outlineColor].includes(touch))
+            found.push(element.tagName)
         }
-        return yellow
-      }, TOKENS.marker)
+        return found
+      }, TOKENS.touch)
       expect(others).toEqual([])
     })
 
@@ -95,9 +99,9 @@ for (const size of SIZES) {
         page
           .locator(selector)
           .evaluateAll((all) => all.map((element) => getComputedStyle(element).textTransform))
-      for (const label of ['h1', 'h2', 'button.play', 'footer a'])
+      for (const label of ['button.play', 'footer a'])
         expect(new Set(await transform(label)), label).toEqual(new Set(['uppercase']))
-      for (const sentence of ['p.lede', 'ul.help li', 'p.playing', 'ul.next li', 'ul.next a'])
+      for (const sentence of ['h1', 'h2', 'p.lede', 'ul.help li', 'p.playing', 'ul.next li', 'ul.next a'])
         expect(new Set(await transform(sentence)), sentence).toEqual(new Set(['none']))
       // Words are at least 18 px, everywhere.
       const sizes = await page
@@ -106,7 +110,7 @@ for (const size of SIZES) {
       expect(Math.min(...sizes)).toBeGreaterThanOrEqual(18)
     })
 
-    test('the Play button is the yellow thing, with a chalk ring when the keyboard reaches it', async ({
+    test('the Play button is the touch-coloured thing, with a ring in the words colour when the keyboard reaches it', async ({
       page,
     }) => {
       await arrive(page)
@@ -124,15 +128,15 @@ for (const size of SIZES) {
         }
       })
       expect(style).toEqual({
-        ground: TOKENS.marker,
-        words: TOKENS.paper,
-        ring: TOKENS.chalk,
+        ground: TOKENS.touch,
+        words: TOKENS.ground,
+        ring: TOKENS.words,
         width: 3,
         corner: '2px',
       })
-      // The ring is drawn outside the button, so it is seen against the sheet behind it, not against the yellow.
-      expect(await groundBehind(page, 'button.play')).toBe(TOKENS.hatch)
-      expect(contrast(style.ring, TOKENS.hatch)).toBeGreaterThanOrEqual(3)
+      // The ring is drawn outside the button, so it is seen against the sheet behind it, not against the touch colour.
+      expect(await groundBehind(page, 'button.play')).toBe(TOKENS.raised)
+      expect(contrast(style.ring, TOKENS.raised)).toBeGreaterThanOrEqual(3)
     })
 
     test("the game's own picture is left alone", async ({ page }) => {
@@ -140,7 +144,7 @@ for (const size of SIZES) {
       await page.getByRole('button', { name: 'Play the game' }).click()
       const frame = page.locator('iframe[title="The demo game"]')
       await expect(page.locator('#game')).toHaveAttribute('data-state', 'playing')
-      // The Owner's answer: once the game plays, nothing of the site's is drawn round it, so the chalk line is gone.
+      // The Owner's answer: once the game plays, nothing of the site's is drawn round it, so the line is gone.
       expect(await page.locator('#game').evaluate((node) => getComputedStyle(node).outlineStyle)).toBe('none')
       for (const element of [frame, page.locator('#game')]) {
         const style = await element.evaluate((node) => {
@@ -285,7 +289,7 @@ test.describe('phone-390x844: with JavaScript off', () => {
   test('the page still looks like itself, shows its icons and says what to do', async ({ page }) => {
     await page.goto('/')
     expect(await page.locator('body').evaluate((body) => getComputedStyle(body).backgroundColor)).toBe(
-      TOKENS.paper,
+      TOKENS.ground,
     )
     await expect(page.locator('svg.icon')).toHaveCount(6)
     const note = page.locator('p.no-script')
@@ -296,7 +300,7 @@ test.describe('phone-390x844: with JavaScript off', () => {
   })
 })
 
-// Review Focus 4: a person using the keyboard. Every link and the Play button must show the chalk ring when Tab reaches
+// Review Focus 4: a person using the keyboard. Every link and the Play button must show the ring when Tab reaches
 // it, at 3 to 1 or more against what is behind it.
 test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () => {
   test.use({ viewport: { width: 820, height: 1180 } })
@@ -324,7 +328,7 @@ test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () =>
         }
       })
       expect(focused.visible, `stop ${stop}: ${focused.name}`).toBe(true)
-      expect(focused.ring, focused.name).toBe(TOKENS.chalk)
+      expect(focused.ring, focused.name).toBe(TOKENS.words)
       expect(focused.width, focused.name).toBe('3px')
       expect(contrast(focused.ring, await groundBehind(page)), focused.name).toBeGreaterThanOrEqual(3)
       reached.add(focused.which)
@@ -337,7 +341,7 @@ test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () =>
 test.describe('phone-390x844: a slow game', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
-  test('"Loading the game…" is a chalk note on the paper, and then it is gone', async ({ page }) => {
+  test('"Loading the game…" is a note on the ground, and then it is gone', async ({ page }) => {
     let release: () => void = () => {}
     const gate = new Promise<void>((resolve) => {
       release = resolve
@@ -355,9 +359,9 @@ test.describe('phone-390x844: a slow game', () => {
       return { words: s.color, ground: s.backgroundColor, edge: s.borderTopColor, capitals: s.textTransform }
     })
     expect(look).toEqual({
-      words: TOKENS.chalk,
-      ground: TOKENS.paper,
-      edge: TOKENS.chalk,
+      words: TOKENS.words,
+      ground: TOKENS.ground,
+      edge: TOKENS.words,
       capitals: 'uppercase',
     })
     // The blank frame is not shown while the game loads (WebKit paints a blank frame white), so the note sits on the sheet.
