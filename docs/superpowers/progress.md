@@ -8,19 +8,28 @@ Spec: [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/Automa
 in AutomataFramework (Stage 1 was done there). The project-wide tracker is AutomataFramework's
 [`progress.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/progress.md).
 
-Overall: **59%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **74%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
-| 2. Plan (M1, site) | Done, 100% (in review) | [`plans/2026-11-13-m1-thin-thread-site.md`](plans/2026-11-13-m1-thin-thread-site.md) |
-| 3. Plan audit | Done, 100% (in review) | [`audits/2026-11-13-m1-site-plan-audit.md`](audits/2026-11-13-m1-site-plan-audit.md) |
-| 4. Execution | In progress, 91% (Tasks 1 to 7 done; Task 8, going live, waits for the Owner's Cloudflare settings) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
-| 5. Implementation audit | Not started | `audits/2026-11-13-m1-site-implementation-audit.md` |
+| 2. Plan (M1, site) | Done, 100% | [`plans/2026-11-13-m1-thin-thread-site.md`](plans/2026-11-13-m1-thin-thread-site.md) |
+| 3. Plan audit | Done, 100% | [`audits/2026-11-13-m1-site-plan-audit.md`](audits/2026-11-13-m1-site-plan-audit.md) |
+| 4. Execution | In progress, 91% (Tasks 1 to 7 done and merged; Task 8, going live, waits for the Owner's Cloudflare settings) | the plan, ticked as it goes; [pull request 3](https://github.com/mcthaydt/AutomataFrameworkSite/pull/3) |
+| 5. Implementation audit | Done, 100% | [`audits/2026-11-13-m1-site-implementation-audit.md`](audits/2026-11-13-m1-site-implementation-audit.md) |
 | 6. Fixes | Not started | |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 5. The implementation audit of `main` at `97b0940`: the build is what the plan asked for and
+  `main` is green (73 Node tests, 40 journeys per engine; the real game passed the same journeys in `site`). The
+  top-level `404.html` is there and proven. Seven should-fix findings for Stage 6: F1, a hand-started `site` run off
+  `main` would deploy (fix before Task 8); F2, `ci` and `site` share job names, so required checks are ambiguous; F3,
+  the playing game is too short on a sideways phone; F4, the Play button and its focus ring fade in dark mode; F5,
+  the touch journey skips hit testing; F6, the README has no commands for a first-time developer; F7, one commit on
+  `main` is authored by "Claude". Six minor notes, and one Owner question (Q1, about F7's commit). All of Stage 4's
+  rulings stand. `main` is not protected yet (the Owner's commands are with the coordinator).
 
 - 2026-11-13: Stage 4, Task 7 done: the `site` workflow. The Owner chose to keep the strict header (the eval was zod's
   probe), the framework fixed it (AutomataFramework 9109fa3), Examples moved its pin (9fab3c0), and the re-run of
