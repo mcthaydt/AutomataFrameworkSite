@@ -46,12 +46,14 @@ test("the game's picture is a picture of the game, not of a blank frame", async 
     image.src = '/game.png'
     await image.decode()
     const canvas = document.createElement('canvas')
-    canvas.width = 160
-    canvas.height = 90
+    // At the picture's own size: a browser that shrinks by taking one pixel in many (Firefox does) would see a flat
+    // picture as two colours, and the stand-in game is flat.
+    canvas.width = image.naturalWidth
+    canvas.height = image.naturalHeight
     const context = canvas.getContext('2d')
     if (context === null) return 0
-    context.drawImage(image, 0, 0, 160, 90)
-    const data = context.getImageData(0, 0, 160, 90).data
+    context.drawImage(image, 0, 0)
+    const data = context.getImageData(0, 0, canvas.width, canvas.height).data
     const seen = new Set<string>()
     for (let at = 0; at < data.length; at += 4) seen.add(`${data[at]},${data[at + 1]},${data[at + 2]}`)
     return seen.size

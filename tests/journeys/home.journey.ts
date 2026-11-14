@@ -78,9 +78,14 @@ async function play(page: Page, name: string = WORDS.play.sheet): Promise<FrameL
 const frameHeight = async (page: Page): Promise<number> =>
   (await page.locator(FRAME).boundingBox())?.height ?? 0
 
-/** Points on the game's picture that are inside the window: the middle and near each corner of what shows. */
+/**
+ * Points on the game's picture that are inside the window: the middle and near each corner of what shows. The picture
+ * is brought to the middle of the window first, because on a phone it starts below the first screen and a point
+ * outside the window has nothing at it to find.
+ */
 async function pointsOnPicture(page: Page): Promise<{ x: number; y: number }[]> {
   return page.locator('#game').evaluate((game) => {
+    game.scrollIntoView({ block: 'center', behavior: 'instant' })
     const box = game.getBoundingClientRect()
     const left = Math.max(box.left, 0) + 4
     const right = Math.min(box.right, innerWidth) - 4
