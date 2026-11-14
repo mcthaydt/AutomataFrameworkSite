@@ -33,13 +33,14 @@ review 10)
   heading, the lede and the button fit upright and sideways, phone and tablet: yes. 7. The playing game, real
   (`pr-10-real/`) against `live/`: the same game, no tint, no rounded corner, and with Q2's answer no line round it.
   8. **No in WebKit, fixed:** the loading note sat on a white frame in WebKit only (a blank frame is painted white
-  there); the frame now has the sheet's colour behind it, with a journey line that checks it; Chromium and Firefox
-  were already right. The focus ring is clear. 9. A device set to light looks the same: yes. 10. Nothing cut off or
+  there, whatever is behind it); the frame is now not shown until the game plays (`visibility`, in the stylesheet), with
+  a journey line that checks it; Chromium and Firefox were already right. A first try, the sheet's colour as the
+  frame's background, did not work in WebKit (the picture of `cf1084c` shows it) and was replaced. The focus ring is clear. 9. A device set to light looks the same: yes. 10. Nothing cut off or
   overlapping. **Reported, not fixed (the plan audit's N3):** on the phone, the link in "See how it is made:" drops
   to a line of its own and leaves a gap in the sentence. 11. After Play, the loading note then the game make the
   press plain: yes.
-  Deviations: Tasks 1 to 3 in one commit; Task 3's playing-game rules follow Q2 (b); the loading-frame background is
-  the one stylesheet value added that the plan's sheet did not have.
+  Deviations: Tasks 1 to 3 in one commit; Task 3's playing-game rules follow Q2 (b); the frame's `visibility` rule is
+  the one stylesheet rule added that the plan's sheet did not have.
 
 - 2026-11-14: Stage 4 starts. Pull request 6 is on `main` (`3893c72`). The Owner answered Q2: (b), the chalk line goes
   once the game plays; the plan says so now (Global Constraints, Task 3's two journeys and its stylesheet).

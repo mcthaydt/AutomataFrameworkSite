@@ -239,15 +239,19 @@ footer .icon,
   margin: 16px;
 }
 
-/* The frame is blank until the game's page arrives, and WebKit paints a blank frame white. Giving the frame the sheet's own
-   colour keeps the loading note on the sheet; the game paints over it, so it is never a tint on the game. */
+/* The frame is blank until the game's page arrives, and WebKit paints a blank frame white, whatever is behind it. So it is
+   not shown until the game plays (the whole of the game's own picture is then shown as it is); until then the loading
+   note sits on the sheet. */
 #game iframe {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
-  background: var(--hatch);
+}
+
+#game:not([data-state="playing"]) iframe {
+  visibility: hidden;
 }
 
 /* The loading line sits above the frame until the game's page has loaded. */

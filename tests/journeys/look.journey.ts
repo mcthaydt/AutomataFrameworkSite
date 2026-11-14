@@ -322,14 +322,16 @@ test.describe('phone-390x844: a slow game', () => {
       edge: TOKENS.chalk,
       capitals: 'uppercase',
     })
-    // The blank frame under the note is the sheet's colour, not the browser's white (WebKit paints a blank frame white).
+    // The blank frame is not shown while the game loads (WebKit paints a blank frame white), so the note sits on the sheet.
     expect(
       await page
         .locator('iframe[title="The demo game"]')
-        .evaluate((element) => getComputedStyle(element).backgroundColor),
-    ).toBe(TOKENS.hatch)
+        .evaluate((element) => getComputedStyle(element).visibility),
+    ).toBe('hidden')
     await page.screenshot({ path: 'tests/journeys/__screenshots__/phone-390x844-loading.png' })
     release()
     await expect(note).toBeHidden()
+    // ...and once the game plays, its frame is shown.
+    await expect(page.locator('iframe[title="The demo game"]')).toBeVisible()
   })
 })
