@@ -3,7 +3,8 @@
 # uploaded to Cloudflare Pages and checked at its live address. It looks for a newer game every 10 minutes.
 #
 #   pick     asks GitHub which game commit passed, reads what the live site shows, and decides what this run does
-#   build-real      builds the game with its own repo's `pnpm build`, then the site around it
+#   build-real      builds the game with its own repo's `pnpm build`, then the site around it; the site's build opens
+#                   the built game once in a browser for its picture (no secret is in the job)
 #   journeys-real   the same journeys as `ci`, against the real game
 #   deploy          the only job that holds the Cloudflare token; it never checks out or runs the game's code, and
 #                   it runs only for `main`
@@ -99,11 +100,17 @@ jobs:
       - name: Install the site
         working-directory: site
         run: pnpm install --frozen-lockfile
+      # `pnpm build` opens the built site in Chromium once, for the game's picture, the share picture and the icon.
+      - name: Install the browser the build takes its pictures with
+        working-directory: site
+        run: pnpm exec playwright install --with-deps chromium
       - name: Build the site around the game
         working-directory: site
         run: pnpm build
         env:
           GAME_DIR: ../game/dist
+          # Where the game's own files are (its project file, level, recorded play and licence): the page's facts.
+          GAME_SOURCE: ../game
           GAME_COMMIT: ${{ needs.pick.outputs.game }}
           SITE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

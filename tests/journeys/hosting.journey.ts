@@ -9,12 +9,12 @@ test.use({ viewport: { width: 1440, height: 900 } })
 test('a missing address answers 404, says so, and offers the way home', async ({ page }) => {
   const response = await page.goto('/no-such-page')
   expect(response?.status()).toBe(404)
-  await expect(page).toHaveTitle('Page not found: AutomataFramework')
+  await expect(page).toHaveTitle('Page not found: Automata Framework')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('This page does not exist.')
   await expect(page.getByText('The address may be mistyped, or the page may have moved.')).toBeVisible()
   await page.getByRole('link', { name: 'Go to the home page' }).click()
   await expect(page).toHaveURL(/\/$/)
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('AutomataFramework')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Finish the game your agent started.')
 })
 
 test('a missing file of the game answers 404, not the home page', async ({ request }) => {
@@ -29,13 +29,17 @@ test('the licence notices of the fonts and icons are served as plain text', asyn
   expect(response.headers()['content-type'] ?? '').toContain('text/plain')
   const text = await response.text()
   for (const notice of [
-    'IBM Plex Sans Condensed',
-    'Copyright 2019 IBM Corp.',
+    'Fraunces',
+    'Copyright 2020 The Fraunces Project Authors',
+    'Onest',
+    'Copyright 2021 The Onest Project Authors',
     'JetBrains Mono',
     'Copyright 2020 The JetBrains Mono Project Authors',
     'SIL OPEN FONT LICENSE Version 1.1',
     'Phosphor Icons',
     'Copyright (c) 2023 Phosphor Icons',
+    'Lenis',
+    'Copyright (c) 2024 darkroom.engineering',
     'MIT License',
   ]) {
     expect(text, notice).toContain(notice)
@@ -62,7 +66,7 @@ test('every page is sent with its safety headers', async ({ request }) => {
 test('the game still plays under those headers', async ({ page }) => {
   const trouble = watchForTrouble(page)
   await page.goto('/')
-  await page.getByRole('button', { name: 'Play the game' }).click()
+  await page.getByRole('button', { name: 'Play it' }).click()
   await expect(
     page.frameLocator('iframe[title="The demo game"]').locator('#game[data-state="playing"]'),
   ).toBeAttached()

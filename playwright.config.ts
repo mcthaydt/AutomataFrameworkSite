@@ -15,8 +15,10 @@ const config: PlaywrightTestConfig = defineConfig({
   retries: 0,
   forbidOnly: !!process.env.CI,
   reporter: [['list']],
-  // A button that is not there should fail in seconds, not at the end of a 30 second test.
-  use: { baseURL, actionTimeout: 8_000, navigationTimeout: 15_000 },
+  // A button that is not there should fail in seconds, not at the end of a 30 second test. Motion is off for every journey
+  // but `motion.journey.ts`, which turns it on: a picture or a measurement taken while the page is still arriving would
+  // differ from run to run, and an engine's animation timing is not what these journeys are about.
+  use: { baseURL, actionTimeout: 8_000, navigationTimeout: 15_000, reducedMotion: 'reduce' },
   projects: ENGINES.map((engine) => ({ name: engine, use: { browserName: engine } })),
   ...(process.env.BASE_URL === undefined
     ? {

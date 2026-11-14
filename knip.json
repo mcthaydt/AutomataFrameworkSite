@@ -4,7 +4,8 @@
   "entry": ["src/build.ts", "scripts/*.ts", "tests/**/*.test.ts", "tests/journeys/*.journey.ts"],
   "project": ["src/**/*.ts", "tests/**/*.ts"],
   "ignoreDependencies": [
-    "@fontsource/ibm-plex-sans-condensed",
+    "@fontsource-variable/fraunces",
+    "@fontsource-variable/onest",
     "@fontsource/jetbrains-mono",
     "@phosphor-icons/core"
   ]

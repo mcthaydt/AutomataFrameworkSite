@@ -2,8 +2,8 @@ This codebase is yours: what it's for and how it's built are your call, and you'
 
 # AutomataFrameworkSite
 
-A framework and set of editors for making games, where agents do the authoring and every piece of authorable content
-can be edited on an iPad. This repo is the website. The first layer's design is
+Automata Framework is a framework and set of editors for making games, where agents do the authoring and every piece
+of authorable content can be edited on an iPad. This repo is the website. The first layer's design is
 [the spec in AutomataFramework](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md);
 where this page is short, the spec has the detail. This repo's plans, audits and tracker are in `docs/superpowers/`.
 
@@ -16,16 +16,28 @@ where this page is short, the spec has the detail. This repo's plans, audits and
   on the game's `main` whose checks all passed, never an unchecked one.
 - **Every claim on a page is true on `main` today.** A sentence that is true only on a branch, or only in one browser,
   is a defect.
+- **Every number, name, hash and stamp on the home page comes from the game's own files**, through `facts` (reads the
+  game's folder into `dist/facts.json`), `claims` (the five claims, each stamp held to a proof) and `fill` (writes
+  them into the page). None is typed in `index.html`. `build` and `build-real` open the built game once in a browser
+  (`pictures`) to take its picture, the share picture and the touch icon; `deploy` still never runs the game.
+- **The build tools the site's pages are made with** read the game's repo folder through `GAME_SOURCE`, never import
+  the framework. The page's name is "Automata Framework", two words; the wordmark is the word `automata`, with no mark.
 - **Site copy is where strategy leaks.** Words on a page come from the public spec and READMEs. Nothing is copied from
   the private notes; a plan may say "the brief is in the private notes" and no more.
 - **Dependencies the Owner approved for this repo** (2026-11-13): `wrangler` 4.140.0, `@playwright/test` 1.63.0,
-  `@types/node` 24.19.1, and (2026-11-14, for the Blueprint
-  look) `@fontsource/ibm-plex-sans-condensed` 5.3.0, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core`
-  2.1.1, all development-only. `knip.json` is told to ignore the three, because knip reads neither CSS `@import`s
-  (the fonts) nor the icon reader's `import.meta.resolve` (the icons).
-- **The site wears Blueprint** (the spec's "Visual direction"). The five colours and the two fonts are named only in
-  `src/styles.css`, and `tests/styles/` holds the sheet to them. Marker yellow is only for what can be touched. Dark is
-  the only theme. Nothing is drawn on or over the game: its art is never restyled.
+  `@types/node` 24.19.1, and (2026-11-14, for the site's look) `@fontsource-variable/fraunces` 5.3.0,
+  `@fontsource-variable/onest` 5.3.1, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core` 2.1.1, all
+  development-only; and `lenis` 1.3.27 (the Owner, 2026-11-14, for very subtle smooth scrolling; Vite bundles it into
+  the page, so it is self-hosted under the strict header). `knip.json` is told to ignore the four fonts-and-icons
+  packages, because knip reads neither CSS `@import`s (the fonts) nor the icon reader's `import.meta.resolve` (the
+  icons).
+- **The site has its own palette and fonts** (the spec's "Visual direction"; the Owner picked them, 2026-11-14).
+  Palette No. 325 from *A Dictionary of Color Combinations*: `ground` (Deep Slate Green), `words` (Naples Yellow),
+  `touch` (Yellow Ocher) and `mark` (Eugenia Red), and two shades mixed from them, `raised` (6% words in the ground)
+  and `quiet` (70%). Those six are named only in `src/styles.css`, and `tests/styles/` holds the sheet to them. `touch`
+  is only for what can be touched, and `mark` is an edge or an icon and never carries words (it is 3.64 to 1 on the
+  ground). Fonts: Fraunces for the claim, titles and wordmark, Onest for words and labels, JetBrains Mono for numbers
+  and file names. Dark is the only theme. Nothing is drawn on or over the game: its art is never restyled.
 - **The fonts' and icons' licence notices** are in `public/licences.txt` (the Owner, 2026-11-14), served at
   `/licences.txt`. Move a font or icon package to a new version, and copy its `LICENSE` there again.
 
@@ -155,10 +167,12 @@ src/index.ts                  the page's entry
 src/build.ts                  the entry for Node: what the scripts use, nothing that needs a page
 src/lib/                      shared helpers, no feature logic
 src/features/<feature>/       <feature>.ts entry, <part>.ts one job per file
+                              (lowest first: version, pick, facts, claims, assemble, icons, fill, pictures, motion, play, page)
 scripts/                      thin CLI wrappers
 tests/architecture.test.ts    imports go down, no cycles, no tests in src
 tests/features/<feature>/     mirrors src/features
 tests/fixtures/               shared test helpers and the stand-in game
+tests/fixtures/game-source/   a made-up game's repo folder: automata.toml, content/, replays/, LICENSE
 tests/journeys/               end-to-end journeys in real browsers, against the built site
 tests/styles/                 checks that read the stylesheet: the five colours, dark only, contrast
 tests/workflows/              checks that read a workflow
@@ -167,3 +181,9 @@ docs/superpowers/             plans/, audits/, progress.md (the spec is in Autom
 ```
 
 Features import only from features below them. No top-level `components/`, `services/` or `utils/`.
+
+`biome.json` turns off some rules for two files and says why here, since JSON has no comments: in `index.html`, the
+accessibility rules that mistake a placeholder (`<a data-address="…">`, whose address the build fills in) and a
+keyboard-reachable file panel for mistakes; in `src/styles.css`, `noDescendingSpecificity` (the sheet is ordered by
+page part, not by specificity) and `noImportantStyles` (the one `!important` pair is the reduced-motion switch, which
+must beat everything above it).

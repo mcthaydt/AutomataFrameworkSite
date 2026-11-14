@@ -11,9 +11,12 @@ importers:
       '@biomejs/biome':
         specifier: 2.5.15
         version: 2.5.15
-      '@fontsource/ibm-plex-sans-condensed':
+      '@fontsource-variable/fraunces':
         specifier: 5.3.0
         version: 5.3.0
+      '@fontsource-variable/onest':
+        specifier: 5.3.1
+        version: 5.3.1
       '@fontsource/jetbrains-mono':
         specifier: 5.3.0
         version: 5.3.0
@@ -29,6 +32,9 @@ importers:
       knip:
         specifier: 6.39.0
         version: 6.39.0
+      lenis:
+        specifier: 1.3.27
+        version: 1.3.27
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -325,8 +331,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource/ibm-plex-sans-condensed@5.3.0':
-    resolution: {integrity: sha512-fQyBpwbkguP4azjq7Cw8h/J3C/d8MFAzXOiSoFxyKCUK4x0XKrWEh3tGdTxhDM0HctVRQilQo1zGoyxDHLm5jQ==}
+  '@fontsource-variable/fraunces@5.3.0':
+    resolution: {integrity: sha512-9BYGySn4AHEJdgp9Z28tQ3X+laJMEOITXkQarZXeloWQZDq5oOvXJ3kDA8c7MGIfpogIaZfjrQBqmda8POOCKA==}
+
+  '@fontsource-variable/onest@5.3.1':
+    resolution: {integrity: sha512-xaaw6G4HDB2/RczsWLD/2bnib4ykmQlTlBUN3GOEOiyErilZukQWVJG95h9zwAy0i8KY+QzDa+COPfqhI72Acw==}
 
   '@fontsource/jetbrains-mono@5.3.0':
     resolution: {integrity: sha512-fqDfB5I9f1p1TV486aUgB9t8zP84P0O1FtQR5Ol9vjwPy+S+EIGlVYm1cvj2W5shcZMTg2nZFdVMoH5wFu8a1A==}
@@ -1103,6 +1112,20 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
+  lenis@1.3.27:
+    resolution: {integrity: sha512-QIHNH4LIfWyLfgH/5K0aTGZgyFJJ7GfHNcaH/AIgyKjb8gstLh5siNGvrVqz1w5ClLXzOvllBVk7vby8JzUVPQ==}
+    peerDependencies:
+      '@nuxt/kit': '>=3.0.0'
+      react: '>=17.0.0'
+      vue: '>=3.0.0'
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      react:
+        optional: true
+      vue:
+        optional: true
+
   lightningcss-android-arm64@1.33.0:
     resolution: {integrity: sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==}
     engines: {node: '>= 12.0.0'}
@@ -1618,7 +1641,9 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
-  '@fontsource/ibm-plex-sans-condensed@5.3.0': {}
+  '@fontsource-variable/fraunces@5.3.0': {}
+
+  '@fontsource-variable/onest@5.3.1': {}
 
   '@fontsource/jetbrains-mono@5.3.0': {}
 
@@ -2131,6 +2156,8 @@ snapshots:
       unbash: 4.0.12
       yaml: 2.9.1
       zod: 4.6.7
+
+  lenis@1.3.27: {}
 
   lightningcss-android-arm64@1.33.0:
     optional: true

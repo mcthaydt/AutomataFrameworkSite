@@ -2,6 +2,7 @@
 // it has to be a folder that works there: an index.html whose addresses are relative.
 import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { FACTS_FILE, type GameFacts, writeFacts } from '../facts/facts.ts'
 import { VERSION_FILE, type Version, writeVersion } from '../version/version.ts'
 
 /** The folder of the site the game is copied to, so its address is `/play/`. */
@@ -13,13 +14,17 @@ export class AssembleError extends Error {}
 /** An address that starts with exactly one `/` (not `//host`) would leave /play/ and ask the site for the game's file. */
 const ROOT_ADDRESS = /\b(?:src|href)\s*=\s*["'](\/(?!\/)[^"']*)["']/i
 
-/** Copies the built game into `<siteDir>/play/` (replacing what is there) and writes `<siteDir>/version.json`. */
+/**
+ * Copies the built game into `<siteDir>/play/` (replacing what is there) and writes `<siteDir>/version.json` and
+ * `<siteDir>/facts.json`, the numbers and names the pages state, read from the game's own files.
+ */
 export function addGame(options: {
   readonly siteDir: string
   readonly gameDir: string
   readonly version: Version
+  readonly facts: GameFacts
 }): void {
-  const { siteDir, gameDir, version } = options
+  const { siteDir, gameDir, version, facts } = options
   const gamePage = join(gameDir, 'index.html')
   if (!existsSync(gamePage)) {
     throw new AssembleError(
@@ -43,4 +48,5 @@ export function addGame(options: {
   rmSync(playDir, { recursive: true, force: true })
   cpSync(gameDir, playDir, { recursive: true })
   writeFileSync(join(siteDir, VERSION_FILE), writeVersion(version))
+  writeFileSync(join(siteDir, FACTS_FILE), writeFacts(facts))
 }

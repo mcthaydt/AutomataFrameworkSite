@@ -1,119 +1,93 @@
-/* The site wears Blueprint, the look the spec's "Visual direction" gives the editors and the site: deep blue paper,
-   chalk lines and words, pencil for quieter words, and one marker yellow that means "you can touch this". These five
-   are the only colours named anywhere on the site, and dark is the only theme for now. The game in the frame is never
-   restyled: nothing here reaches inside it, and nothing is drawn over it. Words are at least 18 px, touch targets at
-   least 44 px.
+/* The site's own look: palette No. 325 from A Dictionary of Color Combinations, in three fonts. Four colours come from
+   the book: the ground (Deep Slate Green), the words (Naples Yellow), touch (Yellow Ocher) and mark (Eugenia Red). Two
+   more are the words colour let into the ground (6% for raised panels and every line that only divides, 70% for quieter
+   words). These six are the only colours named anywhere on the site, and dark is the only theme for now. Touch means
+   "you can touch this" and nothing else. Mark is an edge or an icon and never carries words, because it is only 3.64 to
+   1 on the ground. The game in the frame is never restyled: nothing here reaches inside it, and nothing is drawn over
+   it. Words are at least 18 px (labels 13 px), touch targets at least 44 px.
 
-   The two fonts are the site's own files, from packages (the safety header allows fonts from nowhere else), and only
+   The three fonts are the site's own files, from packages (the safety header allows fonts from nowhere else), and only
    their Latin files, because every word on the site is English: the day the site has another language, that
-   language's files are added here. */
-@import "@fontsource/ibm-plex-sans-condensed/latin-400.css";
-@import "@fontsource/ibm-plex-sans-condensed/latin-600.css";
+   language's files are added here. Fraunces is for the claim, titles and the wordmark, Onest for words and labels,
+   JetBrains Mono for numbers and file names. */
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/onest/wght.css";
 @import "@fontsource/jetbrains-mono/latin-400.css";
 
 :root {
   color-scheme: dark;
-  --paper: #0a1f3c;
-  --hatch: #0e2a50;
-  --chalk: #eaf2fa;
-  --pencil: #8fb0d3;
-  --marker: #ffd447;
-  /* Words and labels; numbers and measures. Each ends in the device's own fonts, which show while the files arrive. */
-  --label: "IBM Plex Sans Condensed", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ground: #112f2c;
+  --raised: #1f3a33;
+  --words: #fbe6a0;
+  --quiet: #b5af7d;
+  --touch: #e2b540;
+  --mark: #da525d;
+  /* Titles; words and labels; numbers and measures. Each ends in the device's own fonts, which show while the files arrive. */
+  --title: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --label: "Onest Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --measure: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
-  /* One square of the drawing paper's grid, and the corner every box shares. */
-  --square: 24px;
+  /* One square of the drawing's grid, the corner every box shares, and the side gutter of every page. */
+  --square: 48px;
   --corner: 2px;
+  --gutter: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* Drawing paper: a faint grid of hatch lines on the paper. The lines are so close to the paper (1.15 to 1) that words
-   over them read as words on paper. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
 body {
   margin: 0;
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--hatch) 1px, transparent 1px),
-    linear-gradient(90deg, var(--hatch) 1px, transparent 1px);
-  background-size: var(--square) var(--square);
-  color: var(--chalk);
+  background-color: var(--ground);
+  color: var(--words);
   font: 400 18px / 1.5 var(--label);
+  font-variant-numeric: tabular-nums;
 }
 
-.page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 max(16px, env(safe-area-inset-right)) 32px max(16px, env(safe-area-inset-left));
+::selection {
+  background: var(--words);
+  color: var(--ground);
 }
 
-/* Marker yellow is for what can be touched, and for nothing else. */
-a {
-  color: var(--marker);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* The ring is chalk, with a gap, so it shows against the paper and beside the yellow button alike. */
-a:focus-visible,
-button:focus-visible {
-  outline: 3px solid var(--chalk);
-  outline-offset: 3px;
-}
-
-/* Labels are written like the notes on a drawing: capitals, a little apart. Sentences never are. The capitals are made
-   here, so the words in the page stay as they are read out. */
 h1,
 h2,
-.play,
-.status,
-footer a {
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-/* Shrinks with the window so the name never runs past the edge of a narrow phone, in any font. */
-h1 {
-  margin: 16px 0 8px;
-  font-size: clamp(1.5rem, 7vw, 2rem);
-  line-height: 1.2;
-  overflow-wrap: anywhere;
+h3 {
+  font-family: var(--title);
+  font-weight: 500;
 }
 
 h2 {
-  margin: 32px 0 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--chalk);
-  font-size: 1.25rem;
-  line-height: 1.3;
+  text-wrap: balance;
 }
 
 p,
-ul {
-  margin: 0 0 12px;
+ul,
+dl,
+dd {
+  margin: 0;
 }
 
-ul {
-  padding-left: 1.25rem;
+/* The touch colour is for what can be touched, and for nothing else. A link's underline is 1 px, 3 px below the words. */
+a {
+  color: var(--touch);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
-li {
-  margin-bottom: 6px;
+/* The ring is the words colour, with a gap, so it shows against the ground and beside a touch-coloured button alike. */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--words);
+  outline-offset: 3px;
 }
 
-li::marker {
-  color: var(--pencil);
-}
-
-.lede {
-  margin-bottom: 16px;
-}
-
-/* An icon is as tall as the words beside it and takes their colour (the SVG's fill is currentColor). No rule gives an
-   icon a colour of its own. */
+/* An icon is as tall as the words beside it and takes their colour (the SVG's fill is currentColor). */
 .icon {
   flex: none;
   width: 1.25em;
@@ -121,180 +95,1000 @@ li::marker {
   vertical-align: -0.25em;
 }
 
-.help {
-  padding-left: 0;
-  list-style: none;
-}
-
-.help li {
-  display: flex;
-  gap: 10px;
-}
-
-footer .icon,
-.home .icon {
-  margin-right: 8px;
-}
-
-.help .icon {
-  margin-top: 0.15em;
-}
-
-/* The game's place: a sheet of hatch with a chalk line round it until the game plays. The line is an outline, drawn
-   outside the box, so the frame fills the box edge to edge and the line is never over the game. No rounded corner
-   here: it would cut the game's own corners. */
-#game {
-  position: relative;
-  display: grid;
-  place-items: center;
+.wrap {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 80svh;
-  overflow: hidden;
-  background: var(--hatch);
-  outline: 1px solid var(--chalk);
+  max-width: 1248px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
 }
 
-/* Once the game plays nothing of the site's is drawn round it (the Owner): the line goes. */
-#game[data-state="playing"] {
-  outline: none;
+/* ---- The top bar: the word and three things to press. Kept at the top of a window tall enough to spare it. ---- */
+
+.top {
+  position: relative;
+  z-index: 10;
+  height: 64px;
+  background: var(--ground);
+  border-bottom: 1px solid var(--raised);
 }
 
-/* A phone held upright: tall instead of wide, so the game has room for its touch buttons under the level. */
-@media (max-width: 699px) and (orientation: portrait) {
-  #game {
-    aspect-ratio: auto;
-    height: 80svh;
-    max-height: none;
-  }
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 }
 
-/* A phone on its side: the heading, the lede and the button must all fit in the first screen, so the game takes what is
-   left of the window instead of the whole of it. */
-@media (max-height: 499px) {
-  .stage {
-    display: flex;
-    flex-direction: column;
-    min-height: 100svh;
-  }
-
-  h1 {
-    margin: 8px 0 4px;
-    font-size: 1.5rem;
-  }
-
-  .lede {
-    margin-bottom: 8px;
-  }
-
-  #game {
-    flex: 1;
-    aspect-ratio: auto;
-    max-height: none;
-    min-height: 160px;
-  }
-
-  /* Once the game is playing it takes the whole window: it was scrolled to the top, and a thumb that swipes on it must
-     play, not scroll the page. */
-  #game[data-state="playing"] {
-    flex: none;
-    height: 100svh;
-  }
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--words);
+  font: 600 24px / 1 var(--title);
+  text-decoration: none;
 }
 
-.play {
+.top nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.top nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+/* ---- Buttons: labels in capitals, set by the sheet, so the words in the page stay as they are read out. ---- */
+
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-width: 200px;
-  min-height: 56px;
-  padding: 8px 24px;
+  min-height: 52px;
+  padding: 0 24px;
   border: 0;
   border-radius: var(--corner);
-  background: var(--marker);
-  color: var(--paper);
-  font-family: inherit;
-  font-size: 20px;
+  font: 600 15px / 1 var(--label);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
-/* `display` on a class beats the `hidden` attribute, and the button must stay hidden until the script shows it. */
-.play[hidden] {
+.btn.main {
+  background: var(--touch);
+  color: var(--ground);
+}
+
+.btn.second {
+  border: 1px solid var(--quiet);
+  background: var(--raised);
+  color: var(--touch);
+}
+
+.btn.small {
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.btn .icon {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+/* `display` on a class beats the `hidden` attribute, and a Play button must stay unseen until the script shows it. */
+.btn[hidden] {
   display: none;
 }
 
-/* A note pinned to the sheet: paper with a thin chalk edge, so it reads over the hatch and over a loading game. */
-.status,
-.no-script {
-  margin: 0;
-  padding: 8px 16px;
-  border: 1px solid var(--chalk);
-  border-radius: var(--corner);
-  background: var(--paper);
-  color: var(--chalk);
+/* ---- The first screen ---- */
+
+.hero {
+  position: relative;
+  padding: 64px 0 96px;
+  text-align: center;
 }
 
-.no-script {
-  margin: 16px;
-}
-
-/* The frame is blank until the game's page arrives, and WebKit paints a blank frame white, whatever is behind it. So it is
-   not shown until the game plays (the whole of the game's own picture is then shown as it is); until then the loading
-   note sits on the sheet. */
-#game iframe {
+/* The drawing's grid lies only behind the first screen and fades out down it. Its lines are the raised colour. */
+.hero::before {
+  content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  height: 640px;
+  background-image:
+    linear-gradient(var(--raised) 1px, transparent 1px),
+    linear-gradient(90deg, var(--raised) 1px, transparent 1px);
+  background-size: var(--square) var(--square);
+  mask-image: linear-gradient(var(--ground), transparent);
+  pointer-events: none;
+}
+
+.hero > .wrap {
+  position: relative;
+}
+
+.tag {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 8px;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--quiet);
+  border-radius: var(--corner);
+  text-decoration: none;
+}
+
+.tag b {
+  padding: 3px 8px;
+  border: 1px solid var(--mark);
+  border-radius: var(--corner);
+  color: var(--words);
+  font: 600 13px / 1.2 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 960px;
+  margin: 24px auto 0;
+  font-size: clamp(2.6rem, 6.2vw, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 620px;
+  margin: 24px auto 0;
+  color: var(--quiet);
+  font-size: 21px;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* ---- The game on its sheet: a bar, the game, a title block. Nothing of the site's is ever over the game. ---- */
+
+.sheet {
+  max-width: 1040px;
+  margin: 64px auto 0;
+  text-align: left;
+}
+
+.sheet-head,
+.title-block {
+  border: 1px solid var(--words);
+  background: var(--ground);
+}
+
+.sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  min-height: 64px;
+  padding: 8px 16px;
+}
+
+.sheet-head b {
+  font-weight: 600;
+}
+
+.sheet-head .quiet {
+  color: var(--quiet);
+}
+
+.how {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--quiet);
+}
+
+.how.fingers {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .how.fingers {
+    display: inline-flex;
+  }
+
+  .how.keys {
+    display: none;
+  }
+}
+
+.sheet-head .btn,
+.status {
+  margin-left: auto;
+}
+
+/* The loading note takes the place of "Play it" in the bar, and is as tall, so the bar does not jump. */
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  font-weight: 600;
+}
+
+.status[hidden] {
+  display: none;
+}
+
+/* The note about JavaScript is a row of the sheet, between the bar and the picture. */
+.no-script {
+  padding: 12px 16px;
+  border: 1px solid var(--words);
+  border-top: 0;
+  background: var(--ground);
+}
+
+/* The game's place: 16 by 9 holding the game's own picture, with a line round it until the game plays. The line is an
+   outline, drawn outside the box, so the frame fills the box edge to edge and the line is never over the game. No
+   rounded corner, filter or tint: the game's art is never restyled. The picture and the frame share one cell, so
+   neither pushes the other. */
+#game {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--raised);
+  outline: 1px solid var(--words);
+}
+
+#game .poster,
+#game iframe {
+  grid-area: 1 / 1;
+  display: block;
   width: 100%;
   height: 100%;
   border: 0;
 }
 
+/* Once the game plays nothing of the site's is drawn round it (the Owner): the line goes, and so does the picture. */
+#game[data-state="playing"] {
+  outline: none;
+}
+
+#game[data-state="playing"] .poster {
+  display: none;
+}
+
+/* The frame is blank until the game's page arrives, and WebKit paints a blank frame white, whatever is behind it. */
 #game:not([data-state="playing"]) iframe {
   visibility: hidden;
 }
 
-/* The loading line sits above the frame until the game's page has loaded. */
-#game .status {
-  position: relative;
-  z-index: 1;
+/* A phone held upright: tall instead of wide while it plays, so the game has room for its touch buttons under the level. */
+@media (max-width: 699px) and (orientation: portrait) {
+  #game[data-state="playing"] {
+    aspect-ratio: auto;
+    height: 80svh;
+  }
 }
 
-/* A measure, like the title block of a drawing: pencil, in the number font, digits in columns. */
-#game-version {
-  color: var(--pencil);
+/* A phone on its side: once playing, the game takes the whole window, so a thumb that swipes on it plays and never
+   scrolls the page. */
+@media (max-height: 499px) {
+  #game[data-state="playing"] {
+    aspect-ratio: auto;
+    height: 100svh;
+  }
+}
+
+.title-block {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.title-block > div {
+  padding: 12px 16px;
+}
+
+.title-block > div + div {
+  border-left: 1px solid var(--raised);
+}
+
+/* A label of the drawing's title block. */
+.title-block dt {
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The version and the level's size are numbers, so they are in the number font; the last check is a sentence. */
+.title-block > div:nth-child(-n + 2) dd {
   font-family: var(--measure);
-  font-variant-numeric: tabular-nums;
 }
 
-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  margin-top: 32px;
-  padding-top: 12px;
-  border-top: 1px solid var(--chalk);
-}
-
-/* A link that stands alone on its line is one 44 px box. The three rules are in order of rising specificity. */
-footer a,
-.home {
+.title-block a {
   display: inline-block;
   min-height: 44px;
   line-height: 44px;
 }
 
-/*
- * A link inside a sentence stays in its line, so the sentence reads as one. It reaches 44 px with padding above and
- * below (padding on an inline link grows what a thumb can hit without moving the lines): an inline-block link would
- * not fit beside the words before it on a phone and would drop to a line of its own.
- */
-.next a {
+/* ---- The numbers ---- */
+
+/* A band across the window; its four cells line up with the page's own columns. */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: none;
+  padding-block: 32px;
+  padding-inline: max(var(--gutter), calc((100% - (1248px - 2 * var(--gutter))) / 2));
+  background: var(--raised);
+}
+
+/* A line that divides is the colour of the ground it lies on, never of the raised ground it divides. */
+.numbers > div {
+  padding: 8px 24px;
+}
+
+.numbers > div:first-child {
+  padding-left: 0;
+}
+
+.numbers > div + div {
+  border-left: 1px solid var(--ground);
+}
+
+.numbers dt {
+  font: 500 32px / 1.2 var(--title);
+}
+
+.numbers dd {
+  margin-top: 4px;
+  color: var(--quiet);
+}
+
+/* ---- The parts below: words beside the real thing ---- */
+
+.part {
+  padding: 128px 0;
+  border-top: 1px solid var(--raised);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.split.flip {
+  grid-template-columns: 7fr 5fr;
+}
+
+.split.flip .text {
+  order: 2;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kicker::before {
+  content: "";
+  width: 28px;
+  border-top: 1px solid var(--quiet);
+}
+
+.part h2 {
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  line-height: 1.05;
+}
+
+.sub {
+  margin-top: 16px;
+  color: var(--quiet);
+  font-size: 19px;
+}
+
+.points {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 0;
+  list-style: none;
+  color: var(--quiet);
+}
+
+.points li {
+  display: flex;
+  gap: 12px;
+}
+
+.points .icon {
+  margin-top: 0.2em;
+  color: var(--words);
+}
+
+.points strong {
+  color: var(--words);
+  font-weight: 600;
+}
+
+.more {
+  margin-top: 16px;
+}
+
+.more a {
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+}
+
+.panel {
+  min-width: 0;
+  border: 1px solid var(--words);
+  background: var(--ground);
+  box-shadow: 10px 10px 0 var(--raised);
+}
+
+.panel-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--raised);
+  color: var(--quiet);
+  font: 400 15px / 1.5 var(--measure);
+  overflow-wrap: anywhere;
+}
+
+.panel-foot {
+  padding: 8px 20px;
+  border-top: 1px solid var(--raised);
+  color: var(--quiet);
+}
+
+.panel-foot a {
   padding: 12px 0;
 }
 
-#game-version a {
-  display: inline-block;
+.panel-foot [data-fact] {
+  color: var(--words);
+  font: 400 15px / 1.5 var(--measure);
+  overflow-wrap: anywhere;
+}
+
+.code {
+  padding: 16px 20px;
+  overflow-x: auto;
+  font: 400 15px / 1.8 var(--measure);
+  white-space: pre;
+}
+
+.code:focus-visible {
+  outline: 3px solid var(--words);
+  outline-offset: -3px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.row code {
+  font: inherit;
+}
+
+/* The line that runs from a row of the file to its note takes the room between them. */
+.leader {
+  flex: 1;
+  min-width: 16px;
+  border-top: 1px solid var(--quiet);
+}
+
+.note {
+  padding: 2px 8px;
+  border: 1px solid var(--words);
+  background: var(--raised);
+  font: 600 13px / 1.5 var(--label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 20px;
+  text-align: left;
+}
+
+thead th {
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  border-top: 1px solid var(--raised);
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+.same {
+  color: var(--quiet);
+  white-space: nowrap;
+}
+
+.same .icon {
+  margin-right: 8px;
+  color: var(--words);
+}
+
+/* ---- What works today: five cards, each with a stamp that says where it stands ---- */
+
+.claims {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-top: 48px;
+  padding: 0;
+  list-style: none;
+}
+
+.claim {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 20px;
+  background: var(--raised);
+}
+
+/* A line between two cards is the ground colour: a raised line on a raised ground would be no line at all. */
+.claim + .claim {
+  border-left: 1px solid var(--ground);
+}
+
+.number {
+  margin-bottom: 12px;
+  color: var(--quiet);
+  font: 400 15px / 1 var(--measure);
+}
+
+.claim h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.claim p {
+  margin-bottom: 24px;
+  color: var(--quiet);
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 6px 10px;
+  border-radius: var(--corner);
+  font: 600 13px / 1.2 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* "Works today": a 2 px mark edge and a mark icon, a little crooked, like a stamp. The words stay the words colour. */
+.stamp.works {
+  border: 2px solid var(--mark);
+  color: var(--words);
+  rotate: -3deg;
+}
+
+.stamp.works .icon {
+  color: var(--mark);
+}
+
+.stamp.building {
+  border: 1px dashed var(--quiet);
+  color: var(--quiet);
+}
+
+/* ---- The page that is not there: the same bar, one sentence and one way home ---- */
+
+.lost {
+  padding-block: 96px 128px;
+}
+
+.lost h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+.lost p {
+  margin: 16px 0 32px;
+  color: var(--quiet);
+}
+
+/* ---- The close and the footer ---- */
+
+.closing {
+  padding: 128px 0;
+  background: var(--raised);
+  text-align: center;
+}
+
+.closing h2 {
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  line-height: 1.05;
+}
+
+.closing p {
+  margin: 16px 0 32px;
+  color: var(--quiet);
+  font-size: 19px;
+}
+
+footer {
+  border-top: 1px solid var(--raised);
+}
+
+footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px 64px;
+  padding-block: 48px;
+}
+
+footer p {
+  margin-top: 8px;
+  color: var(--quiet);
+}
+
+footer nav {
+  display: flex;
+  gap: 64px;
+}
+
+footer h3 {
+  margin: 0 0 8px;
+  color: var(--quiet);
+  font: 600 13px / 1.4 var(--label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+footer nav a {
+  display: block;
   min-height: 44px;
   line-height: 44px;
+}
+
+/* ---- Other sizes of window ---- */
+
+/* A window tall enough to spare it keeps the bar at the top, so a Play button is always in reach. A press that scrolls
+   to something stops 80 px short, so the bar never covers it. In a shorter window the playing game takes the whole
+   window, and the bar scrolls away with the page. */
+@media (min-height: 500px) {
+  .top {
+    position: sticky;
+    top: 0;
+  }
+
+  #today,
+  .sheet,
+  #game {
+    scroll-margin-top: 80px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .part {
+    padding: 80px 0;
+  }
+
+  .closing {
+    padding-block: 80px;
+  }
+
+  .split,
+  .split.flip {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .split.flip .text {
+    order: 0;
+  }
+
+  .claims {
+    grid-template-columns: 1fr;
+  }
+
+  .claim + .claim {
+    border-top: 1px solid var(--ground);
+    border-left: 0;
+  }
+
+  .numbers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .numbers > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .numbers > div:nth-child(n + 3) {
+    border-top: 1px solid var(--ground);
+  }
+}
+
+@media (max-width: 759px) {
+  :root {
+    --gutter: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+
+  .hero {
+    padding-bottom: 64px;
+    text-align: left;
+  }
+
+  .lede {
+    margin-left: 0;
+    font-size: 19px;
+  }
+
+  h1 {
+    margin-left: 0;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+
+  .sheet {
+    margin-top: 48px;
+  }
+
+  .sheet-head .quiet {
+    display: none;
+  }
+
+  .how {
+    flex-basis: 100%;
+  }
+
+  .title-block {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .title-block > div:last-child {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--raised);
+    border-left: 0;
+  }
+
+  .closing {
+    text-align: left;
+  }
+
+  .closing .btn {
+    width: 100%;
+  }
+
+  /* A note goes under its row instead of beside it, so no row is wider for it. */
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .leader {
+    display: none;
+  }
+
+  th,
+  td {
+    padding: 12px 16px;
+  }
+
+  footer nav {
+    gap: 40px;
+  }
+}
+
+/* On a narrow phone the tag's arrow would wrap onto a line of its own, and it only decorates the words beside it. */
+@media (max-width: 479px) {
+  .tag .icon {
+    display: none;
+  }
+}
+
+/* The bar keeps only the word on a phone: its three things are below the first screen's own buttons. */
+@media (max-width: 699px) {
+  .top nav {
+    display: none;
+  }
+}
+
+/* Smaller first screens, so the wordmark, the claim, the lede and the main button fit before any scroll (audit B3): a
+   320 by 568 phone, and any window under 600 px high. */
+@media (max-width: 359px), (max-height: 599px) {
+  .tag {
+    display: none;
+  }
+
+  h1 {
+    margin-top: 0;
+    font-size: 2.1rem;
+  }
+
+  .lede {
+    font-size: 18px;
+  }
+}
+
+/* A phone on its side: the same four things fit, and the claim can be a little larger. */
+@media (max-height: 499px) {
+  .hero {
+    padding-top: 24px;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  .lede {
+    margin-top: 12px;
+  }
+
+  .actions {
+    margin-top: 16px;
+  }
+}
+
+/* ---- A little motion, all of it here, none of it needed to read or press anything ---- */
+
+/* A button or a link answers a pointer and a press: the colour brightens, an underline thickens, a press sits 1 px lower. */
+a,
+.btn {
+  transition:
+    filter 140ms ease-out,
+    transform 140ms ease-out,
+    text-decoration-thickness 140ms ease-out;
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    filter: brightness(1.08);
+  }
+
+  a:hover {
+    text-decoration-thickness: 0.18em;
+  }
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* The first screen arrives once, a word group at a time, and ends fully shown. */
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.tag,
+h1,
+.lede,
+.actions {
+  animation: arrive 200ms ease-out both;
+}
+
+h1 {
+  animation-delay: 40ms;
+}
+
+.lede {
+  animation-delay: 80ms;
+}
+
+.actions {
+  animation-delay: 120ms;
+}
+
+/* A stamp lands as its card scrolls in. The motion follows the scroll, not a clock, and ends the moment the whole
+   stamp is inside the window (audit S5), so a page at rest never shows "Works today" half faded. A browser without
+   scroll-driven animation shows the stamp landed. */
+@keyframes land {
+  from {
+    opacity: 0;
+    scale: 1.4;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .stamp.works {
+    animation: land linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+/* Lenis smooths the scrolling (src/features/motion) and travels to a place a press names, so the browser's own smooth
+   scroll is not asked for. Lenis's stylesheet is these lines of it; its rule that blocks pointer events on frames is
+   left out on purpose, because the game is a frame and must keep them. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+/* The share picture (audit S10): a card for a link preview, so nothing in it asks to be pressed. Only `takePictures`
+   ever sets this attribute. */
+:root[data-picture="share"] .top nav,
+:root[data-picture="share"] .tag span,
+:root[data-picture="share"] .tag .icon,
+:root[data-picture="share"] .actions {
+  display: none;
+}
+
+:root[data-picture="share"] .tag {
+  border: 0;
+  padding: 0;
+}
+
+:root[data-picture="share"] .hero {
+  padding-top: 40px;
+  text-align: center;
+}
+
+:root[data-picture="share"] h1 {
+  margin-inline: auto;
+  font-size: 5.25rem;
+}
+
+:root[data-picture="share"] .lede {
+  margin-inline: auto;
+}
+
+:root[data-picture="share"] .sheet {
+  margin-top: 32px;
+}
+
+/* Last, so nothing above can win: a person who asks for less motion gets none. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

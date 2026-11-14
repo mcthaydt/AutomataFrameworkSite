@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs'
 import { expect, test } from 'vitest'
 import { readIcon } from '#src/features/icons/icons.ts'
 
-/** Every icon the pages use; the last test holds the pages to this list. */
-const USED = ['play', 'keyboard', 'device-mobile', 'cursor-click', 'github-logo', 'house']
+/** Every icon the pages use, `check-circle` (the table of places) included; the last test holds the pages to this list. */
+const USED = ['play', 'keyboard', 'hand-tap', 'arrow-right', 'check', 'check-circle', 'github-logo', 'house']
 
 test.each(USED)('the icon "%s" is in the package, in the shape inlineIcons expects', (name) => {
   const svg = readIcon(name)
