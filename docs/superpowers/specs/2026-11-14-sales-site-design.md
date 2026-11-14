@@ -13,8 +13,9 @@ with M2. Built today, every section would need rewriting as each feature ships.
 The model is the first attempt's sales-optimized site (AutomataFrameworkFailed, `site/`); this spec keeps what it got
 right and leaves what it got wrong (see "What carries over from the first attempt").
 
-**Status of this spec.** Four choices are the Owner's and are open (see "Open for the Owner"). Each part they decide is
-marked *Open (Qn)* and gives the recommended answer; nothing is built on a recommendation.
+**Status of this spec.** The Owner answered its four questions on 2026-11-14 (see "The Owner's answers"): the catch is
+live on the page, the app's prices and a sign-up are shown, the Owner's studio is shown, and the site gains the pages
+of a full framework site, not only Home and Start.
 
 ## Principles served
 
@@ -47,7 +48,7 @@ one claim with the real thing, not a description of it.
 
 ## Non-goals
 
-- Guides, the examples gallery and the API reference. They are M4's site in full (Release 3). *Open (Q4).*
+- Pages for what does not work yet: a guide, an example or an API page appears only once what it shows is on `main`.
 - Selling the editors or publishing before they work. Those claims stay "Being built" until they are true on `main`.
 - A light theme. Dark is the only theme.
 - A blog, a changelog page, a newsletter, a community page.
@@ -80,6 +81,10 @@ one claim with the real thing, not a description of it.
 | Claims | All five, each with an honest stamp ("Works today" or "Being built"), held to `main` by a proof. |
 | Safety | The strict safety header stays. |
 | Copy | The drunk-grandma test. |
+| The catch (Q1) | Live on the page: the visitor nudges a real number and the check turns red (the Owner, 2026-11-14). |
+| Pricing (Q2) | The app's prices, paid once, and an email sign-up for when it is out (the Owner, 2026-11-14). |
+| Proof from people (Q3) | The Owner's own studio, SNEKPRTY, shown now (the Owner, 2026-11-14). |
+| Pages (Q4) | Home, Start, Pricing, Privacy, the 404 and `llms.txt`, and more: guides, examples, the API reference, a showcase and search, the shape of a full framework site (the Owner, 2026-11-14). |
 
 ## Approaches considered
 
@@ -90,8 +95,11 @@ one claim with the real thing, not a description of it.
 2. **Port the first attempt's SvelteKit site.** It had the sections, the copy and the motion already. But it brings a
    framework, two motion libraries and a code-editor library the current site deliberately left out, and its claims
    were held to the workspace, not to a checked `main`. The words and the order carry over; the code does not.
-3. **A site builder (Astro or similar).** Good for many pages, which this site will need at M4. A new dependency for
-   five pages is not worth the Owner's yes now; M4's spec can decide it when guides and the API reference arrive.
+3. **A site builder (Astro or similar).** Good for many pages, and Q4 gives the site many (guides, examples, API,
+   search). Still not chosen: the pages are Markdown and a report turned into the same static files, which a small
+   Markdown reader inside today's build can do, and the build's facts-and-proofs pipeline would have to be rebuilt
+   inside a builder. Both a reader and a builder are new dependencies, so the plan puts the choice to the Owner, with
+   this one recommended, before the reference pages are built.
 
 ## Who arrives, and what they should do
 
@@ -105,7 +113,7 @@ finished it. They arrive from a link someone shared, a search, or their agent. I
    copied prompt makes a game that already has the built-ins.
 
 What is measured, without any script on the page: visits to `/start` against visits to `/`, read from Cloudflare's own
-request counts, and (if Q2 is (a)) the sign-ups for the app. *My call:* no analytics script, because the safety header
+request counts, and the sign-ups for the app. *My call:* no analytics script, because the safety header
 and the "no other company's server" rule both forbid one, and the request counts answer the only question that
 matters at first (does anyone go on to Start).
 
@@ -131,12 +139,13 @@ A text sketch at desktop width; the phone stacks it, left-aligned.
      Version 3f2a91c      3 levels      Plays the same in Node, Chrome, Safari, Firefox
 
    4 engines play it the same · 12 built in · 6 languages · MIT, free
+   MADE WITH AUTOMATA   [SNEKPRTY]
 
    BUILT IN        The part after the demo is already done.      [grid of the built-ins]
    CHECKS          Your agent can't quietly break your game.     [the catch, Q1]
    BUILT FOR AGENTS  That whole level is one small file.         [the file + the commands]
    WHERE IT STANDS What works today, and what is still being built.  [five stamps]
-   PRICING         (Q2)
+   PRICING         Free in your browser · The app, paid once  [Tell me when it's out]
    ┌───────────────────── Finish your next game. ──────────────────────┐
    │  One command makes a game with saves, menus and controls done.     │
    │  [ Make a game → ]     $ <create command>  ⧉                       │
@@ -199,21 +208,21 @@ something a visitor gets.
 
 The page's centrepiece, shown as a thing that happens, not a table to read.
 
-- **Open (Q1).** Recommended (a), *the catch, live*: beside a small copy of the game playing its recorded run sits one
+- **The catch, live** (the Owner, Q1): beside a small copy of the game playing its recorded run sits one
   real number from the game's files, shown as the line of the file it lives on (where the crate starts, how high the
   hero jumps). The visitor nudges it. The same recorded run plays again with the changed file, in the real game, in
   the frame, and the panel says what a check would say, in plain words: "This change broke the recorded play. Your
   agent would see this before a player did." Putting the number back turns it green again. Under it, the table of
   the four engines and the ending each must reach, as today, read from the recorded play.
-  The alternative (b), *the catch, recorded*: a real breaking change caught by CI, shown still: the one-line change,
-  the check that failed, and a link to the real run.
-- **Facts**: the recorded play, its ending, the engines (as today); for (a), the number's file and line from the
-  game's content; for (b), the run's address, from a file the Examples repo keeps for it.
-- **Proof**: as today (`same-in-every-engine`), plus for (a) a journey that nudges the number in three engines and sees
+  If the game cannot be loaded for a visitor, the panel shows the same thing still: a real breaking change caught by
+  CI, the one-line change, the check that failed and a link to the real run, so nobody sees an empty box.
+- **Facts**: the recorded play, its ending, the engines (as today); the number's file and line from the
+  game's content; for the still fallback, the run's address, from a file the Examples repo keeps for it.
+- **Proof**: as today (`same-in-every-engine`), plus a journey that nudges the number in three engines and sees
   the check fail, then pass again.
 - **Words direction**: "Record a play once. Every time your game changes, that play runs again in four places. If a
   change breaks something that worked, the check says so, and your agent sees it before a player does."
-- **What (a) needs from the demo game**: one more message between the page and the game (the watch-mode addendum's
+- **What it needs from the demo game**: one more message between the page and the game (the watch-mode addendum's
   two messages are the pattern), asking it to play its recording against a changed number and say whether it ended
   the same. That is its own small Examples spec addendum, written by this cycle's plan, not built ahead of it.
 
@@ -245,41 +254,65 @@ proof, and the build stops when a "Works today" does not hold.
 
 ### 9. Pricing
 
-*Open (Q2).* Recommended (a): two columns. "Free in your browser": the framework (MIT), every editor in the browser,
+Decided (the Owner, Q2): two columns. "Free in your browser": the framework (MIT), every editor in the browser,
 signing in to save into your game. "The app, paid once": the editors installed on an iPad, an Android phone or a
-computer, with the prices the Owner sets (from the private notes), marked "Not out yet", and one field and button,
+computer, with the prices the Owner sets (from the private notes), marked "Not out yet" (the first attempt's prices are the starting point: $19.99 for a phone or tablet and $39.99
+for a computer, each paid once; the plan confirms them with the Owner before they go on the page), and one field and button,
 "Tell me when it's out", that takes an email address. Under it, in plain words: what is kept (the address and the
 day), why (to send one message when the app is out), and that it is never shared; a link to Privacy.
-Alternatives: (b) no prices, only "Tell me when the app is out"; (c) no pricing until Release 2.
 
-If (a) or (b): the sign-up is the site's first Pages Function. It is the only part of the site that runs code on the
+The sign-up is the site's first Pages Function. It is the only part of the site that runs code on the
 server, it holds no secret beyond Cloudflare's own binding, and `deploy` still never runs the game's code. The store
 is made by the Owner with one `wrangler` command (the plan gives it). A journey checks the sign-up against a pretend
 store, and that a refused sign-up says so in words.
 
 ### 10. Proof from people
 
-*Open (Q3).* Recommended (a): **no section** until there is a real outside game or a real quote. When there is, a
-"Made with Automata" row shows each game's name and picture, linking to where it is played, read from a content file
-in this repo that names each one and its address. The row is absent, not empty, while the file is empty.
+Decided (the Owner, Q3): a **"Made with Automata"** row under the numbers, starting with the Owner's own studio,
+SNEKPRTY (its logo files are the first attempt's, `site/static/made-with/snekprty-*.webp`). Each entry is a name, a
+logo or picture, and where it links, read from a content file in this repo, so adding a studio or game is one entry.
+*My calls:* the row says only what is true of each entry (a studio is "a studio making games with Automata", never
+"trusted by"); it has no quotes until someone real has said one; and it grows only with real entries, never padded
+with placeholders. An entry links only where the Owner says.
 
 ### 11. The closing band and the footer
 
 - **The band**: "Finish your next game." One line ("One command makes a game with saves, menus and controls already
   done. Hand it to your agent."), the yellow "Make a game", and the command with its copy button. It is the page's
   only full-width use of the ocher.
-- **The footer**: the wordmark, "Free and MIT licensed", and short columns: Start, Pricing (if it exists), Privacy,
+- **The footer**: the wordmark, "Free and MIT licensed", and short columns: Start, Guides, Examples, API, Showcase, Pricing, Privacy,
   What works today; the game's files, the framework's files, GitHub; Licences.
 
 ## The other pages
 
-*Open (Q4).* Recommended (a): Home, Start, Pricing, Privacy, the 404, and `llms.txt`.
+Decided (the Owner, Q4): Home, Start, Pricing, Privacy, the 404 and `llms.txt`, **and more**: the pages a full
+framework site has. Each page below lands only once what it shows is on `main`; until then it is not in the bar, and
+no link points at it.
+
+| Page | What it is | It reads | Lands when |
+|---|---|---|---|
+| Start `/start/` | Make a game in three steps (below) | The framework README's first section | Release 1 |
+| Guides `/guides/` | Short task pages: make a game, make it with your agent, add a level, change how it feels, add a sound, add a language, save and load, add a second player, put it on the web. Each is a few steps, each step one command or one file and what you see after it | Markdown guides in the framework's repo, at the release's commit | Each guide when its feature is on `main`; most at Release 1 |
+| Examples `/examples/` | A gallery of small runnable games, one feature each, each playing live in a frame with its one source file beside it and "Copy" on the file | The one-file examples in the Examples repo | When the first examples are there; a plan in Examples writes them |
+| API `/api/` | The framework's public functions and types, one page per entry point, with each doc comment | The framework's API report, at the release's commit | Release 1 |
+| Showcase `/showcase/` | Games and studios made with Automata, bigger than the home row: a picture, a line, where to play | The same content file as "Made with Automata" | With the home row |
+| Pricing `/pricing/` | Section 9 in full | The prices file | With the home section |
+| Privacy `/privacy/` | What the site keeps | — | With the sign-up |
+| Search | One box in the bar (and `/` on a keyboard) over the guides, examples and API, built at build time into a small index the page reads; no other company's service | The pages above | Once there are guides and API pages to search |
+| `llms.txt` and `llms-full.txt` | The framework for an agent: the first is short, the second has every guide and the API in one file | The same sources | Release 1 |
+
+*My calls:* the top bar becomes Start, Guides, Examples, API, Pricing, with GitHub and the yellow "Make a game" on the
+right; on a phone they go behind one "Menu" button. The bar shows the framework's version, read from the facts. The
+editors get no page until they are released (Release 2). The first attempt's playground (code typed into the page) is
+left out, because the examples' "Copy" and the agent prompt serve the same need without running typed code under the
+strict safety header. Every page has the same look, the same safety header and its own journeys.
+
 
 - **Start** (`/start/`): "Make a game in three steps." Each step is one command and what you see after it, read from
   the framework README's first section (the one its test follows in a clean folder), so the page cannot drift from
   what works. Then "Or hand it to your agent": the prompt, with its copy button. Then "Stuck?": a link to open an issue
   on GitHub, said plainly.
-- **Pricing** (`/pricing/`): section 9 in full, if Q2 is (a) or (b).
+- **Pricing** (`/pricing/`): section 9 in full.
 - **Privacy** (`/privacy/`): what the site keeps (nothing, unless the visitor signs up for the app; then the address
   and the day), what Cloudflare sees, and how to be removed. Short.
 - **The 404**: in the same look, with the yellow "Make a game" and a link home.
@@ -324,11 +357,11 @@ test in the plan:
 | One bright button per screen, the closing band | Yes |
 | The announcement pill above the claim | Yes, as the release tag |
 | "Copy the prompt for your agent" | Yes |
-| A "Made with" carousel | Only when real (Q3) |
-| Pricing with the app's two prices | Q2 |
-| Sections for the editors, publishing, 21 examples and a changelog that `main` did not back | No, the site's first rule |
+| A "Made with" carousel | Yes, as a row starting with SNEKPRTY (Q3) |
+| Pricing with the app's two prices | Yes (Q2) |
+| Sections for the editors, publishing, 21 examples and a changelog that `main` did not back | No, the site's first rule; examples come back as real ones land |
 | Near-black and lime, Geist, SvelteKit, two motion libraries, a code-editor library | No: the decided look and the current static build |
-| Docs, examples, API reference, search | M4 (Q4) |
+| Docs, examples, API reference, search | Yes, each when what it reads is on `main` (Q4); the playground is left out |
 
 ## What the other repos must provide first
 
@@ -336,7 +369,9 @@ test in the plan:
 |---|---|---|
 | Examples (M2 plan D) | The showcase demo with its "What's inside" file; watch mode working with the title screen | Sections 2, 3 and 4 |
 | Examples | The check command's output recorded by CI on each passing commit | Section 6 |
-| Examples (Q1 (a) only) | The "try a changed number" message, by its own small addendum | Section 5 |
+| Examples | The "try a changed number" message, by its own small addendum | Section 5 |
+| Examples | The one-file examples, by a plan of its own | The examples gallery |
+| Framework | Its guides as Markdown and its API report at the release's commit | Guides, API, search, `llms-full.txt` |
 | Framework (M2 plan K) | The README's first section and its clean-folder test; the release with skills, check and MCP | Start, the command, the prompt, claim 2's proof |
 | Framework | Release 1 published | The tag, "has them built in" |
 
@@ -350,8 +385,9 @@ Tests run only in GitHub-hosted CI. Every new part has:
 - unit tests for its reader in `facts`, its proof in `claims`, and its filling in `fill`;
 - a proof that stops the build when a "Works today" does not hold, and a test that the stop happens;
 - journeys at phone, tablet and desktop sizes, upright and sideways, in Chromium, WebKit and Firefox: the first screen
-  and both actions; copying the command and the prompt; each built-in tile; the catch (Q1); the Start page's steps;
-  the sign-up against a pretend store and its refused state (Q2); the 404;
+  and both actions; copying the command and the prompt; each built-in tile; the catch, red and green again; the
+  "Made with" row; the sign-up against a pretend store and its refused state; each new page and the bar's menu on a
+  phone; a search that finds a guide, an example and an API entry; an example playing and its file copied; the 404;
 - the copy test (forbidden words, one yellow action per screen, sentence case on titles);
 - the byte budget for the first screen;
 - the no-other-server test: the page makes no request to any address but its own.
@@ -365,18 +401,20 @@ On `main`, proven by CI, and live at `automataframework.pages.dev`:
 - Every journey passes in three engines at every size; the budget and copy tests pass.
 - The Owner has looked at it on a phone and a computer and said it is fine.
 
-## Open for the Owner
+## The Owner's answers (2026-11-14)
 
-Asked through the coordinator on 2026-11-14, each with a recommendation; none is decided here.
+Asked through the coordinator, each with a recommendation. The Owner chose **Q1 (a), Q2 (a), Q3 (b), and Q4 (a) with
+more pages.** The questions are kept as asked, so the reasons stay with the answers.
 
 1. **Q1. The catch:** (a) live on the page, the visitor nudges a real number and the check turns red (recommended), or
-   (b) a real caught break from CI, shown still.
+   (b) a real caught break from CI, shown still. *Answered (a);* (b) stays as the fallback when the game can't load.
 2. **Q2. Pricing and the app sign-up:** (a) prices and "Tell me when it's out" with an email sign-up (recommended), (b)
-   the sign-up without prices, or (c) no pricing until Release 2.
+   the sign-up without prices, or (c) no pricing until Release 2. *Answered (a).*
 3. **Q3. Proof from people:** (a) no section until real, then a "Made with" row (recommended), or (b) the Owner's own
-   studio shown now.
+   studio shown now. *Answered (b).*
 4. **Q4. The pages:** (a) Home, Start, Pricing, Privacy, the 404 and `llms.txt` (recommended), (b) Home only, or (c)
-   the first attempt's full set now.
+   the first attempt's full set now. *Answered (a), "but I'd add more"*: the full set of a framework site's pages, in
+   "The other pages".
 
 ## Left to the builder (the plan)
 
@@ -385,4 +423,8 @@ Asked through the coordinator on 2026-11-14, each with a recommendation; none is
 - How each new fact is read (which file, at which commit), within "the site does not depend on the framework".
 - Which built-ins get a "take me there" press that moves the game, and which only scroll.
 - The prompt's exact text.
-- The order of work, so each part lands as soon as what it reads is on `main`.
+- The order of work, so each part lands as soon as what it reads is on `main`. The pages are large enough that the
+  plan may split into several plans (home, then the reference pages); if it does, it says so and each goes through
+  the stages.
+- How guides and API pages are turned into pages within the static build (a Markdown reader is a new dependency, so
+  only with the Owner's yes; the plan asks).
