@@ -156,7 +156,8 @@ for (const size of SIZES) {
               ),
             side,
           )
-      const numbers = await between('.numbers > div:nth-child(2)', 'Left')
+      // On a narrow phone the numbers stand one under another, so what divides them is a top line, not a left one.
+      const numbers = await between('.numbers > div:nth-child(2)', size.width < 480 ? 'Top' : 'Left')
       const claims = await between('.claim:nth-child(2)', size.width >= 1024 ? 'Left' : 'Top')
       expect([...numbers, ...claims].every((colour) => colour === TOKENS.ground)).toBe(true)
     })
