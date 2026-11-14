@@ -31,7 +31,7 @@ review 10)
   the Owner's to look at in Stage 7 and is left alone. Q3 (the Owner chose (a)): `public/licences.txt` carries the two fonts' and the icons'
   notices, copied from the packages' own `LICENSE` files at the pinned versions, with a journey that serves it. Q4 (the
   Owner chose (b)): the old author name is replaced by `McThayDT` in the plans, the audits and `CLAUDE.md`; git history
-  is not rewritten, and `LICENSE` (the copyright line) is left alone for the Owner to say. Changing the account's
+  is not rewritten, and `LICENSE`'s copyright line says `McThayDT` too (the Owner confirmed). Changing the account's
   display name, which fixes future merge commits, is the Owner's: `gh api -X PATCH user -f name=McThayDT`. No test was
   run locally.
 
