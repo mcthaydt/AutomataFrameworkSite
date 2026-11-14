@@ -1,0 +1,33 @@
+[
+  {
+    "id": "checks",
+    "title": "Your agent can't quietly break your game",
+    "line": "One recorded play, run again in four places on every change.",
+    "state": "works",
+    "proof": "same-in-every-engine"
+  },
+  {
+    "id": "agents",
+    "title": "Built for agents",
+    "line": "Small files with plain names today. Agent skills and a way for an agent to run the game are next.",
+    "state": "building"
+  },
+  {
+    "id": "after-demo",
+    "title": "The part after the demo is already done",
+    "line": "Saves, menus, settings, controls, sound and languages.",
+    "state": "building"
+  },
+  {
+    "id": "editors",
+    "title": "Change it yourself, without another prompt",
+    "line": "Free editors in the browser that work on an iPad.",
+    "state": "building"
+  },
+  {
+    "id": "publish",
+    "title": "Get it in front of players",
+    "line": "One command for the web, itch.io or a desktop app.",
+    "state": "building"
+  }
+]
