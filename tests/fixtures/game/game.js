@@ -16,6 +16,13 @@ const held = new Set()
 const START = 40
 let x = START
 let watching = new URLSearchParams(location.search).has('watch')
+let ticks = 0
+// As the real game does, it shows how far its own play has got, and only while it plays itself: a journey waits on this,
+// never on a picture.
+Object.defineProperty(window, 'automataWatch', {
+  get: () => (watching ? { sim: { tick: ticks }, rounds: 0 } : undefined),
+  configurable: true,
+})
 
 /** Tells the page that frames this one what the game is doing; nobody is told when it is not framed. */
 const tell = (state) => {
@@ -55,6 +62,7 @@ for (const name of ['pointerup', 'pointercancel', 'pointerleave']) {
 }
 
 const frame = () => {
+  if (watching) ticks++
   if (watching || held.has('ArrowRight') || held.has('KeyD') || held.has('Button'))
     x = (x + 4) % Math.max(1, canvas.width)
   context.fillStyle = '#9fd3f0'

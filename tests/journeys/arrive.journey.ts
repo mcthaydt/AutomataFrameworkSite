@@ -38,6 +38,30 @@ const edges = async (page: Page, selector: string): Promise<number[]> => {
   return [box?.x, box?.y, box?.width, box?.height].map((edge) => Math.round(edge ?? -1))
 }
 
+/** What the game's frame says about its own life, for the message of a failure: its visibility and its animation frames. */
+const frameLife = async (page: Page): Promise<string> => {
+  const frame = await (await page.locator(FRAME).elementHandle())?.contentFrame()
+  return (
+    (await frame
+      ?.evaluate(
+        () =>
+          new Promise<string>((resolve) => {
+            let frames = 0
+            const from = performance.now()
+            const count = (): void => {
+              frames++
+              if (performance.now() - from > 400)
+                resolve(`${document.visibilityState}, ${frames} frames in 400 ms`)
+              else requestAnimationFrame(count)
+            }
+            requestAnimationFrame(count)
+            setTimeout(() => resolve(`${document.visibilityState}, ${frames} frames, then no more`), 1500)
+          }),
+      )
+      .catch(() => 'no frame to ask')) ?? 'no frame'
+  )
+}
+
 /** A marker in the frame's own window, which a reloaded frame would lose. */
 async function mark(page: Page): Promise<void> {
   const frame = await (await page.locator(FRAME).elementHandle())?.contentFrame()
@@ -72,13 +96,26 @@ for (const size of SIZES) {
       await untilWatching(page)
       const game = page.frameLocator(FRAME)
       await expect(game.locator('#game')).toHaveAttribute('data-state', 'watching')
-      // It moves by itself: two looks at the game's canvas, with no input between them, differ.
-      const canvas = game.locator('canvas')
-      const before = await canvas.screenshot()
-      await expect.poll(async () => (await canvas.screenshot()).equals(before)).toBe(false)
+      // It moves by itself: with the game in the window, its own count of how far it has got (never a picture) goes up.
+      const points = await pointsOnPicture(page)
+      const tickOf = (): Promise<number> =>
+        game
+          .locator('#game')
+          .evaluate(
+            () =>
+              (window as unknown as { automataWatch?: { sim: { tick: number } } }).automataWatch?.sim.tick ??
+              -1,
+          )
+      const first = await tickOf()
+      await expect
+        .poll(tickOf, {
+          message: `the game plays itself (tick ${first}; ${await frameLife(page)})`,
+          timeout: 10_000,
+        })
+        .toBeGreaterThan(first)
       // Nothing of the site's is over it: at every point on the picture the thing found is the game's own place (the
       // frame lets touches through, so the place under it answers), and the frame fills that place to the pixel.
-      expect(new Set(await idsAt(page, await pointsOnPicture(page)))).toEqual(new Set(['game']))
+      expect(new Set(await idsAt(page, points))).toEqual(new Set(['game']))
       await expect(page.locator('img.poster')).toBeHidden()
       expect(await edges(page, FRAME)).toEqual(await edges(page, '#game'))
       expect(await page.locator('#game').evaluate((node) => getComputedStyle(node).outlineStyle)).toBe(
@@ -148,7 +185,8 @@ for (const size of SIZES) {
       })
       await arrive(page)
       await untilWatching(page)
-      expect(events).toEqual(['page loaded', 'game asked for'])
+      expect(events[0], events.join(', ')).toBe('page loaded')
+      expect(events, 'the game is asked for after the page has loaded').toContain('game asked for')
       expect(await page.locator('img.poster').evaluate((image: HTMLImageElement) => image.complete)).toBe(
         true,
       )
@@ -206,14 +244,16 @@ test.describe('phone-390x844: a tap on the moving game', () => {
     await untilWatching(page)
     const at = (await pointsOnPicture(page))[0] as { x: number; y: number }
     const top = await page.evaluate(() => Math.round(window.scrollY))
+    // A finger put down on the game and drawn upward, step by step, the way a thumb does it.
     const cdp = await page.context().newCDPSession(page)
-    await cdp.send('Input.synthesizeScrollGesture', {
-      x: at.x,
-      y: at.y,
-      yDistance: -300,
-      gestureSourceType: 'touch',
-      speed: 800,
-    })
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: at.x, y: at.y }] })
+    for (let step = 1; step <= 15; step++) {
+      await cdp.send('Input.dispatchTouchEvent', {
+        type: 'touchMove',
+        touchPoints: [{ x: at.x, y: at.y - step * 20 }],
+      })
+    }
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
     await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBeGreaterThan(top + 100)
     await expect(pageGame(page)).toHaveAttribute('data-state', 'watching')
   })

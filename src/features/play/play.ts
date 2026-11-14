@@ -66,6 +66,7 @@ export function createPlayer(
     setState('playing')
     showFrame()
     if (status) status.hidden = true
+    frame?.removeAttribute('tabindex')
     // The keys must reach the game with no second click, so the frame takes the keyboard.
     frame?.focus()
     frame?.contentWindow?.focus()
@@ -92,6 +93,8 @@ export function createPlayer(
     const made = root.ownerDocument.createElement('iframe')
     made.title = FRAME_TITLE
     made.src = address
+    // Not a stop for the Tab key while it only plays itself: there is nothing in it to do, and Play is on the page.
+    made.tabIndex = -1
     if (win !== null) stopListening = listenToGame(win, made, onSaid)
     root.append(made)
     return made
