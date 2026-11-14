@@ -2,6 +2,27 @@
 
 The tracker every stage reads first and updates last. One section per cycle; newest first.
 
+## Cycle 3: the home page looks finished
+
+A design audit came first (the Owner, 2026-11-14: the site "looks unfinished"; combine it with the first attempt's
+site). The spec, plan and the stages after it wait on the Owner's answers to its five questions.
+
+Overall: **5%** (the design audit is 5 points; the rest is shared out when the plan is written)
+
+| Stage | State | Output |
+|---|---|---|
+| Design audit | Done, 100% | [`audits/2026-11-14-home-design-audit.md`](audits/2026-11-14-home-design-audit.md) |
+| The Owner's answers (Q1 to Q5) | Waiting | |
+| 2. Plan | Not started | |
+
+### Log
+
+- 2026-11-14: the design audit. Nine findings (no first screen, one type size, no rhythm, Blueprint only as paint,
+  words about the page, no proof shown, no motion, a dead end, no icon or share picture), a table of what the old
+  site got right, a direction in eleven parts (the old site's bones in Blueprint's skin, saying only what is true
+  today), draft pictures beside the old site and today's, and five questions for the Owner: the colours, the claim,
+  the game before Play, the list of what works, the mark. No test was run.
+
 ## Cycle 2: the site wears Blueprint
 
 Spec: the "Visual direction" section of
