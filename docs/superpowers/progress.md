@@ -8,13 +8,13 @@ Spec: the "Visual direction" section of
 [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
 in AutomataFramework (Stage 1 was done there, 2026-11-14).
 
-Overall: **10%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **15%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
 |---|---|---|
 | 2. Plan | Done, 100% | [`plans/2026-11-14-blueprint-restyle-site.md`](plans/2026-11-14-blueprint-restyle-site.md) |
-| 3. Plan audit | Not started | |
+| 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
 | 4. Execution | Not started (waits for Cycle 1's fixes, pull request 6, on `main`, and for the Owner's answer to Q1) | |
 | 5. Implementation audit | Not started | |
 | 6. Fixes | Not started | |
@@ -22,6 +22,13 @@ review 10)
 
 ### Log
 
+- 2026-11-14: Stage 3. The plan audit: ready to execute once the Owner answers Q1, with seven findings for Stage 4
+  and none blocking. S1, the chalk line stays round the playing game though the plan says it goes; S2, Task 4
+  compares the real game's pictures with the stand-in game's (`main/`) instead of `live/`; S3, the help icons are
+  pencil though icons take their words' colour; S4, no journey measures the home page's links at 44 px; S5, `arrive`
+  can return before the number font is asked for; S6, the new pictures' folder is not named; S7, onboarding is not
+  named. The strict header, the packages, the six icons and every contrast figure were checked and hold. No test
+  was run.
 - 2026-11-14: Stage 2. The plan: four tasks. The two fonts come from packages and are served as the site's own
   files; Phosphor's regular icons are written into the pages when the site is built; one stylesheet holds the five
   Blueprint colours, dark only; the pictures are read against a written list. Not one word of copy changes, the
