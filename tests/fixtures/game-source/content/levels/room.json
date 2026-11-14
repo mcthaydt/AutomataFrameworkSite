@@ -1,0 +1,7 @@
+{
+  "format": 1,
+  "id": "room",
+  "tiles": ["#....#", "#....#", "######"],
+  "things": [{ "id": "ball-1", "character": "ball", "x": 3.5, "y": 1.5 }],
+  "starts": [{ "player": 1, "x": 1.5, "y": 1.5 }]
+}

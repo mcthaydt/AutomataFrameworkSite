@@ -46,6 +46,12 @@ test('the site counts as hostable only when both Cloudflare settings exist', () 
   )
 })
 
+test("the build reads the game's own files for the page's facts, from the folder the game was checked out to", () => {
+  const step = build.slice(build.indexOf('- name: Build the site around the game'))
+  expect(step).toContain('GAME_DIR: ../game/dist')
+  expect(step).toContain('GAME_SOURCE: ../game')
+})
+
 test('the deploy job never checks out or builds the game', () => {
   expect(deploy).not.toContain('AutomataFrameworkExamples')
   expect(deploy).not.toContain('pnpm build')

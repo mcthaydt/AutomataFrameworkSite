@@ -1,0 +1,12 @@
+format = 1
+name = "Stand-in Game"
+start = "room"   # a comment after the value
+hero = "ball"
+
+[[content]]
+type = "level"
+path = "content/levels/room.json"
+
+[[content]]
+type = "character"
+path = "content/characters/ball.json"

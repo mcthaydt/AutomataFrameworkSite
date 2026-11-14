@@ -4,7 +4,18 @@
 // Nothing here reads the file system, so a rule can be tested without one.
 
 /** Feature folders, lowest first. A feature may import only itself, `src/lib/` and features before it in this list. */
-export const LAYERS = ['version', 'pick', 'assemble', 'icons', 'play', 'page'] as const
+export const LAYERS = [
+  'version',
+  'pick',
+  'facts',
+  'claims',
+  'assemble',
+  'icons',
+  'fill',
+  'pictures',
+  'play',
+  'page',
+] as const
 
 /** Path from the repo root (with `/`) to the file's text. */
 export type SourceFiles = Readonly<Record<string, string>>
@@ -19,12 +30,22 @@ const MAX_LINES = 600
 /** Where a `node:` import may live: the Node side of the site, which runs in scripts and workflows, never in a page. */
 const NODE_PLACES: readonly string[] = [
   'src/features/pick/',
+  'src/features/facts/',
   'src/features/assemble/',
   'src/features/icons/',
+  'src/features/pictures/',
   'src/build.ts',
 ]
 /** Features that only Node uses: the page may not reach them. */
-const NODE_FEATURES: ReadonlySet<string> = new Set(['pick', 'assemble', 'icons'])
+const NODE_FEATURES: ReadonlySet<string> = new Set([
+  'pick',
+  'facts',
+  'claims',
+  'assemble',
+  'icons',
+  'fill',
+  'pictures',
+])
 /** Features that only a page uses: the Node entry may not reach them. */
 const PAGE_FEATURES: ReadonlySet<string> = new Set(['play', 'page'])
 
