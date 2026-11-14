@@ -177,6 +177,42 @@ for (const size of SIZES) {
       }
     })
 
+    // A link inside a sentence must stay in its line (it once dropped to a line of its own on a phone and left a gap) and
+    // still be 44 px tall for a thumb. The same goes for the number beside "Game version:".
+    test('a link in a sentence stays in its line and is still big enough', async ({ page }) => {
+      await arrive(page)
+      await settle(page)
+      const lines = await page.evaluate(() => {
+        // The vertical middle of the first line of `link` and of the words just before it in the same element.
+        const middles = (link: Element, before: ChildNode): { link: number; words: number; tall: number } => {
+          const rect = link.getClientRects()[0] as DOMRect
+          const range = document.createRange()
+          range.selectNodeContents(before)
+          const words = range.getClientRects()[range.getClientRects().length - 1] as DOMRect
+          return {
+            link: (rect.top + rect.bottom) / 2,
+            words: (words.top + words.bottom) / 2,
+            tall: rect.height,
+          }
+        }
+        const sentence = document.querySelector('.next a') as Element
+        // The stand-in game's version is plain text, not a link; only the real game's is.
+        const version = document.querySelector('#game-version a')
+        return {
+          sentence: middles(sentence, sentence.previousSibling as ChildNode),
+          version: version === null ? undefined : middles(version, version.previousSibling as ChildNode),
+        }
+      })
+      // Same line: the middles are within a pixel or two, far less than a line apart (27 px).
+      expect(Math.abs(lines.sentence.link - lines.sentence.words), 'See how it is made').toBeLessThanOrEqual(
+        2,
+      )
+      if (lines.version !== undefined) {
+        expect(Math.abs(lines.version.link - lines.version.words), 'Game version').toBeLessThanOrEqual(2)
+      }
+      expect(Math.round(lines.sentence.tall), 'See how it is made').toBeGreaterThanOrEqual(44)
+    })
+
     test('every icon has its words beside it and is hidden from screen readers', async ({ page }) => {
       await arrive(page)
       const icons = page.locator('svg.icon')
@@ -219,11 +255,7 @@ for (const size of [SIZES[0], SIZES[1]]) {
       await expect(page.locator('p.lede')).toBeInViewport({ ratio: 1 })
       await expect(page.getByRole('button', { name: 'Play the game' })).toBeInViewport({ ratio: 1 })
       expect(await loadedFonts(page)).toEqual([])
-      expect(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
-        ),
-      ).toBe(true)
+      expect(await fitsSideways(page)).toBe(true)
     })
   })
 }
@@ -275,12 +307,16 @@ test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () =>
     await settle(page)
     const stops = await page.locator('a[href], button:not([hidden])').count()
     expect(stops).toBeGreaterThanOrEqual(4)
+    // Where Tab has been, by the link's address and words: each stop must be a different thing, so Tab cannot land on
+    // one link twice and skip another without this showing.
+    const reached = new Set<string>()
     for (let stop = 1; stop <= stops; stop++) {
       await page.keyboard.press(tabKey(browserName))
       const focused = await page.evaluate(() => {
         const element = document.activeElement as HTMLElement
         const style = getComputedStyle(element)
         return {
+          which: `${element.tagName} ${element.getAttribute('href') ?? ''} ${(element.textContent ?? '').trim()}`,
           visible: element.matches(':focus-visible'),
           ring: style.outlineColor,
           width: style.outlineWidth,
@@ -291,7 +327,9 @@ test.describe('tablet-820x1180: the ring shows on everything Tab reaches', () =>
       expect(focused.ring, focused.name).toBe(TOKENS.chalk)
       expect(focused.width, focused.name).toBe('3px')
       expect(contrast(focused.ring, await groundBehind(page)), focused.name).toBeGreaterThanOrEqual(3)
+      reached.add(focused.which)
     }
+    expect(reached.size, 'every stop is a different link or button').toBe(stops)
   })
 })
 

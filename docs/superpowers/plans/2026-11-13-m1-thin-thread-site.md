@@ -83,7 +83,7 @@ Stop and report to the coordinator if either of these is not true. Do not work a
   Cloudflare token, and it never checks out or runs the game's code.
 - Every test that waits, waits on something being ready (`expect.poll`, a locator), never on a sleep.
 - Comments say why. Conventional Commits. **No AI attribution anywhere** (commits, the pull request, docs). Before the
-  first commit: `git config --global user.name "Dawson McThay" && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
+  first commit: `git config --global user.name McThayDT && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
   The pull request's credit line reads "Requested by **McThayDT**"; edit its body only with the GitHub MCP tool.
 
 ## How every task is verified

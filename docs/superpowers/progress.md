@@ -8,7 +8,7 @@ Spec: the "Visual direction" section of
 [`2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
 in AutomataFramework (Stage 1 was done there, 2026-11-14).
 
-Overall: **75%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
+Overall: **90%** (the plan is 10 points, its audit 5, execution 45, the implementation audit 15, fixes 15, the Owner's
 review 10)
 
 | Stage | State | Output |
@@ -17,10 +17,23 @@ review 10)
 | 3. Plan audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-plan-audit.md`](audits/2026-11-14-blueprint-restyle-plan-audit.md) |
 | 4. Execution | Done, 100% | [pull request 10](https://github.com/mcthaydt/AutomataFrameworkSite/pull/10); pictures: [`ci-screens/pr-10`](https://github.com/mcthaydt/AutomataFrameworkSite/tree/ci-screens/pr-10) |
 | 5. Implementation audit | Done, 100% | [`audits/2026-11-14-blueprint-restyle-implementation-audit.md`](audits/2026-11-14-blueprint-restyle-implementation-audit.md) |
-| 6. Fixes | Not started | |
+| 6. Fixes | Done, 100% | the pull request that carries this row |
 | 7. Owner review | Not started | |
 
 ### Log
+
+- 2026-11-14: Stage 6. F1: the link in "See how it is made:" is now an inline link with 12 px of padding above and
+  below, so it stays in its line and is still 44 px tall; a journey at every size holds both (and checks the version
+  line's link the same way). F2: `CLAUDE.md` has the Blueprint bullet and `tests/styles/` in its structure list. F3:
+  its `git config` line says `McThayDT`. M1: the commit name above is now "the pictures under `cf1084cd…/`". M2: the
+  plan's steps are ticked. M3: the Tab journey collects what each stop focused and expects as many different things
+  as stops. M4: the colours test also fails on a colour written as a word. M5: one `fitsSideways`, in `look.ts`. M6 is
+  the Owner's to look at in Stage 7 and is left alone. Q3 (the Owner chose (a)): `public/licences.txt` carries the two fonts' and the icons'
+  notices, copied from the packages' own `LICENSE` files at the pinned versions, with a journey that serves it. Q4 (the
+  Owner chose (b)): the old author name is replaced by `McThayDT` in the plans, the audits and `CLAUDE.md`; git history
+  is not rewritten, and `LICENSE`'s copyright line says `McThayDT` too (the Owner confirmed). Changing the account's
+  display name, which fixes future merge commits, is the Owner's: `gh api -X PATCH user -f name=McThayDT`. No test was
+  run locally.
 
 - 2026-11-14: Stage 5. The implementation audit of `main` at `5388563` (pull request 10): the site wears Blueprint as
   the spec's "Visual direction" describes it, and `main` is green in `ci` and `site`. The Owner's four decisions all
@@ -46,7 +59,7 @@ review 10)
   8. **No in WebKit, fixed:** the loading note sat on a white frame in WebKit only (a blank frame is painted white
   there, whatever is behind it); the frame is now not shown until the game plays (`visibility`, in the stylesheet), with
   a journey line that checks it; Chromium and Firefox were already right. A first try, the sheet's colour as the
-  frame's background, did not work in WebKit (the picture of `cf1084c` shows it) and was replaced. The focus ring is clear. 9. A device set to light looks the same: yes. 10. Nothing cut off or
+  frame's background, did not work in WebKit (the pictures under `cf1084cd…/` on `ci-screens` show it) and was replaced. The focus ring is clear. 9. A device set to light looks the same: yes. 10. Nothing cut off or
   overlapping. **Reported, not fixed (the plan audit's N3):** on the phone, the link in "See how it is made:" drops
   to a line of its own and leaves a gap in the sentence. 11. After Play, the loading note then the game make the
   press plain: yes.

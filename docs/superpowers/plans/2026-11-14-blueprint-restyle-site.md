@@ -99,7 +99,7 @@ with that pull request merged: it changes the same stylesheet and the same journ
   `ci-screens` branch.
 - **Dependencies:** exactly the three packages above, pinned to exact versions, as `devDependencies`. Nothing else.
 - **No AI attribution** in commits, the pull request or docs. Before the first commit:
-  `git config --global user.name "Dawson McThay" && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
+  `git config --global user.name McThayDT && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
 - **Conventional Commits**, one commit per task at least; a source file has at most 600 lines.
 - **Privacy:** nothing from the private notes (no product names, no references) goes in this repo.
 
@@ -222,11 +222,11 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   - `LABEL = 'IBM Plex Sans Condensed'`, `MEASURE = 'JetBrains Mono'`.
 - Produces, in CSS: `--label` and `--measure` on `:root`.
 
-- [ ] **Step 1: Check what this stands on.** Run `test -f tests/workflows/names.test.ts && git log --oneline -1 -- tests/workflows/names.test.ts`.
+- [x] **Step 1: Check what this stands on.** Run `test -f tests/workflows/names.test.ts && git log --oneline -1 -- tests/workflows/names.test.ts`.
   If the file is missing, pull request 6 is not on `main`: stop and report to the coordinator. Then set the git author (Global
   Constraints) and add the Cycle 2 execution row to `progress.md` as "In progress, 0%".
 
-- [ ] **Step 2: Write the journeys.** In `tests/journeys/look.journey.ts`, with a header comment saying what the file
+- [x] **Step 2: Write the journeys.** In `tests/journeys/look.journey.ts`, with a header comment saying what the file
   proves (the look, at every size, in every engine), inside `for (const size of SIZES)` / `test.describe(size.name)`
   with `test.use({ viewport })` as `home.journey.ts` does:
 
@@ -266,7 +266,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 
   (`watchForTrouble` is not used in that one: the aborted requests are the point.)
 
-- [ ] **Step 3: Pin the header in `tests/journeys/hosting.journey.ts`.** In "every page is sent with its safety
+- [x] **Step 3: Pin the header in `tests/journeys/hosting.journey.ts`.** In "every page is sent with its safety
   headers", add, before the existing checks of its parts:
 
   ```ts
@@ -275,7 +275,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   )
   ```
 
-- [ ] **Step 4: Add the packages.** Run
+- [x] **Step 4: Add the packages.** Run
   `pnpm add -D -E @fontsource/ibm-plex-sans-condensed@5.3.0 @fontsource/jetbrains-mono@5.3.0 @phosphor-icons/core@2.1.1`.
   In `knip.json` add
   `"ignoreDependencies": ["@fontsource/ibm-plex-sans-condensed", "@fontsource/jetbrains-mono", "@phosphor-icons/core"]`.
@@ -283,7 +283,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   the date of the Owner's yes (2026-11-14), and why knip is told to ignore them (it does not read CSS imports or the
   icon reader's `import.meta.resolve`).
 
-- [ ] **Step 5: Serve the fonts as files.** In `vite.config.ts` add `assetsInlineLimit: 0` to `build`, with a comment:
+- [x] **Step 5: Serve the fonts as files.** In `vite.config.ts` add `assetsInlineLimit: 0` to `build`, with a comment:
   the header allows fonts only from the site's own address, so nothing may be inlined as a `data:` address. At the top
   of `src/styles.css` add:
 
@@ -306,11 +306,11 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   Japanese and Chinese use Noto Sans for that language, as the spec says). Replace the stylesheet's first comment,
   which says "No font files".
 
-- [ ] **Step 6: Wait for the fonts before measuring.** In `tests/journeys/home.journey.ts`, replace every
+- [x] **Step 6: Wait for the fonts before measuring.** In `tests/journeys/home.journey.ts`, replace every
   `await page.goto('/')` with `await arrive(page)` except in the test "with JavaScript off" (no script runs there).
   A late font would move the words after a journey had measured them.
 
-- [ ] **Step 7: Verify, commit, push, read CI.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build`, then
+- [x] **Step 7: Verify, commit, push, read CI.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build`, then
   `ls dist/assets | grep -c woff2` must print `3`. Commit `feat(look): the site's fonts, served as its own files`,
   push, open the pull request as a draft if there is none (its body starts with the project's attribution lines and
   ends with "Requested by **McThayDT**", with no footer), and read the runs. Update `progress.md` (Stage 4 at 22%)
@@ -340,7 +340,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   package's own `<svg …>` opening tag with `xmlns="http://www.w3.org/2000/svg"` swapped for
   `class="icon" aria-hidden="true" focusable="false"`, and everything after it untouched.
 
-- [ ] **Step 1: Write `tests/features/icons/inline.test.ts`** (imports from `#src/features/icons/icons.ts`):
+- [x] **Step 1: Write `tests/features/icons/inline.test.ts`** (imports from `#src/features/icons/icons.ts`):
 
   ```ts
   const PLAY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M1,2Z"/></svg>'
@@ -372,7 +372,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 
   When `page` is not given the sentence starts "A page asks for…".
 
-- [ ] **Step 2: Write `tests/features/icons/read.test.ts`:**
+- [x] **Step 2: Write `tests/features/icons/read.test.ts`:**
 
   ```ts
   const USED = ['play', 'keyboard', 'device-mobile', 'cursor-click', 'github-logo', 'house']
@@ -403,13 +403,13 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   use `createRequire(import.meta.url).resolve(…)` from `node:module` (the package exports the same path to both) and
   report the change as a deviation.
 
-- [ ] **Step 3: Write the feature.** `inline.ts`, `read.ts` and `icons.ts` (which only re-exports the two), each with
+- [x] **Step 3: Write the feature.** `inline.ts`, `read.ts` and `icons.ts` (which only re-exports the two), each with
   a header comment saying its one job and why icons are written in at build time (no script on the page, the words'
   colour, there with JavaScript off). Export the feature from `src/build.ts`. In `tests/architecture/rules.ts`:
   `LAYERS` becomes `['version', 'pick', 'assemble', 'icons', 'play', 'page']`, `'src/features/icons/'` joins
   `NODE_PLACES`, and `'icons'` joins `NODE_FEATURES`.
 
-- [ ] **Step 4: Wire it into the build.** In `vite.config.ts`:
+- [x] **Step 4: Wire it into the build.** In `vite.config.ts`:
 
   ```ts
   import { inlineIcons, readIcon } from './src/build.ts'
@@ -419,7 +419,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 
   with a comment: every page gets its icons as it is built, and an unknown name fails the build.
 
-- [ ] **Step 5: Put the placeholders in the pages.** No word changes. In `index.html`:
+- [x] **Step 5: Put the placeholders in the pages.** No word changes. In `index.html`:
   - the Play button: `<button type="button" class="play" hidden><i data-icon="play"></i>Play the game</button>`
   - the three "How to play" items, each `<li><i data-icon="NAME"></i><span>…the same words…</span></li>`, with
     `keyboard` for "On a computer", `device-mobile` for "On a phone or tablet", `cursor-click` for "Keys not working?"
@@ -468,7 +468,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   plus the rule `.play[hidden] { display: none; }`, with a comment: `display` on a class beats the `hidden`
   attribute, and the button must stay hidden until the script shows it.
 
-- [ ] **Step 6: Add the journey** to `tests/journeys/look.journey.ts`, in the per-size block:
+- [x] **Step 6: Add the journey** to `tests/journeys/look.journey.ts`, in the per-size block:
 
   ```ts
   test('every icon has its words beside it and is hidden from screen readers', async ({ page }) => {
@@ -491,12 +491,12 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   })
   ```
 
-- [ ] **Step 7: Say it in the README.** Under a new heading "Icons": an icon is one line, `<i data-icon="play"></i>`,
+- [x] **Step 7: Say it in the README.** Under a new heading "Icons": an icon is one line, `<i data-icon="play"></i>`,
   put before the words it goes with; the name is a file name from Phosphor's regular set
   (`node_modules/@phosphor-icons/core/assets/regular/`); the build writes the picture in and stops, saying which
   name, if there is no such icon; an icon never stands without words.
 
-- [ ] **Step 8: Verify, commit, push, read CI.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build`, then
+- [x] **Step 8: Verify, commit, push, read CI.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build`, then
   `grep -c 'class="icon"' dist/index.html dist/404.html` must show 6 and 1. Commit
   `feat(icons): Phosphor icons written into the pages at build time`, push, read the runs, update `progress.md`
   (Stage 4 at 44%) and report the line.
@@ -527,7 +527,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     `span`.
 - Consumes: `arrive`, `loadedFonts` (Task 1); the six icons (Task 2).
 
-- [ ] **Step 1: Write `tests/fixtures/contrast.ts` and `tests/styles/tokens.test.ts`.** The Node test reads
+- [x] **Step 1: Write `tests/fixtures/contrast.ts` and `tests/styles/tokens.test.ts`.** The Node test reads
   `src/styles.css` as text:
 
   ```ts
@@ -570,7 +570,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 
   Add `tests/styles/                checks that read the stylesheet` to `CLAUDE.md`'s structure list.
 
-- [ ] **Step 2: Write the look journeys** in `tests/journeys/look.journey.ts`. In the per-size block (so every one
+- [x] **Step 2: Write the look journeys** in `tests/journeys/look.journey.ts`. In the per-size block (so every one
   runs at phone and tablet size, upright and sideways, and at desktop size, in all three engines):
 
   ```ts
@@ -692,7 +692,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
     `border-top-color` `TOKENS.chalk`, its `text-transform` `uppercase`; take the picture
     `phone-390x844-loading.png`; then release and expect it hidden.
 
-- [ ] **Step 3: Write `tests/journeys/not-found.journey.ts`:** for every size in `SIZES`, after
+- [x] **Step 3: Write `tests/journeys/not-found.journey.ts`:** for every size in `SIZES`, after
   `arrive(page, '/no-such-page')`: the title, the `h1` and the sentence word for word (the same words
   `hosting.journey.ts` checks); `body`'s ground is `TOKENS.paper`; every `colours(page, READABLE)` entry is at
   least 4.5 to 1; the home link is marker yellow, at least 44 px high, has one `svg.icon`, and its name is exactly
@@ -701,7 +701,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   `#0A1F3C`, as on the home page; nothing is wider than the window; every line `watchForTrouble` found mentions `404` (the
   address itself, which is the point) and none mentions anything else; picture `<size>-not-found.png`.
 
-- [ ] **Step 4: Update `tests/journeys/home.journey.ts`.** Remove the whole `phone-390x844: dark mode` describe
+- [x] **Step 4: Update `tests/journeys/home.journey.ts`.** Remove the whole `phone-390x844: dark mode` describe
   (see "What this replaces"). In the per-size "before any scroll" test, after the existing picture, call
   `await settle(page)` and then take
   `await page.screenshot({ path: \`tests/journeys/__screenshots__/${size.name}-whole.png\`, fullPage: true })`, so
@@ -712,7 +712,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   button with the keyboard (`page.keyboard.press('Tab')` until it is focused, `Alt+Tab` in WebKit) and takes
   `phone-390x844-focus.png`.
 
-- [ ] **Step 5: Write the stylesheet.** `index.html` and `404.html`: `<meta name="color-scheme" content="dark" />`
+- [x] **Step 5: Write the stylesheet.** `index.html` and `404.html`: `<meta name="color-scheme" content="dark" />`
   and, after it, `<meta name="theme-color" content="#0A1F3C" />`. Replace `src/styles.css` with the sheet below,
   keeping Task 1's three `@import` lines at its top. It was drawn and looked at while planning, at 390 by 844, 844 by
   390, 820 by 1180 and 1180 by 820; keep its values. Keep the comments that are already in the file where their rule
@@ -927,11 +927,11 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   No transition or animation is added: the site has no moments of its own, so there is nothing for reduced motion to
   turn off.
 
-- [ ] **Step 6: Say it in `CLAUDE.md`.** Under "What is particular to this repo" add one bullet: the site wears
+- [x] **Step 6: Say it in `CLAUDE.md`.** Under "What is particular to this repo" add one bullet: the site wears
   Blueprint (the spec's "Visual direction"); the five colours and the two fonts are named only in `src/styles.css`;
   marker yellow is only for what can be touched; dark is the only theme; nothing is drawn on or over the game.
 
-- [ ] **Step 7: Verify, commit, push, read CI.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build`. Commit
+- [x] **Step 7: Verify, commit, push, read CI.** `pnpm lint && pnpm typecheck && pnpm knip && pnpm build`. Commit
   `feat(look): the site wears Blueprint`, push, read the runs. If a contrast or colour journey is red in one engine
   only, report it with the numbers before changing anything: a colour is never changed to make a test pass. Update
   `progress.md` (Stage 4 at 89%) and report the line.
@@ -943,7 +943,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
 **Files:**
 - Modify: `README.md`, `docs/superpowers/progress.md`
 
-- [ ] **Step 1: Fetch the pictures.** `ci` puts them on the `ci-screens` branch under `pr-<number>/<engine>/`, and
+- [x] **Step 1: Fetch the pictures.** `ci` puts them on the `ci-screens` branch under `pr-<number>/<engine>/`, and
   `site` under `pr-<number>-real/<engine>/` (the real game):
 
   ```
@@ -957,7 +957,7 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   `phone-390x844-focus.png` and `phone-390x844-arrival-light-setting.png`: 23 pictures an engine. A missing one is a
   stop.
 
-- [ ] **Step 2: Look at them, with this list.** Open every arrival, whole, not-found, loading and focus picture in
+- [x] **Step 2: Look at them, with this list.** Open every arrival, whole, not-found, loading and focus picture in
   all three engines, and every playing picture of the real game. For each, answer in `progress.md`'s log (one line a
   question, naming any picture that fails):
   1. Is the page blue paper with chalk words, and is the yellow Play button the first thing the eye lands on?
@@ -983,11 +983,11 @@ ten minutes of all three engines. A journey that passes only on a second run is 
   A "no" is a defect: fix it in this task if it is a value in the stylesheet, with a journey that would have caught
   it; report it and stop if it is anything else.
 
-- [ ] **Step 3: Finish the README.** In its opening list, one bullet: the site wears Blueprint, the look the spec's
+- [x] **Step 3: Finish the README.** In its opening list, one bullet: the site wears Blueprint, the look the spec's
   "Visual direction" gives the editors and the site; the colours and fonts are in `src/styles.css`; the pictures of
   every run are on the `ci-screens` branch.
 
-- [ ] **Step 4: Hand over.** Set Stage 4 to "Done, 100%" in `progress.md`, with the overall percentage, the test
+- [x] **Step 4: Hand over.** Set Stage 4 to "Done, 100%" in `progress.md`, with the overall percentage, the test
   counts from CI (Node tests, journeys per engine) and the link to the pictures
   (`https://github.com/mcthaydt/AutomataFrameworkSite/tree/ci-screens/pr-<number>`). Commit
   `docs: the Blueprint restyle done, the tracker updated`, push, read the runs once more, and send the coordinator the

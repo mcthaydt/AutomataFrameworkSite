@@ -3,7 +3,7 @@
 // Every word is asserted word for word: a word that changes here must change in index.html on purpose.
 import { expect, type FrameLocator, type Page, test } from '@playwright/test'
 import { gameCommitUrl, isCommit, parseVersion, shortCommit } from '../../src/features/version/version.ts'
-import { arrive, settle, tabKey } from './look.ts'
+import { arrive, fitsSideways, settle, tabKey } from './look.ts'
 import { SIZES } from './sizes.ts'
 import { watchForTrouble } from './watch.ts'
 
@@ -46,10 +46,6 @@ async function play(page: Page): Promise<FrameLocator> {
 /** The height of the game's frame, in pixels, or 0 when there is none. */
 const frameHeight = async (page: Page): Promise<number> =>
   (await page.locator(FRAME).boundingBox())?.height ?? 0
-
-/** True while the document is no wider than the window: no sideways scrolling. */
-const fitsSideways = (page: Page): Promise<boolean> =>
-  page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)
 
 for (const size of SIZES) {
   test.describe(size.name, () => {

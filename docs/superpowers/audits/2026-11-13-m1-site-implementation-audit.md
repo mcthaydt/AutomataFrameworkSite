@@ -144,7 +144,7 @@ The section also says what each command shows, in a sentence each. Add a `tests/
 section names `pnpm build`, `wrangler pages dev` and `GAME_DIR`. `CLAUDE.md`'s Structure block gains `tests/docs/`.
 
 **F7. One commit on `main` is authored by "Claude".** `0f1b4be` ("docs: Task 7 done, the tracker at 59 percent") has
-the author `Claude <noreply@anthropic.com>`. The other 30 commits are Dawson McThay's. The rule is "No AI attribution
+the author `Claude <noreply@anthropic.com>`. The other 30 commits are McThayDT's. The rule is "No AI attribution
 anywhere", and the git identity is to be set before every commit. It can't be fixed without rewriting `main`, which
 its rules forbid, so it is a question for the Owner (Q1). *Fix forward, in Stage 6:* nothing in the code. The
 coordinator reminds each stage session to run the `git config` line, and the merge session reads the authors of a
