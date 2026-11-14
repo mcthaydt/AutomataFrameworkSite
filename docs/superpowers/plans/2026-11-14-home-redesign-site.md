@@ -26,25 +26,23 @@ D11 and the Owner's answers; its pictures in `audits/2026-11-14-home-design/` ar
 [`docs/superpowers/specs/2026-11-13-2d-first-layer-design.md`](https://github.com/mcthaydt/AutomataFramework/blob/main/docs/superpowers/specs/2026-11-13-2d-first-layer-design.md)
 at `7705bf7` or later: "Visual direction" (colours, name, type), "The offer" (the five claims) and "The site".
 
+**Plan audit:** [`audits/2026-11-14-home-redesign-plan-audit.md`](../audits/2026-11-14-home-redesign-plan-audit.md).
+Its findings (B1 to B3, S1 to S11) are written into this plan, each marked where it lands; its notes (N1 to N12) are
+for execution to read.
+
 **Principles served:** 1 (agent-first: every number on the page is in `facts.json`, a documented file an agent can
 read, and the page shows the files an agent works on) and the rule that onboarding comes first. It breaks none: no
 framework dependency, no 3D, no monorepo.
 
-## Open for the Owner (Q1): Task 3 waits for it
+## The Owner's answers (2026-11-14): nothing is open
 
-Reported to the coordinator. Nothing here is decided by this plan.
-
-**Q1. Is "Built for agents" stamped "Works today" or "Being built"?** The audit says a claim is stamped "Works today"
-only when all of its sentence is true. The spec's sentence for this claim names four things: small files with plain
-names, agent skills, an MCP server, and `automata check`. Only the first is on `main` today.
-
-- (a) **"Being built"**, until all four exist. The section that shows the level's file stays on the page either way,
-  as the part that works. One claim would then read "Works today" ("Your agent can't quietly break your game") and
-  four "Being built". **Recommended:** it is the strict reading of the Owner's own rule.
-- (b) "Works today", with the card's line saying only what is true: "Small files with plain names that an agent can
-  find and change." Two stamps then read "Works today", as in the draft the Owner saw.
-
-Either answer is one word in `src/features/claims/library/claims.json` (Task 3, Step 3) and one line in a journey.
+- **Q1. "Built for agents" is stamped "Being built"** (the Owner: (a)). The spec's sentence for the claim names four
+  things (small files with plain names, agent skills, an MCP server, `automata check`) and only the first is on
+  `main` today, so the claim waits until all four exist. One claim reads "Works today" ("Your agent can't quietly
+  break your game") and four read "Being built". The section that shows the level's file stays on the page, as the
+  part that works, and the card's line says what is here and what is not.
+- **Q2. The line under the claim has no number** (the Owner: (b); asked by the plan audit). It reads "...are what
+  take the weeks after that.", not "the next six weeks", which nobody measured.
 
 ## Depends on
 
@@ -61,17 +59,24 @@ Either answer is one word in `src/features/claims/library/claims.json` (Task 3, 
   ground, channel by channel, rounded: raised `#1f3a33` (6% words: panels, the numbers row, the closing band, and
   every line that only divides) and quiet `#b5af7d` (70% words: quieter words and labels). These six are the only
   colours the stylesheet names.
+- **A line that divides is never the colour it lies on** (audit S2). On the ground it is raised; on a raised ground
+  (the numbers row, the claims' cards, the closing band) it is the ground colour. Raised on ground is 1.17 to 1: it
+  is felt, not read, so nothing a person must find is marked only by such a line.
 - **Touch means "you can touch this"** and is used for nothing else. Every link and button but the wordmark carries
   it, in its words or in its ground.
 - **Mark never carries words.** Eugenia Red on the ground is 3.64 to 1 and on raised 3.12 to 1: enough for an edge or
   an icon (3 to 1), not for words (4.5 to 1). A stamp's and the tag's edge and icon are mark; their words are the
   words colour. (The draft drew stamp words in red; this is the one place the page differs from it for a reason.)
 - **Contrast:** every word 4.5 to 1 or more against what is behind it; every edge, icon and focus ring 3 to 1 or more.
-- **Type:** Fraunces for the claim, titles and the wordmark, in sentence case; Onest for words and buttons; JetBrains
-  Mono for numbers, measures and small labels (tabular). **Labels are in capitals, made by CSS, never typed**:
-  buttons, kickers, stamps, the tag, table headings, the title block's and the footer's small headings. Sentences and
-  titles never are. **Sentences are at least 18 px; labels at least 13 px; the claim is up to 84 px** (the audit's
-  D11; this replaces "every word at least 18 px").
+- **Type:** Fraunces for the claim, titles and the wordmark, in sentence case; Onest for words, buttons and labels;
+  JetBrains Mono (tabular) only for numbers, measures, file names, the file's rows and the recorded ending. **Labels
+  are in capitals, in Onest, made by CSS, never typed** (the spec: "Labels and drawing notes are still set in
+  capitals, like notes on a drawing, in Onest"; audit S4): buttons, kickers, stamps, the tag, notes, table headings,
+  the title block's and the footer's small headings. Sentences and titles never are. **Sentences are at least 18 px;
+  labels at least 13 px; the file's rows and a panel's file name at least 15 px; the claim is up to 84 px** (the
+  design audit's D11; this replaces "every word at least 18 px"). A label is known by its class, never by its tag
+  (audit B2): the labels are `.btn`, `.kicker`, `.stamp`, `.tag b`, `.note`, `thead th`, `.title-block dt`
+  and `footer h3`.
 - **Only the Latin files the page's words need.** No character outside Fontsource's `latin` range is typed on the
   page (no arrow characters: arrows are Phosphor icons).
 - **Space:** sections 128 px apart at 1024 px and wider, 80 px below; one 1 px raised line between sections; the
@@ -80,7 +85,10 @@ Either answer is one word in `src/features/claims/library/claims.json` (Task 3, 
   raised colour, no blur).
 - **The game's art is never restyled.** Nothing is drawn on or over the game's picture or the playing game: no
   filter, tint, opacity, blend, rounded corner or border. The 1 px line round the game's place is an outline, there
-  until the game plays and gone then. The site names no colour of the game.
+  until the game plays and gone then. The site names no colour of the game. **The site's own notes are beside the
+  picture, never over it** (audit B1): "Loading the game…" is in the sheet's bar, where "Play it" was, and the note
+  about JavaScript is a row between the bar and the picture. `#game` holds the picture and the frame and nothing
+  else.
 - **Every number, name, hash and stamp on the page comes from `fill`**, read from the game's files at the commit being
   built. None is typed in `index.html`. A page that would say something untrue fails the build with a plain sentence.
 - **Every claim on the page is true on `main` today.** Words about what does not exist yet say so ("will", "Not
@@ -88,7 +96,9 @@ Either answer is one word in `src/features/claims/library/claims.json` (Task 3, 
 - **Every icon is Phosphor regular and has its words beside it.**
 - **The strict header stays byte for byte.** `public/_headers` is not edited. Nothing comes from another address or a
   `data:` address; no inline script; no `style` attribute.
-- **Touch:** targets at least 44 px, main buttons at least 52 px high. Scroll sideways only inside the file panel.
+- **Touch:** targets at least 44 px; main buttons at least 52 px high, and the two small ones (the top bar's and the
+  sheet's) at least 48 px, the spec's size for a primary action (audit S3). Scroll sideways only inside the file
+  panel.
 - **Drunk-grandma test** on every screen; Task 9 reads the pictures against a written list.
 - **Journeys run in Chromium, WebKit and Firefox** at `SIZES` (phone and tablet, upright and sideways, and desktop)
   and at 320 px where named. **Tests run only in GitHub-hosted CI.** `pnpm lint`, `pnpm typecheck`, `pnpm knip` and
@@ -169,8 +179,9 @@ What the audit implies and a person will meet, most likely first. Each has its t
    content file, or a name with `<` or `&` in it must give a page that is still true and still whole, or a build that
    stops with a sentence. Task 2 ("a level with nothing in it", "a project file the site cannot read") and Task 4
    ("a name with markup in it is shown as words").
-2. **A Play button pressed far from the game, or pressed again.** The top bar's button pressed at the bottom of the
-   page must bring the game up and start it; a second press on any of them must not start a second game. Task 6.
+2. **A Play button pressed far from the game, or pressed again.** The top bar stays at the top of the window while
+   the page scrolls (audit S1), so its button is in reach at the bottom of the page: pressed there, it must bring the
+   game up and start it; a second press on any of them must not start a second game. Task 6.
 3. **The fonts do not arrive.** The wordmark, the claim, the lede and the main button must still fit before any
    scroll, phone upright and sideways. Task 6.
 4. **A 320 px phone.** The claim, the file panel and the table must not push the page sideways; the file panel
@@ -349,7 +360,11 @@ test('a folder with no automata.toml stops with a sentence that names the folder
 - [ ] **Step 4: `facts.json` is written with the game.** `addGame`'s options gain `readonly facts: GameFacts`, and it
   writes `<siteDir>/facts.json` with `writeFacts` after `version.json`. `scripts/add-game.ts` reads them with
   `readFacts({ sourceDir: env.GAME_SOURCE ?? 'tests/fixtures/game-source', commit: env.GAME_COMMIT ?? 'fixture' })`
-  and prints a `FactsError`'s sentence and exits 1, as it does for `AssembleError`. Add to `assemble.test.ts`:
+  and prints a `FactsError`'s sentence and exits 1, as it does for `AssembleError`. **A game with the wrong game's
+  facts is an untrue page** (audit S6): when `GAME_DIR` is set and `GAME_SOURCE` is not, the script (and Task 4's
+  plugin) stops with "GAME_DIR names a built game, and GAME_SOURCE does not say where that game's own files are. Set
+  GAME_SOURCE to the game's repo folder (the folder that holds automata.toml)." One small pure function in `facts`
+  gives the folder or throws that sentence (`sourceFolder(env)`), with its test in `read.test.ts`. Add to `assemble.test.ts`:
   "writes facts.json beside version.json" and "a refused game leaves no facts.json".
 
 - [ ] **Step 5: The workflow.** In `site.yml`'s "Build the site around the game" step, add `GAME_SOURCE: ../game`.
@@ -365,8 +380,6 @@ test('a folder with no automata.toml stops with a sentence that names the folder
 
 ### Task 3: The claims and their stamps
 
-**Waits for Q1.** Everything but the one word marked below can be written first.
-
 **Files:**
 - Create: `src/features/claims/{claims,proofs}.ts`, `src/features/claims/library/claims.json`,
   `tests/features/claims/claims.test.ts`
@@ -381,7 +394,7 @@ test('a folder with no automata.toml stops with a sentence that names the folder
 export type ClaimState = 'works' | 'building'
 export interface Claim { readonly id: string; readonly title: string; readonly line: string
                          readonly state: ClaimState; readonly proof?: ProofName }
-export type ProofName = 'same-in-every-engine' | 'small-files'
+export type ProofName = 'same-in-every-engine'   // one proof today; a claim that comes to work brings its own
 export const PROOFS: Record<ProofName, (facts: GameFacts) => string | undefined>  // a sentence when it does not hold
 export const CLAIMS: readonly Claim[]
 export class ClaimError extends Error {}
@@ -399,7 +412,6 @@ test('a claim that works names a proof, and a claim being built names none', …
 test('every claim stamped as working holds for the stand-in game', () => checkClaims(CLAIMS, fixtureFacts))
 test('same-in-every-engine fails when an engine is missing', …)   // engines: ['Node','Chrome'] → a sentence
 test('same-in-every-engine fails when there is no recorded play to run', …)   // steps: 0
-test('small-files fails when a content file is not JSON', …)      // files: ['content/level.bin']
 test('a working claim whose proof fails stops the build, naming the claim', () =>
   expect(() => checkClaims(CLAIMS, { ...fixtureFacts, engines: ['Node'] })).toThrow(/can't quietly break/))
 test('a working claim with no proof stops the build', …)
@@ -409,8 +421,8 @@ test('no line promises what is being built as if it were here', …)
 
 - [ ] **Step 2: `proofs.ts`.** `same-in-every-engine` holds when `facts.engines` is exactly Node, Chrome, Safari and
   Firefox, `facts.replay.steps > 0` and `facts.replay.ending` is 16 hex digits. (It is true because `pick` only ever
-  shows a commit that passed `REQUIRED_CHECKS`; the comment says so.) `small-files` holds when `facts.files` has at
-  least one path and every path ends `.json`.
+  shows a commit that passed `REQUIRED_CHECKS`; the comment says so.) There is no second proof yet (Q1's answer: only one
+  claim works today), and none is written ahead of the claim that needs it.
 
 - [ ] **Step 3: `library/claims.json`**, in this order:
 
@@ -420,8 +432,8 @@ test('no line promises what is being built as if it were here', …)
     "line": "One recorded play, run again in four places on every change.",
     "state": "works", "proof": "same-in-every-engine" },
   { "id": "agents", "title": "Built for agents",
-    "line": "Small files with plain names that an agent can find and change.",
-    "state": "<Q1: 'building' for (a); 'works' with \"proof\": \"small-files\" for (b)>" },
+    "line": "Small files with plain names today. Agent skills and a way for an agent to run the game are next.",
+    "state": "building" },
   { "id": "after-demo", "title": "The part after the demo is already done",
     "line": "Saves, menus, settings, controls, sound and languages.", "state": "building" },
   { "id": "editors", "title": "Change it yourself, without another prompt",
@@ -431,8 +443,7 @@ test('no line promises what is being built as if it were here', …)
 ]
 ```
 
-  With (a), the `agents` line becomes "Small files with plain names today. Agent skills and a way for an agent to run
-  the game are next." so the card says what is here and what is not.
+  The `agents` line says what is here and what is not (Q1's answer), so the card never promises the whole claim.
 
 - [ ] **Step 4: Verify and commit.** `feat(claims): the five claims, each stamp held to a proof`. Push; `ci` green.
 
@@ -455,14 +466,18 @@ export function factWords(facts: GameFacts): Record<FactName, string>
 export function addresses(facts: GameFacts): Record<AddressName, string>
 ```
 
-Placeholders, as a page author writes them (the element stays, so a journey can find it):
+Placeholders, as a page author writes them (the element stays, so a journey can find it). Audit S9: an element
+with `data-fact` is written empty and an element with `data-address` is written with no `href`; either one written
+otherwise, or any `data-fact`, `data-address` or `data-block` still unfilled when `fillPage` is done, is a
+`FillError` naming it and the page. One element may carry both a `data-address` and a `data-fact` (the version
+link).
 
 | Written | Filled with |
 |---|---|
 | `<span data-fact="name"></span>` | `Crate Game` |
 | `data-fact="version"` | `05fb33d` (the short commit; a plain word as it is) |
 | `data-fact="level-size"` | `16 × 9 tiles` |
-| `data-fact="engines-count"` | `4 engines` |
+| `data-fact="engines-count"` | `4 places` (audit S11: the page's word for where the play runs) |
 | `data-fact="engines-list"` | `Node, Chrome, Safari and Firefox` |
 | `data-fact="steps"` | `360 steps` (`1 step`) |
 | `data-fact="files-count"` | `3 small files` (`1 small file`) |
@@ -489,6 +504,8 @@ test('a name with markup in it is shown as words', () =>
   expect(fillPage('<b data-fact="name"></b>', { ...facts, name: '<img src=x> & Co' }, CLAIMS))
     .toBe('<b data-fact="name">&lt;img src=x&gt; &amp; Co</b>'))
 test('an unknown fact, address or block stops the build, naming it and the page', …)
+test('a fact that is not empty, or an address that already has an href, stops the build', …)   // audit S9
+test('one element may carry an address and a fact', …)   // <a data-address="version" data-fact="version"></a>
 test('a page with no placeholder comes back unchanged', …)            // 404.html
 test('filling checks the claims first', …)   // facts whose engines are ['Node'] → ClaimError, nothing returned
 
@@ -526,7 +543,9 @@ test('the claims: one card each, numbered 01 to 05, with its title, its line and
 - [ ] **Step 3: Wire it into the build.** In `vite.config.ts`, read the facts once
   (`readFacts({ sourceDir: process.env.GAME_SOURCE ?? 'tests/fixtures/game-source', commit: process.env.GAME_COMMIT ?? 'fixture' })`)
   and add a `fill` plugin before `icons` whose `transformIndexHtml` is `fillPage(html, facts, CLAIMS, page)`. A
-  `FactsError`, `ClaimError` or `FillError` stops the build with its sentence.
+  `FactsError`, `ClaimError` or `FillError` stops the build with its sentence: the facts are read in the plugin's
+  `buildStart`, and each of the three is passed to `this.error(error.message)`, so the last thing the build prints
+  is the sentence and not a stack (audit N3).
 
 - [ ] **Step 4: Verify and commit.** Lint, typecheck, knip, build. `feat(fill): write the game's facts and the claims
   into the pages`. Push; `ci` and `site` green (no page uses a placeholder yet).
@@ -535,7 +554,7 @@ test('the claims: one card each, numbered 01 to 05, with its title, its line and
 
 **Files:**
 - Create: `src/features/pictures/{pictures,serve}.ts`, `scripts/take-pictures.ts`, `public/icon.svg`,
-  `tests/journeys/facts.journey.ts`
+  `tests/journeys/facts.journey.ts`, `tests/features/pictures/serve.test.ts`
 - Modify: `package.json` (`build`), `src/build.ts`, `index.html` and `404.html` (`<head>` only),
   `.github/workflows/ci.yml`, `.github/workflows/site.yml`, `tests/workflows/{ci,site}.test.ts`, `README.md`,
   `tests/docs/readme.test.ts`, `tests/journeys/hosting.journey.ts`
@@ -550,13 +569,17 @@ export interface Picture { readonly file: string; readonly address: string
   readonly ready: string }
 export const PICTURES: readonly Picture[]
 // game.png             /play/      1280 × 720, scale 2, ready '#game[data-state="playing"]'
-// share.png            /           1200 × 630, scale 1, ready 'h1'
+// share.png            /           1200 × 630, scale 1, ready 'h1', as: 'share'
 // apple-touch-icon.png /icon.svg   180 × 180,  scale 1, ready 'svg'
 export class PictureError extends Error {}
 export function takePictures(options: { siteDir: string; executablePath?: string }): Promise<void>
 export function serveFolder(dir: string): Promise<{ url: string; close(): Promise<void> }>
-export const SITE_ADDRESS = 'https://automataframework.pages.dev'
 ```
+
+`Picture` also has `readonly as?: 'share'`: before that picture is taken, `takePictures` sets
+`document.documentElement.dataset.picture = 'share'` in the page, and the stylesheet (Task 6) lays the first screen
+out as a card for it (audit S10). There is no `SITE_ADDRESS` constant: the address is typed once in `index.html`'s
+head and held to the workflow's `SITE_URL` by the test below (audit N5).
 
 - [ ] **Step 1: Write the journey `facts.journey.ts`** (desktop size; `request` only where no page is needed):
 
@@ -586,11 +609,23 @@ test('facts.json is served and says which game the page shows', …)
   right content type for `.html .js .css .json .png .svg .woff2 .wasm .toml` and `index.html` for a folder; nothing
   outside the folder. `takePictures` launches `chromium` from `@playwright/test`, takes `PICTURES` in order (the
   share picture shows the game's picture, so `game.png` is first) with reduced motion, and for each waits for `ready`,
-  for `document.fonts.ready`, and then until two pictures in a row are the same bytes (at most 10 s); it writes
-  `<siteDir>/<file>`. A game that never says it is playing, or a picture that never settles, is a `PictureError` with
-  a sentence naming the picture. A missing browser is a `PictureError` whose sentence is: "Chromium is not installed
+  for `document.fonts.ready`, and then until two pictures in a row are the same bytes; it writes
+  `<siteDir>/<file>`. A game that never says it is playing (15 s) is a `PictureError` with a sentence naming the
+  picture. **A game that never stands still is not an error** (audit S7): the demo will gain a title screen, music
+  and things that move, and a picture that will not settle must not stop every build of the site. After 3 s without
+  two pictures the same, the last one is kept and one line is printed ("game.png: the game kept moving, so this is
+  one moment of it."). The site's own two pictures must settle (10 s), or it is a `PictureError`.
+  **Playwright is loaded inside `takePictures`** with `await import('@playwright/test')`, never at the top of the
+  file (audit S8): `src/build.ts` exports this feature, the Vite config and every script load `src/build.ts`, and a
+  Node test that loads Playwright's `expect` beside Vitest's stops with "Cannot redefine property". The same
+  `import()` is where a missing package or browser is caught. A missing browser is a `PictureError` whose sentence is: "Chromium is not installed
   for Playwright. Run: pnpm exec playwright install chromium". `scripts/take-pictures.ts` calls it with `dist` and
   `process.env.CHROMIUM_PATH`, prints the sentence and exits 1 on a `PictureError`.
+
+  Node tests, in `tests/features/pictures/serve.test.ts` (audit S8; they need no browser): "serves a file of the
+  folder with its type", "a folder's address gives its index.html", "an address that climbs out of the folder
+  (`/../package.json`, `/%2e%2e/package.json`) answers 404 and serves nothing", "a missing file answers 404", and
+  for `PICTURES`: "the game's picture is first, and the names are the three the pages point at".
 
 - [ ] **Step 3: The build.** `"build": "vite build && node scripts/add-game.ts && node scripts/take-pictures.ts"`.
   In `ci.yml`'s `build` job and `site.yml`'s `build-real` job, add
@@ -611,7 +646,9 @@ test('facts.json is served and says which game the page shows', …)
 
 - [ ] **Step 6: Verify and commit.** Lint, typecheck, knip. For `pnpm build` in a cloud container set
   `CHROMIUM_PATH=/opt/pw-browsers/chromium` if Playwright's own browser is missing; then look at `dist/game.png` and
-  `dist/share.png`. `feat(pictures): the game's picture, the share picture and the icons`. Push; `ci` and `site`
+  `dist/share.png`. Check that `dist/index.html` still says `href="/apple-touch-icon.png"` as written: Vite leaves an
+  address alone when its file is not there at build time (tried in the plan audit with `/game.png`, N1), and the
+  pictures arrive after Vite is done. `feat(pictures): the game's picture, the share picture and the icons`. Push; `ci` and `site`
   green; read `game.png` of the real game from the `site` run (Task 6 puts it on the page and in the pictures).
 
 ### Task 6: The top bar, the first screen and the game on its sheet
@@ -621,8 +658,8 @@ test('facts.json is served and says which game the page shows', …)
   `playwright.config.ts`, `tests/journeys/{home.journey,look.journey,look,hosting.journey}.ts`
 
 **Interfaces:**
-- Produces: `createPlayer(root: HTMLElement, buttons: readonly HTMLButtonElement[]): Player` (state and `destroy` as
-  now); `startPage(doc: Document): void`; in `look.ts`, `arrive` as now and `settle` removed.
+- Produces: `createPlayer(root: HTMLElement, buttons: readonly HTMLButtonElement[], status: HTMLElement | null): Player`
+  (state and `destroy` as now); `startPage(doc: Document): void`; in `look.ts`, `arrive` as now and `settle` removed.
 
 - [ ] **Step 1: `playwright.config.ts`:** `use` gains `reducedMotion: 'reduce'`, with a comment: pictures and
   measures are taken of a page at rest; `motion.journey.ts` (Task 8) turns motion back on for itself.
@@ -646,10 +683,10 @@ test('facts.json is served and says which game the page shows', …)
     <div class="wrap">
       <a class="tag" href="#today"><b>Being built</b><span>See what works today</span><i data-icon="arrow-right"></i></a>
       <h1>Finish the game your agent started.</h1>
-      <p class="lede">Your coding agent can make a playable demo in a weekend. Saves, menus, settings, touch controls and publishing are what take the next six weeks. Automata Framework is a toolkit that will have them built in.</p>
+      <p class="lede">Your coding agent can make a playable demo in a weekend. Saves, menus, settings, touch controls and publishing are what take the weeks after that. Automata Framework is a toolkit that will have them built in.</p>
       <div class="actions">
         <button type="button" class="btn main" data-play hidden><i data-icon="play"></i>Play the first game</button>
-        <a class="btn second" href="https://github.com/mcthaydt/AutomataFrameworkExamples" data-address="files"><i data-icon="github-logo"></i>See how it is made</a>
+        <a class="btn second" data-address="files"><i data-icon="github-logo"></i>See how it is made</a>
       </div>
       <section class="sheet" aria-label="The game">
         <div class="sheet-head">
@@ -658,11 +695,11 @@ test('facts.json is served and says which game the page shows', …)
           <span class="how keys"><i data-icon="keyboard"></i>Arrow keys to move. Space to jump.</span>
           <span class="how fingers"><i data-icon="hand-tap"></i>Use the buttons on the game.</span>
           <button type="button" class="btn main small" data-play hidden><i data-icon="play"></i>Play it</button>
+          <p class="status" role="status" hidden>Loading the game…</p>
         </div>
+        <noscript><p class="no-script">This game needs JavaScript. Turn it on in your browser's settings, then load this page again.</p></noscript>
         <div id="game">
           <img class="poster" src="/game.png" width="2560" height="1440" alt="" />
-          <noscript><p class="no-script">This game needs JavaScript. Turn it on in your browser's settings, then load this page again.</p></noscript>
-          <p class="status" role="status" hidden>Loading the game…</p>
         </div>
         <dl class="title-block">
           <div><dt>Game version</dt><dd><a data-address="version" data-fact="version"></a></dd></div>
@@ -677,6 +714,9 @@ test('facts.json is served and says which game the page shows', …)
   The picture's `alt` is empty because the words beside it say what it is and a screen reader gains nothing from
   "a picture of the game"; the sheet's label names it.
 
+  Audit B1: the loading note and the note about JavaScript are in the sheet, outside `#game`, so nothing of the
+  site's is ever over the game's picture. `<noscript>` is a child of the `section` here, which HTML allows.
+
 - [ ] **Step 3: Write the journeys** (`home.journey.ts`; at every size in `SIZES` unless said):
 
 ```ts
@@ -688,7 +728,8 @@ const WORDS = { title: 'Automata Framework: finish the game your agent started',
 
 test('the page says what it is and what to press', …)
 //   title; the wordmark link's name 'Automata Framework, home' and text 'automata'; h1 is the claim; the lede;
-//   the tag; 'See how it is made' goes to the game's repo; at 700 px and wider the bar shows 'What works today',
+//   the tag; 'See how it is made' goes to the game's files (its href starts with the game's repo's address and is
+//   addresses(facts).files); at 700 px and wider the bar shows 'What works today',
 //   'GitHub' and 'Play the game', and below 700 px none of the three; 'Play the first game' and 'Play it' are
 //   visible at every size; fitsSideways; no trouble
 test('before any scroll, the wordmark, the claim, the lede and the main Play button are all in the window', …)
@@ -705,12 +746,22 @@ test('pressing each Play button starts the game inside the page', …)
 test('the keys reach the game with no second click', …)            // as now
 // at the largest and the smallest size:
 test('the top bar\'s Play button, pressed at the bottom of the page, brings the game up and starts it', …)  // desktop
-//   scroll to the footer; press 'Play the game'; the frame is playing and its top is in the window
+//   scroll to the footer; check 'Play the game' is in the window already (the bar is kept, audit S1: a click that
+//   had to scroll back up to find the button would prove nothing); press it; the frame is playing, its top is in
+//   the window and it is not under the bar
 test('a press while the game plays goes back to the game and starts no second one', …)
 //   play; scroll to the bottom; press 'Play the first game' (scroll it into view first); one iframe; frame in window
 test('a double press starts one game', …)                          // as now, on 'Play it'
-test('a slow game says it is loading over its picture, and then stops saying it', …)
-//   while loading: the status is visible, the poster is still visible, the frame's visibility is hidden
+test('a slow game says it is loading beside its picture, and then stops saying it', …)
+//   while loading: the status is visible in the sheet's bar, where 'Play it' was, and is in the window; the poster
+//   is still visible; the frame's visibility is hidden; nothing is over the picture (below)
+test('nothing of the site\'s is over the game\'s picture, before Play, while loading and with JavaScript off', …)
+//   audit B1. #game's element children are the poster alone (and the frame once pressed); at the middle and near
+//   each corner of the poster, document.elementFromPoint is the poster
+test('the top bar stays at the top of the window while the page scrolls', …)   // audit S1; desktop and tablet
+//   scroll to the footer: header.top's top edge is 0 and 'Play the game' is in the window without scrolling to it.
+//   Press 'What works today': #today's heading is in the window and its top is below the bar's bottom edge.
+//   At phone-844x390 (a short window) the bar is not kept: after a scroll its bottom edge is above the window.
 test('with JavaScript off: the picture, the note, and no Play button', …)
 //   p.no-script visible with its words; img.poster visible; every [data-play] hidden; the facts are on the page
 test('turning the phone keeps the same game going', …)             // as now
@@ -723,43 +774,72 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
   leaves out `.wordmark` and `iframe`; "the game's own picture is left alone" also measures `img.poster` before Play
   (filter none, opacity 1, blend normal, corner 0, border 0, and `object-fit` is `fill` or `contain` so nothing is
   cropped) and the outline (`solid` before, `none` once playing); the 44 px journey expects 52 for `.btn.main` that is
-  not `.small`; the capitals journey: capitals for `.btn`, `.tag b`, `.title-block dt`; none for `h1`, `.lede`,
-  `.wordmark`, `nav a`, `.how`; sizes: every label at least 13 px, every sentence (`p, li, dd, .how, nav a`) at least
-  18; the icon count is read from the page (`svg.icon` count equals the count of icons expected at this size) and
+  not `.small` and 48 for one that is (audit S3); the capitals journey: capitals for `.btn`, `.tag b`,
+  `.title-block dt`; none for `h1`, `.lede`, `.wordmark`, `nav a`, `.how`; sizes (audit B2; a label is known by its
+  class, and a kicker or a panel's head is a `p`): with `LABELS` the Global Constraints' list and `MEASURES` being
+  `.code, .panel-head, .number, .panel-foot [data-fact]`, every visible `LABELS` thing is at least 13 px, every `MEASURES`
+  thing at least 15, and every other visible thing in `READABLE` with words of its own at least 18; every `LABELS`
+  thing's family contains `LABEL` (audit S4); the 320 px journey is at 320 by 568 and the first screen must hold the
+  four there (audit B3); the icon count is read from the page (`svg.icon` count equals the count of icons expected at this size) and
   each visible one still has words beside it. `hosting.journey.ts`'s "still plays under those headers" presses
   'Play it'.
 
-- [ ] **Step 4: `play.ts` and `page.ts`.** `createPlayer(root, buttons)`: every button is shown and listens. A press
-  when `ready` starts the game as now (loading, then playing) and scrolls `root` into view at once, so a press far
-  from the game is seen to do something; a press in any other state only scrolls `root` into view and gives the frame
+- [ ] **Step 4: `play.ts` and `page.ts`.** `createPlayer(root, buttons, status)`: every button is shown and listens;
+  `status` is the sheet's loading note, which is no longer inside `root` (audit B1), shown and hidden as now. A press
+  when `ready` starts the game as now (loading, then playing) and at once scrolls the sheet (`root.closest('.sheet')`,
+  or `root`) into view, so a press far from the game is seen to do something and the loading note in the sheet's bar
+  is in the window; once playing, `root` is scrolled into view as now; a press in any other state only scrolls `root` into view and gives the frame
   the keyboard. On `loading` the buttons inside the sheet are hidden (the ones outside stay: they lead back to the
   game). `root.dataset.state` as now; the poster and the frame are shown and hidden by the stylesheet from it.
-  `startPage` finds `#game` and every `button[data-play]` and makes the player; the version line's fetch goes (the
+  `startPage` finds `#game`, every `button[data-play]` and the sheet's `[role="status"]` and makes the player; the version line's fetch goes (the
   line is filled when the site is built).
 
 - [ ] **Step 5: The stylesheet.** The drawing is the audit's `fonts-site.png` (the Fraunces column),
   `draft-desktop.png` and `draft-phone.png`, with three differences: no square beside the wordmark, the colours and
   fonts of Task 1, and stamp words in the words colour. Decisions the pictures do not settle:
   - `.wrap`: at most 1248 px wide, 24 px gutters, 16 px below 760 px (and never less than the safe-area insets).
-  - `.top`: 64 px high, a 1 px raised line under it. `.wordmark`: Fraunces, 24 px, weight 600, the words colour, no
-    underline, 44 px tall. Below 700 px the `nav` is not shown.
+  - `.top`: 64 px high, the ground behind it, a 1 px raised line under it. **It is kept at the top of the window**
+    (`position: sticky; top: 0`, above the page's other layers) in a window 500 px high or more, and scrolls away
+    with the page in a shorter one, where the playing game takes the whole window (audit S1). So that the bar never
+    covers what a press goes to, `#today`, `.sheet` and `#game` have `scroll-margin-top: 80px` where the bar is kept.
+    `.wordmark`: Fraunces, 24 px, weight 600, the words colour, no underline, 44 px tall. Below 700 px the `nav` is
+    not shown.
   - `.hero`: centred at 760 px and wider, left-aligned below. The grid (48 px squares, raised lines) is a
     `::before` behind it only, faded out with a `mask-image` gradient written with `var(--ground)` and
     `transparent` (no new colour). `body` loses its grid.
-  - `h1`: Fraunces, weight 500, `clamp(2.6rem, 6.2vw, 5.25rem)`, line-height 1.02, `text-wrap: balance`, at most
-    960 px wide. `.lede`: quiet, 21 px (19 px below 760 px), at most 620 px wide.
+  - `h1`: Fraunces, weight 500, `clamp(2.6rem, 6.2vw, 5.25rem)`, line-height 1.02, `letter-spacing: -0.02em`,
+    `text-wrap: balance`, at most 960 px wide. `.lede`: quiet, 21 px (19 px below 760 px), at most 620 px wide,
+    `text-wrap: pretty`.
   - `.btn`: Onest 600, capitals, 52 px high, 2 px corner; `.main` is touch with ground words; `.second` is raised
-    with touch words and a 1 px quiet edge; `.small` is 44 px. Below 760 px the two actions stack, full width.
+    with touch words and a 1 px quiet edge; `.small` is 48 px (audit S3). Below 760 px the two actions stack, full
+    width. `.btn[hidden] { display: none }`: a class's `display` beats the `hidden` attribute, and a Play button must
+    stay unseen until the script shows it.
+  - The finish (the Owner asked for a page that looks finished; none of these adds a colour): `::selection` is the
+    words colour with ground words; `html` has `-webkit-text-size-adjust: 100%` and `text-rendering:
+    optimizeLegibility`; numbers anywhere are `font-variant-numeric: tabular-nums`; a link's underline is 1 px,
+    3 px below the words; every `h2` has `text-wrap: balance`.
   - `.tag`: 44 px high, a 1 px quiet edge; its `b` has a 1 px mark edge and words-colour words; the rest is touch.
   - `.sheet`: at most 1040 px wide. `.sheet-head` and `.title-block` have a 1 px words edge and the ground behind
     them. `.how.fingers` shows and `.how.keys` hides under `@media (pointer: coarse)`; otherwise the reverse. Below
     760 px `.quiet` is not shown and `.how` takes a line of its own under the name. `.title-block dt` is a 13 px
-    measure label in quiet; its three cells are divided by raised lines and stack to two rows below 760 px.
+    label in Onest, quiet; the version and the level's size are in the number font and the last check's sentence
+    in Onest (audit S4); its three cells are divided by raised lines and stack to two rows below 760 px.
   - `#game` before Play: 16 by 9 at every size, the poster filling it (`width: 100%; height: 100%`), the outline as
-    now. `#game[data-state="playing"]`: as today (16 by 9, but 80svh tall on an upright phone and 100svh on a short
-    window), the poster `display: none`, no outline. The loading note sits over the poster.
+    now. The poster and the frame share one cell of `#game`'s grid (`grid-area: 1 / 1`), so neither pushes the other
+    down. `#game[data-state="playing"]`: as today (16 by 9, but 80svh tall on an upright phone and 100svh on a short
+    window), the poster `display: none`, no outline.
+  - `.status` (audit B1) is in `.sheet-head`, where "Play it" was: a label in the words colour, 48 px high like the
+    button it follows, so the bar does not jump. `.no-script` is a row of the sheet between the bar and the picture:
+    the ground, a 1 px words edge, words-colour words.
   - A window less than 500 px high: the tag is not shown, the claim is 2.25rem, and the lede 18 px, so the four
     things fit before any scroll.
+  - A window less than 360 px wide or less than 600 px high (audit B3): the tag is not shown, the claim is 2.1rem
+    and the lede 18 px. At 320 by 568 the plan's first sizes came to about 620 px for the bar, the tag, a claim of
+    four lines, a lede of eight and the button, which is more than the window; with these they come to about 470.
+  - The share picture (audit S10): under `:root[data-picture="share"]` the bar's `nav`, the tag's link words and
+    `.actions` are not shown (a picture of a button cannot be pressed), the claim is at its largest and the first
+    screen is centred, so the card reads: the wordmark, "Being built", the claim, the lede, and the top of the game
+    on its sheet. Nothing but `takePictures` ever sets that attribute.
 
 - [ ] **Step 6: Verify and commit.** Lint, typecheck, knip, build; open `dist/index.html`'s picture in
   `dist/share.png` to see the first screen. `feat(home): the top bar, the first screen and the game on its sheet`.
@@ -777,7 +857,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
   <dl class="numbers wrap">
     <div><dt data-fact="engines-count"></dt><dd><span data-fact="engines-list"></span> play the game exactly the same way</dd></div>
     <div><dt data-fact="steps"></dt><dd>of recorded play, run again every time the game changes</dd></div>
-    <div><dt data-fact="files-count"></dt><dd>the whole game, apart from its code</dd></div>
+    <div><dt data-fact="files-count"></dt><dd>hold all of the game's content</dd></div>
     <div><dt data-fact="licence"></dt><dd>licensed and free to use</dd></div>
   </dl>
 
@@ -795,7 +875,7 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
     <div class="panel">
       <p class="panel-head" data-fact="level-path"></p>
       <div class="code" data-block="level-file" tabindex="0" role="region" aria-label="The level's file"></div>
-      <p class="panel-foot">Some rows are left out here. <a data-address="level">Read the whole file</a></p>
+      <p class="panel-foot">Part of the file is shown here. <a data-address="level">Read the whole file</a></p>
     </div>
   </div></section>
 
@@ -847,6 +927,14 @@ test('with a finger: the game\'s buttons are on screen and holding one moves the
 
   "In four places" is true because `checkClaims` stops the build unless the engines are exactly four.
 
+  Audit S11, three places where the words were not yet true or not yet one voice. (1) The page says "places"
+  wherever a person reads how many: `data-fact="engines-count"` is written `4 places`, not `4 engines` (Task 4's
+  table and tests follow; the fact's name stays), so the numbers row, the claim's line and the checks' words all say
+  the same thing, and "engine" is not a word a newcomer has to know. (2) "Some rows are left out here" was short of
+  the truth: the panel also leaves out the file's other parts (today `format` and `starts`), so it says "Part of
+  the file is shown here." (3) "The whole game, apart from its code" left out the project file and the recorded
+  play; the files counted are the content files `automata.toml` lists, so the line says that.
+
 - [ ] **Step 2: Write the journeys.** In `home.journey.ts`, at every size:
 
 ```ts
@@ -854,44 +942,50 @@ test('the page says, below the game, why to care, in these words', …)
 //   every h2, kicker, sub, point, numbers dd, closing sentence, footer line and link name, word for word;
 //   every link's href (the two repos, #today, /licences.txt)
 test('the numbers, the file and the table are the game\'s own', …)
-//   reads /facts.json; engines-count '<n> engines'; both steps places '<steps> steps'; files-count; licence 'MIT';
+//   reads /facts.json; engines-count '<n> places'; both steps places '<steps> steps'; files-count; licence 'MIT';
 //   the panel heads are level.path and replay.path; the file panel's text has level.firstRow and level.lastRow and,
 //   when the level has a thing, its character; the table has one row an engine, each ending 'Same ending';
 //   replay-ending is replay.ending; the four data-address links start 'https://github.com/mcthaydt/AutomataFrameworkExamples'
 test('five claims, each with a stamp that says where it stands', …)
 //   5 cards, numbered 01 to 05, the five titles in order; each stamp is 'Works today' or 'Being built';
-//   'checks' is 'Works today'; 'after-demo', 'editors' and 'publish' are 'Being built'; 'agents' as Q1 was answered
+//   'checks' is 'Works today'; 'agents', 'after-demo', 'editors' and 'publish' are 'Being built' (Q1's answer)
 test('"What works today" in the bar, the tag and the footer all go to the list', …)
 //   each link, clicked, leaves #today's heading in the window
 ```
 
-  In `look.journey.ts`, at every size: capitals for `.kicker`, `.stamp`, `.note`, `thead th`, `footer h3`,
-  `.panel-head`; none for `h2`, `h3` in a claim, `.sub`, `.points li`, `.claims p`. Sections: at 1024 px and wider
+  In `look.journey.ts`, at every size: capitals for `.kicker`, `.stamp`, `.note`, `thead th`, `footer h3`
+  (and not `.panel-head`: a file's name is shown as it is written, in the number font); none for `h2`, `h3` in a claim, `.sub`, `.points li`, `.claims p`. Sections: at 1024 px and wider
   each `.part` has 128 px of padding above and below, and 80 px below that width. Stamps: a `.stamp.works` has a
   2 px solid mark edge and words-colour words; a `.stamp.building` a 1 px dashed quiet edge and quiet words; no
-  element with words of its own has the mark colour as its `color` (the walk in `colours`, over `body *`). The
-  contrast journey now finds at least 40 things. The focus-ring journey reaches every link and button, the file
+  element with words of its own has the mark colour as its `color` (the walk in `colours`, over `body *`). Lines
+  (audit S2): the edge between two claims' cards, and between two of the numbers, is the ground colour, and no
+  visible border on the page is the colour of the ground it lies on (a walk over `body *` comparing each border
+  that has a width with `groundBehind`). The contrast journey now finds at least 40 things. The focus-ring journey reaches every link and button, the file
   panel included (it is a stop: `tabindex="0"`), each a different thing.
   At 320 px (Review Focus 4): `fitsSideways` is true; the file panel's `scrollWidth` may be more than its
   `clientWidth` and the page's is not; the table is inside the window.
 
 - [ ] **Step 3: The stylesheet.** From the same pictures. Decisions they do not settle:
-  - `.numbers`: raised ground, a raised line above and below, four across at 1024 px and wider, two by two below;
-    `dt` in Fraunces at 32 px, `dd` quiet at 18 px.
+  - `.numbers`: raised ground, four across at 1024 px and wider, two by two below, the four divided by 1 px lines
+    in the ground colour (audit S2: a raised line on a raised ground is no line); `dt` in Fraunces at 32 px, `dd`
+    quiet at 18 px.
   - `.part`: `padding: 128px 0` (80 px below 1024 px), a 1 px raised line on top. `.split` is text beside its panel
     (5 and 7 of 12 columns; `.flip` swaps them), one column below 1024 px with the text first.
-  - `.kicker`: JetBrains Mono, 13 px, capitals, quiet, with a 28 px quiet line before it. `h2`: Fraunces 500,
+  - `.kicker`: Onest 600, 13 px, capitals, `letter-spacing: 0.08em`, quiet, with a 28 px quiet line before it
+    (audit S4: a label is Onest's). `h2`: Fraunces 500,
     `clamp(2rem, 3.8vw, 3.1rem)`, line-height 1.05. `.sub`: quiet, 19 px.
-  - `.panel`: a 1 px words edge, the ground behind, `box-shadow: 10px 10px 0 var(--raised)`. `.code`: JetBrains
+  - `.panel`: a 1 px words edge, the ground behind, `box-shadow: 10px 10px 0 var(--raised)`. `.panel-head`:
+    JetBrains Mono 15 px, quiet, as the file's name is written (no capitals). `.code`: JetBrains
     Mono 15 px, line-height 1.8, `white-space: pre`, `overflow-x: auto`, and the focus ring when Tab reaches it.
     `.note`: Onest 600, 13 px, capitals, a 1 px words edge on raised; `.leader` is a 1 px quiet line that takes the
     room between. Below 760 px a note goes under its row instead of beside it, so no row is wider for it.
   - The table: rows divided by raised lines; `th[scope=row]` in Onest 18 px; `.same` quiet with a words-colour icon.
-  - `.claims`: five across at 1024 px and wider, one column below; raised ground, raised lines between cards.
-    `.stamp.works` is turned 3 degrees (`rotate: -3deg`).
+  - `.claims`: five across at 1024 px and wider, one column below; raised ground, 1 px lines in the ground colour
+    between cards (audit S2). `.number` is JetBrains Mono 15 px, quiet. `.stamp.works` is turned 3 degrees
+    (`rotate: -3deg`).
   - `.closing`: raised ground, centred (left below 760 px, its button full width there), 128 and 80 px as a part.
   - `footer`: a raised line on top; the wordmark and its line on the left, two columns of links on the right, each
-    link 44 px tall; `h3` a 13 px measure label.
+    link 44 px tall; `h3` a 13 px label in Onest, quiet.
 
 - [ ] **Step 4: Verify and commit.** `feat(home): the numbers, the level's file, the checks, the five claims, the
   close and the footer`. Push; `ci` and `site` green. Read the whole-page pictures at every size on `ci-screens`.
@@ -911,6 +1005,9 @@ test.describe('with motion', () => {
   //   expect.poll: the tag, h1, .lede and .actions each have opacity '1' and transform 'none' or the identity
   test('every stamp is seen once its card is in the window', …)
   //   scroll each .stamp to the middle of the window; expect.poll: opacity '1', and it is toBeInViewport
+  test('a stamp that is wholly in the window is wholly landed, wherever the page rests', …)   // audit S5
+  //   scroll so a .stamp.works sits just inside the bottom edge of the window (its bottom 8 px above the edge);
+  //   expect.poll: opacity '1' and scale 'none' or '1'. Then press 'What works today' in the bar: the same.
   test('a button answers a pointer and a press', …)
   //   hover 'Play it': its filter or background differs from at rest; transition-duration is between 0.1s and 0.2s
 })
@@ -927,8 +1024,12 @@ test.describe('with reduced motion', () => {
   thickens a link's underline; pressed moves a `.btn` down 1 px. The first screen: `.tag, h1, .lede, .actions` run
   one `arrive` (opacity 0 and 8 px lower, to rest) over 200 ms, each 40 ms after the one before, `both`. The stamp:
   inside `@supports (animation-timeline: view())` only, `.stamp.works` runs `land` (from 1.4 times the size and
-  unseen, to rest) over `animation-timeline: view()` and `animation-range: entry 0% cover 30%`; a browser without it
-  shows the stamp landed. Last in the sheet:
+  unseen, to rest) over `animation-timeline: view()` and `animation-range: entry 0% entry 100%`; a browser without it
+  shows the stamp landed. The range ends the moment the whole stamp is inside the window (audit S5): this motion
+  follows the scroll, not a clock, so with a longer range a page at rest could show "Works today" half faded, and
+  the stamp is the one thing in that section a person must be able to read. Under
+  `@media (prefers-reduced-motion: no-preference)`, `html { scroll-behavior: smooth }`, so a press on "What works
+  today" is seen to travel. Last in the sheet:
   `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }`.
 
 - [ ] **Step 3: Verify and commit.** `feat(home): small motion, off for people who ask for less`. Push; green.
@@ -950,14 +1051,16 @@ test.describe('with reduced motion', () => {
   particular" gains: every number and stamp on the page comes from the game's files through `facts`, `claims` and
   `fill` and is in `facts.json`; `build` and `build-real` open the built game once in a browser for its picture and
   `deploy` still never runs it; the structure list gains `tests/fixtures/game-source/` and the four features'
-  order. `README.md` says what the page now shows and names `facts.json` beside `version.json`.
+  order. `README.md` says what the page now shows and names `facts.json` beside `version.json`; its
+  first lines and `package.json`'s `description` say "Automata Framework", and its bullet about the look names the
+  site's own palette and fonts in place of "wears Blueprint" (audit N10).
 
 - [ ] **Step 3: Read the pictures** on `ci-screens` (`pr-<n>/` for the stand-in game, `pr-<n>-real/` for the real
   one), all three engines, every size, and write one line an answer in the tracker:
   1. From the arrival picture alone, can a drunk grandma say what this is and what to press?
   2. Is the claim the biggest thing on the first screen, and is the wordmark the word alone, with no mark?
   3. Is the game's picture the real game, with nothing drawn on it, and does it look the same as the playing game's
-     first moment in `<size>.png`?
+     first moment in `<size>.png`? Is anything of the site's over it, before Play or while it loads (audit B1)?
   4. Ground green, words yellow, ocher only on what can be pressed, red only as an edge or an icon?
   5. Fraunces on the claim, titles and wordmark; Onest on words; mono on numbers and small labels?
   6. Phone upright: does anything overlap, get cut off or need a sideways scroll? The same at 320 px?
@@ -965,8 +1068,14 @@ test.describe('with reduced motion', () => {
   8. Are the numbers, the file's rows, the table and the title block the real game's values (`facts.json`), and is
      each stamp what the claims file says?
   9. After Play: is it plain that the press worked (the loading note over the picture, then the game)?
-  10. Does the share picture (`share.png`, in the `site` run's built site) read at the size of a link preview?
+  10. Does the share picture (`share.png`, in the `site` run's built site) read at the size of a link preview, with
+      no button or link drawn in it (audit S10)?
   11. Does the 404 page look like the same site and show one way home?
+  12. Does it look finished (the Owner's word)? Side by side with `fonts-site.png`'s Fraunces column and
+      `draft-desktop.png`: one clear biggest thing on each screen, air between sections, every line that divides
+      visible, no words touching an edge, no orphaned single word under the claim or a title.
+  13. On a phone, are the game's own words in its picture too small to read, and does that matter (audit N8)? Say
+      what is seen; it is the Owner's to judge in Stage 7.
   A "no" is fixed, with its journey, before the stage ends, or reported as a stop.
 
 - [ ] **Step 4: The tracker.** `progress.md`'s Cycle 3: execution done, the test counts per engine, every deviation
@@ -989,3 +1098,5 @@ test.describe('with reduced motion', () => {
   the recorded number (which an editor's save makes untrue). The file's three notes describe the format, not this
   level, and none names a colour of the game (an editor's save or new art would make it untrue). The keys are said
   in words beside an icon, not drawn as key caps (the page's fonts have no arrow characters). Sentences are 18 px where the draft had 16 and 17.
+  From the plan audit: the loading note is in the sheet's bar and not on the picture; kickers and small headings
+  are Onest, not the number font (the spec); the numbers row says "4 places"; the small Play buttons are 48 px.
