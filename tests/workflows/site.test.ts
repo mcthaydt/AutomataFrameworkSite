@@ -52,6 +52,27 @@ test("the build reads the game's own files for the page's facts, from the folder
   expect(step).toContain('GAME_SOURCE: ../game')
 })
 
+test("the real build installs Chromium after the site's install and before its build", () => {
+  expect(build).toContain('pnpm exec playwright install --with-deps chromium')
+  const install = build.indexOf('- name: Install the site')
+  const browser = build.indexOf('playwright install')
+  const built = build.indexOf('- name: Build the site around the game')
+  expect(browser).toBeGreaterThan(install)
+  expect(browser).toBeLessThan(built)
+  // It runs inside the site's folder, like the install before it.
+  expect(build.slice(build.indexOf('- name: Install the browser'), built)).toContain(
+    'working-directory: site',
+  )
+})
+
+test("the pages' address in index.html is the workflow's SITE_URL", () => {
+  const url = /^ {2}SITE_URL: (\S+)$/m.exec(head(site))?.[1] ?? ''
+  expect(url).toMatch(/^https:\/\//)
+  const html = readFileSync(new URL('../../index.html', import.meta.url), 'utf8')
+  expect(html).toContain(`<meta property="og:url" content="${url}/" />`)
+  expect(html).toContain(`<meta property="og:image" content="${url}/share.png" />`)
+})
+
 test('the deploy job never checks out or builds the game', () => {
   expect(deploy).not.toContain('AutomataFrameworkExamples')
   expect(deploy).not.toContain('pnpm build')

@@ -19,6 +19,13 @@ test('every action is pinned to a commit', () => {
   }
 })
 
+test("the build installs Chromium before it builds, because the build takes the site's pictures", () => {
+  const build = job(ci, 'build')
+  expect(build).toContain('pnpm exec playwright install --with-deps chromium')
+  expect(build.indexOf('playwright install')).toBeGreaterThan(build.indexOf('pnpm install --frozen-lockfile'))
+  expect(build.indexOf('playwright install')).toBeLessThan(build.indexOf('run: pnpm build'))
+})
+
 test('only the call to journeys.yml may write', () => {
   const call = job(ci, 'journeys')
   expect(ci.match(/contents: write/g)).toHaveLength(1)

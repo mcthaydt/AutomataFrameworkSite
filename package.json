@@ -17,7 +17,7 @@
     "format": "biome check --write .",
     "typecheck": "tsc -p .",
     "knip": "knip",
-    "build": "vite build && node scripts/add-game.ts",
+    "build": "vite build && node scripts/add-game.ts && node scripts/take-pictures.ts",
     "test:node": "vitest run",
     "test:journeys": "playwright test"
   },

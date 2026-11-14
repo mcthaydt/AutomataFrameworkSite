@@ -54,7 +54,7 @@ for (const size of SIZES) {
     test('the page says what it is and what to press', async ({ page }) => {
       const trouble = watchForTrouble(page)
       await arrive(page)
-      await expect(page).toHaveTitle('AutomataFramework')
+      await expect(page).toHaveTitle('Automata Framework: finish the game your agent started')
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(WORDS.title)
       await expect(page.locator('p.lede')).toHaveText(WORDS.lede)
       await expect(page.getByRole('heading', { level: 2 })).toHaveText(WORDS.headings)

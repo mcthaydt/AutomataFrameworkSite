@@ -9,17 +9,20 @@ test('the README has a section that takes you from clone to the page', () => {
   expect(readme).toContain('## Try it on your machine')
 })
 
-test('it gives the commands, in order: install, build, serve', () => {
+test('it gives the commands, in order: install, playwright install, build, serve', () => {
   const install = section.indexOf('pnpm install')
+  const browser = section.indexOf('pnpm exec playwright install chromium')
   const build = section.indexOf('pnpm build')
   const serve = section.indexOf('wrangler pages dev dist')
   expect(install).toBeGreaterThan(0)
-  expect(build).toBeGreaterThan(install)
+  expect(browser).toBeGreaterThan(install)
+  expect(build).toBeGreaterThan(browser)
   expect(serve).toBeGreaterThan(build)
 })
 
 test('it says how to put the real game in place of the stand-in, and where the page then is', () => {
   expect(section).toContain('GAME_DIR=')
+  expect(section).toContain('GAME_SOURCE=')
   expect(section).toContain('AutomataFrameworkExamples')
   expect(section).toContain('http://localhost:8788')
 })

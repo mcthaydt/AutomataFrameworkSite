@@ -9,7 +9,7 @@ test.use({ viewport: { width: 1440, height: 900 } })
 test('a missing address answers 404, says so, and offers the way home', async ({ page }) => {
   const response = await page.goto('/no-such-page')
   expect(response?.status()).toBe(404)
-  await expect(page).toHaveTitle('Page not found: AutomataFramework')
+  await expect(page).toHaveTitle('Page not found: Automata Framework')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('This page does not exist.')
   await expect(page.getByText('The address may be mistyped, or the page may have moved.')).toBeVisible()
   await page.getByRole('link', { name: 'Go to the home page' }).click()

@@ -14,7 +14,7 @@ for (const size of SIZES) {
     test('the 404 page is a sign on the ground, with one way home', async ({ page }) => {
       const trouble = watchForTrouble(page)
       await arrive(page, '/no-such-page')
-      await expect(page).toHaveTitle('Page not found: AutomataFramework')
+      await expect(page).toHaveTitle('Page not found: Automata Framework')
       const heading = page.getByRole('heading', { level: 1 })
       await expect(heading).toHaveText('This page does not exist.')
       const sentence = page.getByText('The address may be mistyped, or the page may have moved.')
