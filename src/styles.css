@@ -276,10 +276,24 @@ footer {
   border-top: 1px solid var(--chalk);
 }
 
+/* A link that stands alone on its line is one 44 px box. The three rules are in order of rising specificity. */
 footer a,
-.next a,
-#game-version a,
 .home {
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+}
+
+/*
+ * A link inside a sentence stays in its line, so the sentence reads as one. It reaches 44 px with padding above and
+ * below (padding on an inline link grows what a thumb can hit without moving the lines): an inline-block link would
+ * not fit beside the words before it on a phone and would drop to a line of its own.
+ */
+.next a {
+  padding: 12px 0;
+}
+
+#game-version a {
   display: inline-block;
   min-height: 44px;
   line-height: 44px;

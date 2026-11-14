@@ -20,6 +20,23 @@ test('those five are the only colours the stylesheet names', () => {
   expect(css).not.toMatch(/\brgba?\(|\bhsla?\(/)
 })
 
+// A colour written as a word (`color: white`) would slip past the test above. The sheet needs no colour keyword but
+// `transparent` and `currentColor`; `none` and the line style `solid` are not colours, nor is a `var(--…)` or a length.
+test('no colour is written as a word', () => {
+  const COLOUR_PROPERTY =
+    /(?:^|[;{\s])(?:color|background(?:-color)?|border(?:-(?:top|right|bottom|left))?(?:-color)?|outline(?:-color)?|fill|stroke|caret-color|accent-color)\s*:\s*([^;}]+)/gm
+  const allowed = new Set(['transparent', 'currentcolor', 'none', 'solid'])
+  const words: string[] = []
+  for (const [, value] of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(COLOUR_PROPERTY)) {
+    for (const part of (value ?? '').replace(/var\([^)]*\)/g, ' ').split(/[\s,/()]+/)) {
+      if (/^[a-z-]+$/i.test(part) && !allowed.has(part.toLowerCase())) {
+        words.push(part)
+      }
+    }
+  }
+  expect(words).toEqual([])
+})
+
 test('dark is the only theme', () => {
   expect(css).toMatch(/color-scheme:\s*dark;/)
   expect(css).not.toContain('prefers-color-scheme')

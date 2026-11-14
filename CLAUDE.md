@@ -23,6 +23,9 @@ where this page is short, the spec has the detail. This repo's plans, audits and
   look) `@fontsource/ibm-plex-sans-condensed` 5.3.0, `@fontsource/jetbrains-mono` 5.3.0 and `@phosphor-icons/core`
   2.1.1, all development-only. `knip.json` is told to ignore the three, because knip reads neither CSS `@import`s
   (the fonts) nor the icon reader's `import.meta.resolve` (the icons).
+- **The site wears Blueprint** (the spec's "Visual direction"). The five colours and the two fonts are named only in
+  `src/styles.css`, and `tests/styles/` holds the sheet to them. Marker yellow is only for what can be touched. Dark is
+  the only theme. Nothing is drawn on or over the game: its art is never restyled.
 
 ## Principles
 
@@ -133,7 +136,7 @@ implementations or incomplete integrations. Do your best work."
   the Owner CLI commands rather than click-through steps.
 - **No AI attribution anywhere.** No `Co-Authored-By: Claude`, no session-link trailer and no "Generated with Claude Code" in
   commits, pull request bodies or docs (the Owner, 2026-11-13). Before any commit, set the author with
-  `git config --global user.name "Dawson McThay" && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
+  `git config --global user.name McThayDT && git config --global user.email "107786093+mcthaydt@users.noreply.github.com"`.
 - Refresh sessions after 90 minutes.
 - Branches: `main` plus branches with CI running, five at most.
 - **Tests run only in GitHub-hosted CI, never locally.** Verify through the pull request's CI runs.
@@ -152,6 +155,7 @@ tests/architecture.test.ts    imports go down, no cycles, no tests in src
 tests/features/<feature>/     mirrors src/features
 tests/fixtures/               shared test helpers and the stand-in game
 tests/journeys/               end-to-end journeys in real browsers, against the built site
+tests/styles/                 checks that read the stylesheet: the five colours, dark only, contrast
 tests/workflows/              checks that read a workflow
 tests/docs/                   checks that read the README
 docs/superpowers/             plans/, audits/, progress.md (the spec is in AutomataFramework)
