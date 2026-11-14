@@ -4,7 +4,7 @@
 // so the work of reading and compiling the game never lands on a visitor's first scroll. Every visitor gets it, whatever
 // their device says about motion (the Owner, 2026-11-14: it plays for everyone, as the game's own page does), except one
 // who has asked their device to save data: they keep the picture until they press Play, as before the game could watch
-// (the Owner, 2026-11-14, Q-C b), because the game is about 1.5 MB.
+// (the Owner, 2026-11-14, Q-C b), because the game is about 1.2 MB.
 
 /** How far from the window, as a share of the window's height, the game's place may be and still be near. */
 export const NEAR = '100%'
