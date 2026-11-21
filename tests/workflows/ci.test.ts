@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { expect, test } from 'vitest'
 import { expr, head, job, readWorkflow } from './read.ts'
 
@@ -18,12 +19,46 @@ test('every action is pinned to a commit', () => {
   }
 })
 
-test("the build installs Chromium before it builds, because the build takes the site's pictures", () => {
+test("the build has Chromium before it builds, because the build takes the site's pictures", () => {
   const build = job(ci, 'build')
-  expect(build).toContain('pnpm exec playwright install --with-deps chromium')
-  expect(build.indexOf('playwright install')).toBeGreaterThan(build.indexOf('pnpm install --frozen-lockfile'))
-  expect(build.indexOf('playwright install')).toBeLessThan(build.indexOf('run: pnpm build'))
+  // Installed before the build, or ready-made in Playwright's own image (how is `ci.yml`'s own pull request's call).
+  const image = /\n {4}container:\n {6}image: mcr\.microsoft\.com\/playwright:/.test(build)
+  if (!image) {
+    expect(build).toContain('pnpm exec playwright install --with-deps chromium')
+    expect(build.indexOf('playwright install')).toBeGreaterThan(
+      build.indexOf('pnpm install --frozen-lockfile'),
+    )
+    expect(build.indexOf('playwright install')).toBeLessThan(build.indexOf('run: pnpm build'))
+  }
 })
+
+// A job that drives a browser and runs in a container runs in Playwright's own image, whose tag is the lockfile's
+// `@playwright/test`, pinned by digest, so it installs no browser or system library from the runner's package mirror
+// (whose slow days hung `install-deps` until the job's timeout).
+const playwright = (
+  JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as {
+    devDependencies: Record<string, string>
+  }
+).devDependencies['@playwright/test']
+const image = new RegExp(
+  `\\n {4}container:\\n {6}image: mcr\\.microsoft\\.com/playwright:v${playwright?.replaceAll('.', '\\.')}-noble@sha256:[0-9a-f]{64}\\n {6}options: --user 1001\\n`,
+)
+
+test.each([
+  ['the build', () => job(ci, 'build')],
+  ['the journeys', () => job(journeys, 'shards')],
+])(
+  '%s, when it runs in a container, runs in the Playwright image pinned by digest and installs no browser',
+  (_, read) => {
+    expect(playwright).toMatch(/^\d+\.\d+\.\d+$/)
+    const text = read()
+    if (!/\n {4}container:/.test(text)) return
+    expect(text).toMatch(image)
+    expect(text).toContain(`test "$(pnpm exec playwright --version)" = "Version ${playwright}"`)
+    const commands = text.split('\n').filter((line) => !line.trim().startsWith('#'))
+    expect(commands.filter((line) => /playwright install|install-deps/.test(line))).toEqual([])
+  },
+)
 
 test('nothing may write, and nothing pushes a branch (the pictures are artifacts only)', () => {
   for (const text of [ci, journeys, readWorkflow('site.yml')]) expect(text).not.toContain('git push')
